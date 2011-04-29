@@ -12,6 +12,7 @@
             <onup>3000</onup>
             <onleft>3000</onleft>
             <onright>3000</onright>
+			<enabled>false</enabled>
         </control>
         <control type="image" id="1000">
             <description>The Picture to guess</description>
@@ -24,7 +25,7 @@
             <onup>3000</onup>
             <onleft>3000</onleft>
             <onright>3000</onright>
-            <aspectratio>keep</aspectratio>
+			<aspectratio>keep</aspectratio>
         </control>
         <control type="button" id="3000">
             <description>Guess Button</description>
@@ -36,12 +37,12 @@
             <align>center</align>
             <aligny>center</aligny>
             <onright>3001</onright>
-            <onleft>3002</onleft>
-            <font>font13</font>
-            <textcolor>FFFFFFFF</textcolor>
-            <onright>3001</onright>
+			<onleft>3002</onleft>
+			<font>font13</font>
+			<textcolor>FFFFFFFF</textcolor>
+			<onright>3001</onright>
         </control>
-        <control type="button" id="3001">
+		<control type="button" id="3001">
             <description>Random next Button</description>
             <posx>840</posx>
             <posy>600</posy>
@@ -51,11 +52,11 @@
             <align>center</align>
             <aligny>center</aligny>
             <onright>3001</onright>
-            <font>font13</font>
-            <textcolor>FFFFFFFF</textcolor>
-            <onleft>3000</onleft>
+			<font>font13</font>
+			<textcolor>FFFFFFFF</textcolor>
+			<onleft>3000</onleft>
         </control>
-        <control type="button" id="3002">
+		<control type="button" id="3002">
             <description>Exit Button</description>
             <posx>280</posx>
             <posy>600</posy>
@@ -65,22 +66,33 @@
             <align>center</align>
             <aligny>center</aligny>
             <onright>3001</onright>
-            <font>font13</font>
-            <textcolor>FFFFFFFF</textcolor>
-            <onright>3000</onright>
+			<font>font13</font>
+			<textcolor>FFFFFFFF</textcolor>
+			<onright>3000</onright>
         </control>
-        <control type="label" id="1001">
+		<control type="label" id="1001">
             <description>Login state label</description>
             <posx>20</posx>
             <posy>20</posy>
             <width>300</width>
             <height>40</height>
             <align>left</align>
-            <font>font13</font>
-            <textcolor>FFFFFFFF</textcolor>
-            <visible>true</visible>
-        </control>
-        <control type="image" id="1002">
+			<font>font13</font>
+			<textcolor>FFFFFFFF</textcolor>
+			<visible>true</visible>
+		</control>
+		<control type="label" id="1003">
+            <description>Score Label</description>
+            <posx>1260</posx>
+            <posy>20</posy>
+            <width>200</width>
+            <height>40</height>
+            <align>right</align>
+			<font>font13</font>
+			<textcolor>FFFFFFFF</textcolor>
+			<visible>true</visible>
+		</control>
+		<control type="image" id="1002">
             <description>Animated Gif</description>
             <posx>325</posx>
             <posy>190</posy>
@@ -91,7 +103,7 @@
             <onup>3000</onup>
             <onleft>3000</onleft>
             <onright>3000</onright>
-            <aspectratio>keep</aspectratio>
+			<aspectratio>keep</aspectratio>
         </control>
     </controls>
 </window>

@@ -22,6 +22,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     CONTROL_ID_IMAGE_MAIN = 1000
     CONTROL_ID_IMAGE_GIF = 1002
     CONTROL_ID_LABEL_STATE = 1001
+    CONTROL_ID_LABEL_SCORE = 1003
 
     def __init__(self, *args, **kwargs):
         # __init__ will be called when python creates object from this class
@@ -39,6 +40,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.button_next = self.getControl(self.CONTROL_ID_BUTTON_NEXT)
         self.button_exit = self.getControl(self.CONTROL_ID_BUTTON_EXIT)
         self.label_state = self.getControl(self.CONTROL_ID_LABEL_STATE)
+        self.label_score = self.getControl(self.CONTROL_ID_LABEL_SCORE)
         self.image_main = self.getControl(self.CONTROL_ID_IMAGE_MAIN)
         self.image_gif = self.getControl(self.CONTROL_ID_IMAGE_GIF)
         
@@ -56,6 +58,8 @@ class GUI(xbmcgui.WindowXMLDialog):
         # action is the action which was triggered
         if action in self.action_exitkeys_id:
             self.closeDialog()
+        #else:
+        #    print action.getId()
 
     def onFocus(self, controlId):
         # onFocus will be called on any focus
@@ -93,12 +97,14 @@ class GUI(xbmcgui.WindowXMLDialog):
         if answer == 'right':
             message = getLocalizedString(3103)
             self.getRandomShot()
+            self.score += 1
         else:
             message = getLocalizedString(3104)
         dialog = xbmcgui.Dialog()
         dialog.ok(answer, message)  # fixme
 
     def login(self):
+        self.score = 0
         if getSetting('login') == 'false':
             self.label_state.setLabel(getLocalizedString(3106))
         else:
@@ -111,6 +117,8 @@ class GUI(xbmcgui.WindowXMLDialog):
                 self.label_state.setLabel(getLocalizedString(3106))
             else:
                 self.label_state.setLabel(getLocalizedString(3107) % user)
+                self.score = int(self.Quiz.getScore())
+        self.updateScore()
 
     def downloadPic(self, image_url, shot_id):
         cache_dir = 'special://profile/addon_data/%s/cache' % sys.modules['__main__'].__id__
@@ -119,6 +127,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         image_path = xbmc.translatePath('%s/%s.jpg' % (cache_dir, shot_id))
         dl = urllib.urlretrieve(image_url, image_path, )
         return image_path
-        
-	
-        
+
+    def updateScore(self):
+        score_string = getLocalizedString(3110) % str(self.score)
+        self.label_score.setLabel(score_string)
