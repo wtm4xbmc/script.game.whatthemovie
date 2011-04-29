@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<strings>
+  <string id="3100">Guess!</string>
+  <string id="3101">Next</string>
+  <string id="3102">Exit</string>
+  <string id="3103">Right[CR]You scored one point. Awesome</string>
+  <string id="3104">Wrong</string>
+  <string id="3105">Type the movie title</string>
+  <string id="3106">Not Logged in</string>
+  <string id="3107">Logged in as User [B]%s[/B]</string>
+  <string id="3108">Could not Login</string>
+  <string id="3109">Password wrong or Username unknown[CR]User [B]%s[/B]</string>
+  <string id="3200">Login on whatthemovie.com</string>
+  <string id="3201">Username</string>
+  <string id="3202">Password</string>
+</strings>

@@ -1,0 +1,97 @@
+﻿<window id="1000">
+    <defaultcontrol always="false">3000</defaultcontrol>
+    <controls>
+        <control type="image">
+            <description>Background</description>
+            <posx>0</posx>
+            <posy>0</posy>
+            <width>1280</width>
+            <height>720</height>
+            <texture>wtm_mockup.png</texture>
+            <ondown>3000</ondown>
+            <onup>3000</onup>
+            <onleft>3000</onleft>
+            <onright>3000</onright>
+        </control>
+        <control type="image" id="1000">
+            <description>The Picture to guess</description>
+            <posx>280</posx>
+            <posy>160</posy>
+            <width>720</width>
+            <height>400</height>
+            <texture></texture>
+            <ondown>3000</ondown>
+            <onup>3000</onup>
+            <onleft>3000</onleft>
+            <onright>3000</onright>
+			<aspectratio>keep</aspectratio>
+        </control>
+        <control type="button" id="3000">
+            <description>Guess Button</description>
+            <posx>570</posx>
+            <posy>600</posy>
+            <width>140</width>
+            <height>60</height>
+            <textoffsetx>12</textoffsetx>
+            <align>center</align>
+            <aligny>center</aligny>
+            <onright>3001</onright>
+			<onleft>3002</onleft>
+			<font>font13</font>
+			<textcolor>FFFFFFFF</textcolor>
+			<onright>3001</onright>
+        </control>
+		<control type="button" id="3001">
+            <description>Random next Button</description>
+            <posx>840</posx>
+            <posy>600</posy>
+            <width>140</width>
+            <height>60</height>
+            <textoffsetx>12</textoffsetx>
+            <align>center</align>
+            <aligny>center</aligny>
+            <onright>3001</onright>
+			<font>font13</font>
+			<textcolor>FFFFFFFF</textcolor>
+			<onleft>3000</onleft>
+        </control>
+		<control type="button" id="3002">
+            <description>Exit Button</description>
+            <posx>280</posx>
+            <posy>600</posy>
+            <width>140</width>
+            <height>60</height>
+            <textoffsetx>12</textoffsetx>
+            <align>center</align>
+            <aligny>center</aligny>
+            <onright>3001</onright>
+			<font>font13</font>
+			<textcolor>FFFFFFFF</textcolor>
+			<onright>3000</onright>
+        </control>
+		<control type="label" id="1001">
+            <description>Login state label</description>
+            <posx>20</posx>
+            <posy>20</posy>
+            <width>300</width>
+            <height>40</height>
+            <align>left</align>
+			<font>font13</font>
+			<textcolor>FFFFFFFF</textcolor>
+			<visible>true</visible>
+		</control>
+		<control type="image" id="1002">
+            <description>Animated Gif</description>
+            <posx>325</posx>
+            <posy>190</posy>
+            <width>48</width>
+            <height>48</height>
+            <texture>loader.gif</texture>
+            <ondown>3000</ondown>
+            <onup>3000</onup>
+            <onleft>3000</onleft>
+            <onright>3000</onright>
+			<aspectratio>keep</aspectratio>
+        </control>
+    </controls>
+</window>
