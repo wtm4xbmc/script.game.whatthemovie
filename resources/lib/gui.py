@@ -1,4 +1,6 @@
 import sys
+import os
+import urllib
 import xbmcgui
 import xbmc
 import whatthemovie
@@ -47,6 +49,7 @@ class GUI(xbmcgui.WindowXMLDialog):
 
         self.login()
         self.getRandomShot()
+        self.downloadPic()
 
     def onAction(self, action):
         # onAction will be called on keyboard or mouse action
@@ -77,7 +80,8 @@ class GUI(xbmcgui.WindowXMLDialog):
     def getRandomShot(self):
         self.image_gif.setVisible(True)
         self.Quiz.getRandomShot()
-        self.image_main.setImage(self.Quiz.shot['image_url'])
+        local_image_path = self.downloadPic(self.Quiz.shot['image_url'], self.Quiz.shot['shot_id'])
+        self.image_main.setImage(local_image_path)
         self.image_gif.setVisible(False)
 
     def guessTitle(self):
@@ -107,5 +111,14 @@ class GUI(xbmcgui.WindowXMLDialog):
                 self.label_state.setLabel(getLocalizedString(3106))
             else:
                 self.label_state.setLabel(getLocalizedString(3107) % user)
+
+    def downloadPic(self, image_url, shot_id):
+        cache_dir = 'special://profile/addon_data/%s/cache' % sys.modules['__main__'].__id__
+        if not os.path.isdir(xbmc.translatePath(cache_dir)):
+            os.makedirs(xbmc.translatePath(cache_dir))
+        image_path = xbmc.translatePath('%s/%s.jpg' % (cache_dir, shot_id))
+        dl = urllib.urlretrieve(image_url, image_path, )
+        return image_path
+        
 	
         
