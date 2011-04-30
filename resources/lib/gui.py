@@ -11,7 +11,7 @@ getSetting = sys.modules['__main__'].getSetting
 
 class GUI(xbmcgui.WindowXMLDialog):
     # Constants
-    # CONTOL_IDs
+    # CONTROL_IDs
     CID_BUTTON_GUESS = 3000
     CID_BUTTON_RANDOM = 3001
     CID_BUTTON_EXIT = 3002
@@ -19,6 +19,8 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_IMAGE_GIF = 1002
     CID_LABEL_STATE = 1001
     CID_LABEL_SCORE = 1003
+    CID_LABEL_POSTED_BY = 1004
+    CID_LABEL_SOLVED = 1005
 
     # STRING_IDs
     SID_GUESS = 3100
@@ -32,6 +34,9 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_LOGIN_FAILED_HEADING = 3108
     SID_LOGIN_FAILED = 3109
     SID_YOUR_SCORE = 3110
+    SID_POSTED_BY = 3203
+    SID_SOLVED = 3204
+    SID_UNSOLVED = 3205
 
     # ACTION_IDs
     AID_EXIT_BACK = [10, 13]
@@ -51,6 +56,8 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.button_exit = self.getControl(self.CID_BUTTON_EXIT)
         self.label_state = self.getControl(self.CID_LABEL_STATE)
         self.label_score = self.getControl(self.CID_LABEL_SCORE)
+        self.label_posted_by = self.getControl(self.CID_LABEL_POSTED_BY)
+        self.label_solved =  self.getControl(self.CID_LABEL_SOLVED)
         self.image_main = self.getControl(self.CID_IMAGE_MAIN)
         self.image_gif = self.getControl(self.CID_IMAGE_GIF)
 
@@ -102,6 +109,14 @@ class GUI(xbmcgui.WindowXMLDialog):
         local_image_path = self.downloadPic(shot['image_url'],
                                             shot['shot_id'])
         self.image_main.setImage(local_image_path)
+        self.label_posted_by.setLabel(getString(self.SID_POSTED_BY)
+                                      % self.Quiz.shot['posted_by'])
+        if self.Quiz.shot['solved']['status']:
+            self.label_solved.setLabel(getString(self.SID_SOLVED)
+                                       % (self.Quiz.shot['solved']['status'],
+                                          self.Quiz.shot['solved']['first_by']))
+        else:
+            self.label_solved.setLabel(getString(self.SID_UNSOLVED))
         self.image_gif.setVisible(False)
 
     def guessTitle(self):

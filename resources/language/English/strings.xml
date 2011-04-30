@@ -14,4 +14,7 @@
   <string id="3200">Login on whatthemovie.com</string>
   <string id="3201">Username</string>
   <string id="3202">Password</string>
+  <string id="3203">Posted by [B]%s[/B]</string>
+  <string id="3204">[B][COLOR=ff008B00]%s[/COLOR][/B] times, first by [B]%s[/B]</string>
+  <string id="3205">Not solved yet</string>
 </strings>
