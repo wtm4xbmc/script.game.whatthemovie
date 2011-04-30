@@ -23,6 +23,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_LABEL_POSTED_BY = 1004
     CID_LABEL_SOLVED = 1005
     CID_LABEL_SOLUTION = 1007
+    CID_LABEL_SHOT_ID = 1008
 
     # STRING_IDs
     SID_GUESS = 3100
@@ -40,6 +41,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_SOLVED = 3204
     SID_UNSOLVED = 3205
     SID_SOLUTION = 3206
+    SID_SHOT_ID = 3207
 
     # ACTION_IDs
     AID_EXIT_BACK = [10, 13]
@@ -62,6 +64,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_posted_by = self.getControl(self.CID_LABEL_POSTED_BY)
         self.label_solved =  self.getControl(self.CID_LABEL_SOLVED)
         self.label_solution =  self.getControl(self.CID_LABEL_SOLUTION)
+        self.label_shot_id =  self.getControl(self.CID_LABEL_SHOT_ID)
         self.image_main = self.getControl(self.CID_IMAGE_MAIN)
         self.image_gif = self.getControl(self.CID_IMAGE_GIF)
         self.image_solution =  self.getControl(self.CID_IMAGE_SOLUTION)
@@ -122,6 +125,8 @@ class GUI(xbmcgui.WindowXMLDialog):
                                           shot['solved']['first_by']))
         else:
             self.label_solved.setLabel(getString(self.SID_UNSOLVED))
+        self.label_shot_id.setLabel(getString(self.SID_SHOT_ID)
+                                    % shot['shot_id'])
         self.image_gif.setVisible(False)
 
     def guessTitle(self):
