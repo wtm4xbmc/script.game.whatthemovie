@@ -129,7 +129,19 @@
             <height>40</height>
             <align>right</align>
             <font>font12</font>
-	    <scroll>true</scroll>
+            <scroll>true</scroll>
+            <textcolor>FFFFFFFF</textcolor>
+            <visible>true</visible>
+        </control>
+        <control type="label" id="1006">
+            <description>Movie title and year</description>
+            <posx>1005</posx>
+            <posy>115</posy>
+            <width>730</width>
+            <height>40</height>
+            <align>left</align>
+            <font>font12</font>
+            <scroll>true</scroll>
             <textcolor>FFFFFFFF</textcolor>
             <visible>true</visible>
         </control>

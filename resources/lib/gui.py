@@ -21,6 +21,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_LABEL_SCORE = 1003
     CID_LABEL_POSTED_BY = 1004
     CID_LABEL_SOLVED = 1005
+    CID_LABEL_SOLUTION = 1006
 
     # STRING_IDs
     SID_GUESS = 3100
@@ -37,6 +38,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_POSTED_BY = 3203
     SID_SOLVED = 3204
     SID_UNSOLVED = 3205
+    SID_SOLUTION = 3206
 
     # ACTION_IDs
     AID_EXIT_BACK = [10, 13]
@@ -58,6 +60,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_score = self.getControl(self.CID_LABEL_SCORE)
         self.label_posted_by = self.getControl(self.CID_LABEL_POSTED_BY)
         self.label_solved =  self.getControl(self.CID_LABEL_SOLVED)
+        self.label_solution =  self.getControl(self.CID_LABEL_SOLUTION)
         self.image_main = self.getControl(self.CID_IMAGE_MAIN)
         self.image_gif = self.getControl(self.CID_IMAGE_GIF)
 
