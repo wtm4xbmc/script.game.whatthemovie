@@ -5,24 +5,36 @@ import xbmcgui
 import xbmc
 import whatthemovie
 
-getLocalizedString = sys.modules['__main__'].getLocalizedString
+getString = sys.modules['__main__'].getLocalizedString
 getSetting = sys.modules['__main__'].getSetting
-
-# Buttons               3000-3009
-# Textboxes             3010-3019
-# Transl. for Controls  3100-3119
-# Transl. for Usage     3200-3219
 
 
 class GUI(xbmcgui.WindowXMLDialog):
-    # get control ids
-    CONTROL_ID_BUTTON_GUESS = 3000
-    CONTROL_ID_BUTTON_RANDOM = 3001
-    CONTROL_ID_BUTTON_EXIT = 3002
-    CONTROL_ID_IMAGE_MAIN = 1000
-    CONTROL_ID_IMAGE_GIF = 1002
-    CONTROL_ID_LABEL_STATE = 1001
-    CONTROL_ID_LABEL_SCORE = 1003
+    # Constants
+    # CONTOL_IDs
+    CID_BUTTON_GUESS = 3000
+    CID_BUTTON_RANDOM = 3001
+    CID_BUTTON_EXIT = 3002
+    CID_IMAGE_MAIN = 1000
+    CID_IMAGE_GIF = 1002
+    CID_LABEL_STATE = 1001
+    CID_LABEL_SCORE = 1003
+
+    # STRING_IDs
+    SID_GUESS = 3100
+    SID_RANDOM = 3101
+    SID_EXIT = 3102
+    SID_ANSWER_RIGHT = 3103
+    SID_ANSWER_WRONG = 3104
+    SID_KEYBOARD_HEADING = 3105
+    SID_NOT_LOGGED_IN = 3106
+    SID_LOGGED_IN_AS = 3107
+    SID_LOGIN_FAILED_HEADING = 3108
+    SID_LOGIN_FAILED = 3109
+    SID_YOUR_SCORE = 3110
+
+    # ACTION_IDs
+    AID_EXIT_BACK = [10, 13]
 
     def __init__(self, *args, **kwargs):
         # __init__ will be called when python creates object from this class
@@ -33,21 +45,19 @@ class GUI(xbmcgui.WindowXMLDialog):
         # store xbmc keycodes for exit and backspace
         self.Quiz = whatthemovie.WhatTheMovie()
 
-        self.action_exitkeys_id = [10, 13]
-
         # get controls
-        self.button_guess = self.getControl(self.CONTROL_ID_BUTTON_GUESS)
-        self.button_random = self.getControl(self.CONTROL_ID_BUTTON_RANDOM)
-        self.button_exit = self.getControl(self.CONTROL_ID_BUTTON_EXIT)
-        self.label_state = self.getControl(self.CONTROL_ID_LABEL_STATE)
-        self.label_score = self.getControl(self.CONTROL_ID_LABEL_SCORE)
-        self.image_main = self.getControl(self.CONTROL_ID_IMAGE_MAIN)
-        self.image_gif = self.getControl(self.CONTROL_ID_IMAGE_GIF)
+        self.button_guess = self.getControl(self.CID_BUTTON_GUESS)
+        self.button_random = self.getControl(self.CID_BUTTON_RANDOM)
+        self.button_exit = self.getControl(self.CID_BUTTON_EXIT)
+        self.label_state = self.getControl(self.CID_LABEL_STATE)
+        self.label_score = self.getControl(self.CID_LABEL_SCORE)
+        self.image_main = self.getControl(self.CID_IMAGE_MAIN)
+        self.image_gif = self.getControl(self.CID_IMAGE_GIF)
 
         # translate buttons
-        self.button_guess.setLabel(getLocalizedString(3100))
-        self.button_random.setLabel(getLocalizedString(3101))
-        self.button_exit.setLabel(getLocalizedString(3102))
+        self.button_guess.setLabel(getString(self.SID_GUESS))
+        self.button_random.setLabel(getString(self.SID_RANDOM))
+        self.button_exit.setLabel(getString(self.SID_EXIT))
 
         # start the api
         self.login()
@@ -56,7 +66,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     def onAction(self, action):
         # onAction will be called on keyboard or mouse action
         # action is the action which was triggered
-        if action in self.action_exitkeys_id:
+        if action in self.AID_EXIT_BACK:
             self.closeDialog()
         #else:
         #    print action.getId()
@@ -68,11 +78,11 @@ class GUI(xbmcgui.WindowXMLDialog):
     def onClick(self, controlId):
         # onClick will be called on any click
         # controlID is the ID of the item which is clicked
-        if controlId == self.CONTROL_ID_BUTTON_GUESS:
+        if controlId == self.CID_BUTTON_GUESS:
             self.guessTitle()
-        if controlId == self.CONTROL_ID_BUTTON_RANDOM:
+        if controlId == self.CID_BUTTON_RANDOM:
             self.getRandomShot()
-        elif controlId == self.CONTROL_ID_BUTTON_EXIT:
+        elif controlId == self.CID_BUTTON_EXIT:
             self.closeDialog()
 
     def closeDialog(self):
@@ -87,7 +97,8 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.image_gif.setVisible(False)
 
     def guessTitle(self):
-        keyboard = xbmc.Keyboard(default='', title=getLocalizedString(3105))
+        heading = getString(self.SID_KEYBOARD_HEADING)
+        keyboard = xbmc.Keyboard(default='', heading=heading)
         keyboard.doModal()
         if keyboard.isConfirmed():
             guess = keyboard.getText()
@@ -100,33 +111,34 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.answerWrong()
 
     def answerRight(self):
-        message = getLocalizedString(3103)
+        message = getString(self.SID_ANSWER_RIGHT)
         self.getRandomShot()
         self.score += 1
         dialog = xbmcgui.Dialog()
         dialog.ok('right', message)  # fixme
 
     def answerWrong(self):
-        message = getLocalizedString(3104)
+        message = getString(self.SID_ANSWER_WRONG)
         dialog = xbmcgui.Dialog()
         dialog.ok('wrong', message)  # fixme
 
     def login(self):
         self.score = 0
         if getSetting('login') == 'false':
-            self.label_state.setLabel(getLocalizedString(3106))
+            self.label_state.setLabel(getString(self.SID_NOT_LOGGED_IN))
         else:
             user = getSetting('username')
             password = getSetting('password')
             success = self.Quiz.login(user, password)
             if success == False:
                 dialog = xbmcgui.Dialog()
-                dialog.ok(getLocalizedString(3108),
-                          getLocalizedString(3109) % user)  # fixme
-                self.label_state.setLabel(getLocalizedString(3106))
+                dialog.ok(getString(self.SID_LOGIN_FAILED_HEADING),
+                          getString(self.SID_LOGIN_FAILED) % user)  # fixme
+                label = getString(self.SID_NOT_LOGGED_IN)
             else:
-                self.label_state.setLabel(getLocalizedString(3107) % user)
+                label = getString(self.SID_LOGGED_IN_AS) % user
                 self.score = int(self.Quiz.getScore())
+            self.label_state.setLabel(label)
         self.updateScore()
 
     def downloadPic(self, image_url, shot_id):
@@ -139,5 +151,5 @@ class GUI(xbmcgui.WindowXMLDialog):
         return image_path
 
     def updateScore(self):
-        score_string = getLocalizedString(3110) % str(self.score)
+        score_string = getString(self.SID_YOUR_SCORE) % str(self.score)
         self.label_score.setLabel(score_string)
