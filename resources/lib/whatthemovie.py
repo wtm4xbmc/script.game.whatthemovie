@@ -98,16 +98,19 @@ class WhatTheMovie:
         return self.shot
 
     def guessShot(self, title_guess, shot_id=None):
-        self.answer_is_right = False
+        self.answer = dict()
+        self.answer['is_right'] = False
         if not shot_id:
             shot_id = self.shot['shot_id']
         post_url = '%s/shot/%s/guess' % (self.MAIN_URL, shot_id)
         self.browser.open(post_url, 'guess=%s' % title_guess)
-        answer = str(self.browser.response().read())[6:11]
+        response = self.browser.response().read()
+        str_right = str(response)[6:11]
         # ['right'|'wrong']
-        if answer == 'right':
-            self.answer_is_right = True
-        return self.answer_is_right
+        if str_right == 'right':
+            self.answer['is_right'] = True
+            self.answer['title_year'] = response.split('"')[3]
+        return self.answer
 
     def getScore(self, username=None):
         self.score = 0

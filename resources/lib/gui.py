@@ -104,17 +104,18 @@ class GUI(xbmcgui.WindowXMLDialog):
             guess = keyboard.getText()
         else:
             return
-        answer_is_right = self.Quiz.guessShot(guess)
-        if answer_is_right == True:
-            self.answerRight()
+        answer = self.Quiz.guessShot(guess)
+        if answer['is_right'] == True:
+            self.answerRight(answer['title_year'])
         else:
             self.answerWrong()
 
-    def answerRight(self):
+    def answerRight(self, title_year):
         message = getString(self.SID_ANSWER_RIGHT)
         self.getRandomShot()
         self.score += 1
         self.updateScore()
+        print title_year  # fixme: plz put me in any label
         dialog = xbmcgui.Dialog()
         dialog.ok('right', message)  # fixme
 
