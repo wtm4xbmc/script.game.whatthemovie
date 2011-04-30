@@ -17,11 +17,12 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_BUTTON_EXIT = 3002
     CID_IMAGE_MAIN = 1000
     CID_IMAGE_GIF = 1002
+    CID_IMAGE_SOLUTION = 1006
     CID_LABEL_STATE = 1001
     CID_LABEL_SCORE = 1003
     CID_LABEL_POSTED_BY = 1004
     CID_LABEL_SOLVED = 1005
-    CID_LABEL_SOLUTION = 1006
+    CID_LABEL_SOLUTION = 1007
 
     # STRING_IDs
     SID_GUESS = 3100
@@ -63,6 +64,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_solution =  self.getControl(self.CID_LABEL_SOLUTION)
         self.image_main = self.getControl(self.CID_IMAGE_MAIN)
         self.image_gif = self.getControl(self.CID_IMAGE_GIF)
+        self.image_solution =  self.getControl(self.CID_IMAGE_SOLUTION)
 
         # translate buttons
         self.button_guess.setLabel(getString(self.SID_GUESS))

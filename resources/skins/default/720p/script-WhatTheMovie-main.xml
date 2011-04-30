@@ -134,13 +134,25 @@
             <visible>true</visible>
         </control>
         <control type="image" id="1006">
-            <description>Solution Movie title and year</description>
+            <description>Solution background image</description>
             <posx>280</posx>
             <posy>530</posy>
             <width>720</width>
             <height>30</height>
             <texture>solutionback.png</texture>
             <enabled>false</enabled>
+            <visible>false</visible>
+        </control>
+        <control type="label" id="1007">
+            <description>Solution Movie title and year</description>
+            <posx>280</posx>
+            <posy>530</posy>
+            <width>720</width>
+            <height>30</height>
+            <align>left</align>
+            <font>font12</font>
+            <scroll>true</scroll>
+            <textcolor>FFFFFFFF</textcolor>
             <visible>false</visible>
         </control>
         <control type="label" id="1003">
