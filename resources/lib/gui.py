@@ -113,11 +113,11 @@ class GUI(xbmcgui.WindowXMLDialog):
                                             shot['shot_id'])
         self.image_main.setImage(local_image_path)
         self.label_posted_by.setLabel(getString(self.SID_POSTED_BY)
-                                      % self.Quiz.shot['posted_by'])
-        if self.Quiz.shot['solved']['status']:
+                                      % shot['posted_by'])
+        if shot['solved']['status']:
             self.label_solved.setLabel(getString(self.SID_SOLVED)
-                                       % (self.Quiz.shot['solved']['status'],
-                                          self.Quiz.shot['solved']['first_by']))
+                                       % (shot['solved']['count'],
+                                          shot['solved']['first_by']))
         else:
             self.label_solved.setLabel(getString(self.SID_UNSOLVED))
         self.image_gif.setVisible(False)

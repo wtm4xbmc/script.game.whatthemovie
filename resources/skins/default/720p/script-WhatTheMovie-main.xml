@@ -133,17 +133,15 @@
             <textcolor>FFFFFFFF</textcolor>
             <visible>true</visible>
         </control>
-        <control type="label" id="1006">
-            <description>Movie title and year</description>
-            <posx>1005</posx>
-            <posy>115</posy>
-            <width>730</width>
-            <height>40</height>
-            <align>left</align>
-            <font>font12</font>
-            <scroll>true</scroll>
-            <textcolor>FFFFFFFF</textcolor>
-            <visible>true</visible>
+        <control type="image" id="1006">
+            <description>Solution Movie title and year</description>
+            <posx>280</posx>
+            <posy>530</posy>
+            <width>720</width>
+            <height>30</height>
+            <texture>solutionback.png</texture>
+            <enabled>false</enabled>
+            <visible>false</visible>
         </control>
         <control type="label" id="1003">
             <description>Score Label</description>
