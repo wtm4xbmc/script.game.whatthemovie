@@ -83,7 +83,14 @@ class WhatTheMovie:
                              attrs={'class': 'nav_shotinfo'}).findAll('li')
         posted_by = sections[0].a.string
         solved = dict()
-        solved['status'] = sections[1].string[8:]
+        try:
+            solved_string, solved_count = sections[1].string[8:].split()
+            if solved_string == 'solved':
+                solved['status'] = True
+                solved['count'] = int(solved_count.strip('()'))
+        except:
+            solved['status'] = False
+            solved['count'] = 0
         try:
             solved['first_by'] = sections[2].a.string
         except:
