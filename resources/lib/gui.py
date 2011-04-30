@@ -43,7 +43,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     def onInit(self):
         # onInit will be called from xbmc (after __init__)
         # store xbmc keycodes for exit and backspace
-        self.Quiz = whatthemovie.WhatTheMovie()
+        self.startApi()
 
         # get controls
         self.button_guess = self.getControl(self.CID_BUTTON_GUESS)
@@ -62,6 +62,13 @@ class GUI(xbmcgui.WindowXMLDialog):
         # start the api
         self.login()
         self.getRandomShot()
+
+    def startApi(self):
+        script_id = sys.modules['__main__'].__id__
+        cookie_dir = 'special://profile/addon_data/%s' % script_id
+        self.createCheckPath(cookie_dir)
+        cookie_file = xbmc.translatePath('%s/cookie.txt' % cookie_dir)
+        self.Quiz = whatthemovie.WhatTheMovie(cookie_file)
 
     def onAction(self, action):
         # onAction will be called on keyboard or mouse action
@@ -91,6 +98,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     def getRandomShot(self):
         self.image_gif.setVisible(True)
         shot = self.Quiz.getRandomShot()
+        shot = self.Quiz.shot  # fixme, strange error without?!
         local_image_path = self.downloadPic(shot['image_url'],
                                             shot['shot_id'])
         self.image_main.setImage(local_image_path)
@@ -146,8 +154,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     def downloadPic(self, image_url, shot_id):
         script_id = sys.modules['__main__'].__id__
         cache_dir = 'special://profile/addon_data/%s/cache' % script_id
-        if not os.path.isdir(xbmc.translatePath(cache_dir)):
-            os.makedirs(xbmc.translatePath(cache_dir))
+        self.createCheckPath(cache_dir)
         image_path = xbmc.translatePath('%s/%s.jpg' % (cache_dir, shot_id))
         dl = urllib.urlretrieve(image_url, image_path, )
         return image_path
@@ -155,3 +162,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     def updateScore(self):
         score_string = getString(self.SID_YOUR_SCORE) % str(self.score)
         self.label_score.setLabel(score_string)
+
+    def createCheckPath(self, path):
+        if not os.path.isdir(xbmc.translatePath(path)):
+            os.makedirs(xbmc.translatePath(path))

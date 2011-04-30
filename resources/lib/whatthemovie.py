@@ -115,9 +115,9 @@ class WhatTheMovie:
     def getScore(self, username=None):
         self.score = 0
         if not username:
-            #print 'No username given trying logged in user.'
+            # No username given trying logged in user
             if not self.username:
-                #print 'Not logged in.'
+                # Not logged in
                 return self.score
             else:
                 username = self.username
