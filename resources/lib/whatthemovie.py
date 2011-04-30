@@ -41,25 +41,25 @@ class WhatTheMovie:
         login_url = '%s/user/login/' % self.MAIN_URL
         try:
             self.cookies.revert('cookie.txt')
-            #print 'cookie found.'
+            # cookie found
         except:
-            #print 'no cookie found.'
+            # no cookie found
             pass
         if self._checkLogin(login_url):
-            #print 'logged in via cookie.'
+            # logged in via cookie
             self.username = user
         else:
-            #print 'need to login.'
+            # need to login
             self.browser.select_form(nr=0)
             self.browser['name'] = user
             self.browser['upassword'] = password
             self.browser.submit()
             if self._checkLogin(login_url):
-                #print 'logged in via auth.'
+                # logged in via auth
                 self.cookies.save('cookie.txt')
                 self.username = user
             else:
-                #print 'could not log in.'
+                # could not log in
                 pass
         return self.is_login
 
