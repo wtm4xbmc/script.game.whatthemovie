@@ -1,4 +1,4 @@
-﻿<window id="1000">
+<window id="1000">
     <defaultcontrol always="false">3000</defaultcontrol>
     <controls>
         <control type="image">
@@ -7,7 +7,7 @@
             <posy>0</posy>
             <width>1280</width>
             <height>720</height>
-            <texture>background.png</texture>
+            <texture>background.jpg</texture>
             <ondown>3000</ondown>
             <onup>3000</onup>
             <onleft>3000</onleft>
@@ -40,7 +40,7 @@
             <onright>3000</onright>
             <enabled>false</enabled>
         </control>
-        <control type="image" id="1000" fadetime="2000">
+        <control type="image" id="1000">
             <description>The Picture to guess</description>
             <posx>280</posx>
             <posy>160</posy>
@@ -59,7 +59,6 @@
             <posy>588</posy>
             <width>406</width>
             <height>45</height>
-            <textoffsetx>12</textoffsetx>
             <texturefocus>inputfield.png</texturefocus>
             <texturenofocus>inputfield.png</texturenofocus>
             <align>center</align>
@@ -76,7 +75,6 @@
             <posy>590</posy>
             <width>155</width>
             <height>40</height>
-            <textoffsetx>12</textoffsetx>
             <texturefocus>button_active.png</texturefocus>
             <texturenofocus>button.png</texturenofocus>
             <align>center</align>
@@ -92,7 +90,6 @@
             <posy>590</posy>
             <width>155</width>
             <height>40</height>
-            <textoffsetx>12</textoffsetx>
             <texturefocus>button_active.png</texturefocus>
             <texturenofocus>button.png</texturenofocus>
             <align>center</align>
