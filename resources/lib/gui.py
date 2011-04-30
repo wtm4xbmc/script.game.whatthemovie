@@ -114,6 +114,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         message = getString(self.SID_ANSWER_RIGHT)
         self.getRandomShot()
         self.score += 1
+        self.updateScore()
         dialog = xbmcgui.Dialog()
         dialog.ok('right', message)  # fixme
 
