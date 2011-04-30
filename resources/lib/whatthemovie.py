@@ -9,11 +9,13 @@ class WhatTheMovie:
 
     MAIN_URL = 'http://whatthemovie.com'
 
-    def __init__(self):
+    def __init__(self, cookie_path=None):
         # Get browser stuff
         self.cookies = LWPCookieJar()
         self.browser = Browser()
         self.browser.set_cookiejar(self.cookies)
+        # Set variables
+        self.cookie_path = cookie_path
         # Set empty returns
         self.is_login = False
         self.shot = dict()
@@ -39,24 +41,26 @@ class WhatTheMovie:
         login_url = '%s/user/login/' % self.MAIN_URL
         try:
             self.cookies.revert('cookie.txt')
-            print 'cookie found.'
+            #print 'cookie found.'
         except:
-            print 'no cookie found.'
+            #print 'no cookie found.'
+            pass
         if self._checkLogin(login_url):
-            print 'logged in via cookie.'
+            #print 'logged in via cookie.'
             self.username = user
         else:
-            print 'need to login.'
+            #print 'need to login.'
             self.browser.select_form(nr=0)
             self.browser['name'] = user
             self.browser['upassword'] = password
             self.browser.submit()
             if self._checkLogin(login_url):
-                print 'logged in via auth.'
+                #print 'logged in via auth.'
                 self.cookies.save('cookie.txt')
                 self.username = user
             else:
-                print 'could not log in.'
+                #print 'could not log in.'
+                pass
         return self.is_login
 
     def getRandomShot(self):
@@ -75,27 +79,42 @@ class WhatTheMovie:
         langs = section.findAll(lambda tag: len(tag.attrs) == 0)
         for lang in langs:
             lang_list.append(str(lang.img['alt'])[:-6])
+        sections = tree.find('ul',
+                             attrs={'class': 'nav_shotinfo'}).findAll('li')
+        posted_by = sections[0].a.string
+        solved = dict()
+        solved['status'] = sections[1].string[8:]
+        try:
+            solved['first_by'] = sections[2].a.string
+        except:
+            solved['first_by'] = 'nobody'
         self.shot['shot_id'] = shot_id
         self.shot['image_url'] = image_url
         self.shot['lang_list'] = lang_list
+        self.shot['posted_by'] = posted_by
+        self.shot['solved'] = solved
+        # fixme, only for debug
+        print 'debug languages: %s' % str(self.shot['lang_list'])
         return self.shot
 
     def guessShot(self, title_guess, shot_id=None):
-        self.answer = None
+        self.answer_is_right = False
         if not shot_id:
             shot_id = self.shot['shot_id']
         post_url = '%s/shot/%s/guess' % (self.MAIN_URL, shot_id)
         self.browser.open(post_url, 'guess=%s' % title_guess)
-        self.answer = str(self.browser.response().read())[6:11]
+        answer = str(self.browser.response().read())[6:11]
         # ['right'|'wrong']
-        return self.answer
+        if answer == 'right':
+            self.answer_is_right = True
+        return self.answer_is_right
 
     def getScore(self, username=None):
-        self.score = None
+        self.score = 0
         if not username:
-            print 'No username given trying logged in user.'
+            #print 'No username given trying logged in user.'
             if not self.username:
-                print 'Not logged in.'
+                #print 'Not logged in.'
                 return self.score
             else:
                 username = self.username

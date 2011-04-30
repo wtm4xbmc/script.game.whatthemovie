@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <strings>
   <string id="3100">Guess!</string>
-  <string id="3101">Next</string>
+  <string id="3101">Random</string>
   <string id="3102">Exit</string>
   <string id="3103">Right[CR]You scored one point. Awesome</string>
   <string id="3104">Wrong</string>
