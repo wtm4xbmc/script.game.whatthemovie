@@ -90,9 +90,9 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def getRandomShot(self):
         self.image_gif.setVisible(True)
-        self.Quiz.getRandomShot()
-        local_image_path = self.downloadPic(self.Quiz.shot['image_url'],
-                                            self.Quiz.shot['shot_id'])
+        shot = self.Quiz.getRandomShot()
+        local_image_path = self.downloadPic(shot['image_url'],
+                                            shot['shot_id'])
         self.image_main.setImage(local_image_path)
         self.image_gif.setVisible(False)
 
