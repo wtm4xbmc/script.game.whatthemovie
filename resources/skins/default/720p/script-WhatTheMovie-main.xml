@@ -114,7 +114,7 @@
             <description>Posted by label</description>
             <posx>275</posx>
             <posy>115</posy>
-            <width>300</width>
+            <width>250</width>
             <height>40</height>
             <align>left</align>
             <font>font12</font>
@@ -125,7 +125,7 @@
             <description>Solved label</description>
             <posx>1005</posx>
             <posy>115</posy>
-            <width>500</width>
+            <width>450</width>
             <height>40</height>
             <align>right</align>
             <font>font12</font>
