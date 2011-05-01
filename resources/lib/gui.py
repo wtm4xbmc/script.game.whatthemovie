@@ -24,6 +24,8 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_LABEL_SOLVED = 1005
     CID_LABEL_SOLUTION = 1007
     CID_LABEL_SHOT_ID = 1008
+    CID_IMAGE_CORRECT = 1009
+    CID_IMAGE_WRONG = 1010
 
     # STRING_IDs
     SID_GUESS = 3100
@@ -67,6 +69,8 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.image_main = self.getControl(self.CID_IMAGE_MAIN)
         self.image_gif = self.getControl(self.CID_IMAGE_GIF)
         self.image_solution = self.getControl(self.CID_IMAGE_SOLUTION)
+        self.image_correct = self.getControl(self.CID_IMAGE_CORRECT)
+        self.image_wrong = self.getControl(self.CID_IMAGE_WRONG)
 
         # translate buttons
         self.button_guess.setLabel(getString(self.SID_GUESS))
@@ -75,7 +79,9 @@ class GUI(xbmcgui.WindowXMLDialog):
 
         # set control visibility
         self.setVisibleState((self.label_solution,
-                              self.image_solution), False)
+                              self.image_solution,
+                              self.image_correct,
+                              self.image_wrong), False)
         self.hideLabels()
 
         # start the api
@@ -114,7 +120,9 @@ class GUI(xbmcgui.WindowXMLDialog):
         local_image_path = self.downloadPic(shot['image_url'],
                                             shot['shot_id'])
         self.setVisibleState((self.label_solution,
-                              self.image_solution), False)
+                              self.image_solution,
+                              self.image_correct,
+                              self.image_wrong), False)
         self.image_main.setImage(local_image_path)
         self.label_posted_by.setLabel(getString(self.SID_POSTED_BY)
                                       % shot['posted_by'])
@@ -149,7 +157,8 @@ class GUI(xbmcgui.WindowXMLDialog):
     def answerRight(self, title_year):
         message = getString(self.SID_ANSWER_RIGHT)
         self.setVisibleState((self.label_solution,
-                              self.image_solution), True)
+                              self.image_solution,
+                              self.image_correct), True)
         self.label_solution.setLabel(message % title_year)
         self.getRandomShot()
         self.score += 1
@@ -159,7 +168,8 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def answerWrong(self):
         self.setVisibleState((self.label_solution,
-                              self.image_solution), True)
+                              self.image_solution,
+                              self.image_wrong), True)
         message = getString(self.SID_ANSWER_WRONG)
         self.label_solution.setLabel(message)
 
