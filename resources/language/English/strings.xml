@@ -26,4 +26,5 @@
   <string id="3211">Show "Solved"</string>
   <string id="3212">Show "Shot ID"</string>
   <string id="3213">Shot Date: [B]%s[/B]</string>
+  <string id="3214">%Y-%m-%d</string>
 </strings>

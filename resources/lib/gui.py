@@ -1,6 +1,7 @@
 import sys
 import os
 import urllib
+import time
 import xbmcgui
 import xbmc
 import whatthemovie
@@ -46,6 +47,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_UNSOLVED = 3205
     SID_SHOT_ID = 3207
     SID_SHOT_DATE = 3213
+    SID_DATE_FORMAT = 3214
 
     # ACTION_IDs
     AID_EXIT_BACK = [10, 13]
@@ -137,10 +139,10 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.label_solved.setLabel(getString(self.SID_UNSOLVED))
         self.label_shot_id.setLabel(getString(self.SID_SHOT_ID)
                                     % shot['shot_id'])
+        date_string = time.strftime(getString(self.SID_DATE_FORMAT),
+                                    shot['struct_date'])
         self.label_shot_date.setLabel(getString(self.SID_SHOT_DATE)
-                                      % (shot['date']['year'] + ' ' +
-                                         shot['date']['month'] + ' ' +
-                                         shot['date']['day']))
+                                      % date_string)
         self.setVisibleState((self.image_gif, ), False)
 
     def guessTitle(self):

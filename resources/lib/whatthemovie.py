@@ -3,6 +3,7 @@
 
 from mechanize import Browser, LWPCookieJar
 from BeautifulSoup import BeautifulSoup
+from time import strptime
 
 
 class WhatTheMovie:
@@ -80,11 +81,10 @@ class WhatTheMovie:
 
         date_info = tree.find('ul',
                               attrs={'class': 'nav_date'}).findAll('li')
-        date = dict()
-        date['year'] = date_info[1].a.string
-        date['month'] = date_info[2].a.string
-        date['day'] = date_info[3].a.string
-
+        struct_date = strptime('%s %s %s' % (date_info[1].a.string,
+                                             date_info[2].a.string,
+                                             date_info[3].a.string[:-2]),
+                               '%Y %B %d')
         sections = tree.find('ul',
                              attrs={'class': 'nav_shotinfo'}).findAll('li')
         posted_by = sections[0].a.string
@@ -106,7 +106,7 @@ class WhatTheMovie:
         self.shot['lang_list'] = lang_list
         self.shot['posted_by'] = posted_by
         self.shot['solved'] = solved
-        self.shot['date'] = date
+        self.shot['struct_date'] = struct_date
         # fixme, only for debug
         print 'debug languages: %s' % str(self.shot['lang_list'])
         return self.shot
