@@ -53,7 +53,6 @@ class GUI(xbmcgui.WindowXMLDialog):
     def onInit(self):
         # onInit will be called from xbmc (after __init__)
         # store xbmc keycodes for exit and backspace
-        self.startApi()
 
         # get controls
         self.button_guess = self.getControl(self.CID_BUTTON_GUESS)
@@ -62,12 +61,12 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_loginstate = self.getControl(self.CID_LABEL_LOGINSTATE)
         self.label_score = self.getControl(self.CID_LABEL_SCORE)
         self.label_posted_by = self.getControl(self.CID_LABEL_POSTED_BY)
-        self.label_solved =  self.getControl(self.CID_LABEL_SOLVED)
-        self.label_solution =  self.getControl(self.CID_LABEL_SOLUTION)
-        self.label_shot_id =  self.getControl(self.CID_LABEL_SHOT_ID)
+        self.label_solved = self.getControl(self.CID_LABEL_SOLVED)
+        self.label_solution = self.getControl(self.CID_LABEL_SOLUTION)
+        self.label_shot_id = self.getControl(self.CID_LABEL_SHOT_ID)
         self.image_main = self.getControl(self.CID_IMAGE_MAIN)
         self.image_gif = self.getControl(self.CID_IMAGE_GIF)
-        self.image_solution =  self.getControl(self.CID_IMAGE_SOLUTION)
+        self.image_solution = self.getControl(self.CID_IMAGE_SOLUTION)
 
         # translate buttons
         self.button_guess.setLabel(getString(self.SID_GUESS))
@@ -79,6 +78,7 @@ class GUI(xbmcgui.WindowXMLDialog):
                               self.image_solution), False)
 
         # start the api
+        self.startApi()
         self.login()
         self.getRandomShot()
 
@@ -168,7 +168,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         else:
             script_id = sys.modules['__main__'].__id__
             cookie_dir = 'special://profile/addon_data/%s' % script_id
-            self.createCheckPath(cookie_dir)
+            self.checkCreatePath(cookie_dir)
             cookie_file = xbmc.translatePath('%s/cookie.txt' % cookie_dir)
             user = getSetting('username')
             password = getSetting('password')
@@ -176,7 +176,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             if success == False:
                 dialog = xbmcgui.Dialog()
                 dialog.ok(getString(self.SID_LOGIN_FAILED_HEADING),
-                          getString(self.SID_LOGIN_FAILED) % user)  # fixme
+                          getString(self.SID_LOGIN_FAILED) % user)
                 label = getString(self.SID_NOT_LOGGED_IN)
             else:
                 label = getString(self.SID_LOGGED_IN_AS) % user
@@ -187,7 +187,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     def downloadPic(self, image_url, shot_id):
         script_id = sys.modules['__main__'].__id__
         cache_dir = 'special://profile/addon_data/%s/cache' % script_id
-        self.createCheckPath(cache_dir)
+        self.checkCreatePath(cache_dir)
         image_path = xbmc.translatePath('%s/%s.jpg' % (cache_dir, shot_id))
         dl = urllib.urlretrieve(image_url, image_path, )
         return image_path
@@ -196,11 +196,14 @@ class GUI(xbmcgui.WindowXMLDialog):
         score_string = getString(self.SID_YOUR_SCORE) % str(self.score)
         self.label_score.setLabel(score_string)
 
-    def createCheckPath(self, path):
-        if not os.path.isdir(xbmc.translatePath(path)):
-            os.makedirs(xbmc.translatePath(path))
+    def checkCreatePath(self, path):
+        result = False
+        if os.path.isdir(xbmc.translatePath(path)):
+            result = True
+        else:
+            result = os.makedirs(xbmc.translatePath(path))
+        return result
 
     def setVisibleState(self, control_list, visible):
         for control in control_list:
             control.setVisible(visible)
-        
