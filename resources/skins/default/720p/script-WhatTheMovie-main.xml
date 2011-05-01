@@ -65,9 +65,10 @@
             <aligny>center</aligny>
             <onright>3001</onright>
             <onleft>3002</onleft>
+            <onup>3002</onup>
+            <ondown>3001</ondown>
             <font>font13</font>
             <textcolor>FFFFFFFF</textcolor>
-            <onright>3001</onright>
         </control>
         <control type="button" id="3001">
             <description>Random next Button</description>
@@ -79,10 +80,12 @@
             <texturenofocus>button.png</texturenofocus>
             <align>center</align>
             <aligny>center</aligny>
-            <onright>3001</onright>
+            <onleft>3000</onleft>
+            <onright>3002</onright>
+            <onup>3000</onup>
+            <ondown>3002</ondown>
             <font>font13</font>
             <textcolor>FFFFFFFF</textcolor>
-            <onleft>3000</onleft>
         </control>
         <control type="button" id="3002">
             <description>Exit Button</description>
@@ -94,10 +97,12 @@
             <texturenofocus>button.png</texturenofocus>
             <align>center</align>
             <aligny>center</aligny>
-            <onright>3001</onright>
+            <onleft>3001</onleft>
+            <onright>3000</onright>
+            <onup>3001</onup>
+            <ondown>3000</ondown>
             <font>font13</font>
             <textcolor>FFFFFFFF</textcolor>
-            <onright>3000</onright>
         </control>
         <control type="label" id="1001">
             <description>Login state label</description>
