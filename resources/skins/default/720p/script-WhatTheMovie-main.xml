@@ -83,6 +83,7 @@
             <ondown>3002</ondown>
             <font>font13</font>
             <textcolor>FFFFFFFF</textcolor>
+            <onclick>SetFocus(3000)</onclick>
         </control>
         <control type="button" id="3002">
             <description>Exit Button</description>
