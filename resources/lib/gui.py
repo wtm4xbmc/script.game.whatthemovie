@@ -84,6 +84,8 @@ class GUI(xbmcgui.WindowXMLDialog):
                               self.image_wrong), False)
         self.hideLabels()
 
+        Skin.SetString('test', 'init')
+
         # start the api
         self.Quiz = whatthemovie.WhatTheMovie()
         self.login()
@@ -134,6 +136,10 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.label_solved.setLabel(getString(self.SID_UNSOLVED))
         self.label_shot_id.setLabel(getString(self.SID_SHOT_ID)
                                     % shot['shot_id'])
+        self.label_shot_date.setLabel(getString(self.SID_SHOT_DATE)
+                                      % (shot['date']['year'] + ' ' +
+                                         shot['date']['month'] + ' ' +
+                                         shot['date']['day']))
         self.setVisibleState((self.image_gif, ), False)
 
     def guessTitle(self):
@@ -168,7 +174,8 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.score += 1
         self.updateScore()
         self.setVisibleState((self.label_solution,
-                              self.image_solution), False)
+                              self.image_solution,
+                              self.image_correct), False)
 
     def answerWrong(self):
         self.setVisibleState((self.label_solution,

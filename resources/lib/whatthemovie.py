@@ -77,6 +77,14 @@ class WhatTheMovie:
         langs = section.findAll(lambda tag: len(tag.attrs) == 0)
         for lang in langs:
             lang_list.append(str(lang.img['alt'])[:-6])
+
+        date_info = tree.find('ul',
+                              attrs={'class': 'nav_date'}).findAll('li')
+        date = dict()
+        date['year'] = date_info[1].a.string
+        date['month'] = date_info[2].a.string
+        date['day'] = date_info[3].a.string
+
         sections = tree.find('ul',
                              attrs={'class': 'nav_shotinfo'}).findAll('li')
         posted_by = sections[0].a.string
@@ -98,6 +106,7 @@ class WhatTheMovie:
         self.shot['lang_list'] = lang_list
         self.shot['posted_by'] = posted_by
         self.shot['solved'] = solved
+        self.shot['date'] = date
         # fixme, only for debug
         print 'debug languages: %s' % str(self.shot['lang_list'])
         return self.shot
