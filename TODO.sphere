@@ -9,3 +9,7 @@ hotkeys for random/guess/next/prev/first/last		?
 only use returns									X
 hover für guess?
 move cookie to a xbmc-legal path!					X
+escapte return title_year
+add "checking..." to title_year						X
+rename title_year
+make random after guess_right optional. def:enabled

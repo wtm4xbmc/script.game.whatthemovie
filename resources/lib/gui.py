@@ -37,6 +37,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_LOGIN_FAILED_HEADING = 3108
     SID_LOGIN_FAILED = 3109
     SID_YOUR_SCORE = 3110
+    SID_CHECKING = 3111
     SID_POSTED_BY = 3203
     SID_SOLVED = 3204
     SID_UNSOLVED = 3205
@@ -115,6 +116,8 @@ class GUI(xbmcgui.WindowXMLDialog):
         shot = self.Quiz.getRandomShot()
         local_image_path = self.downloadPic(shot['image_url'],
                                             shot['shot_id'])
+        self.setVisibleState((self.label_solution,
+                              self.image_solution), False)
         self.image_main.setImage(local_image_path)
         self.label_posted_by.setLabel(getString(self.SID_POSTED_BY)
                                       % shot['posted_by'])
@@ -126,8 +129,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.label_solved.setLabel(getString(self.SID_UNSOLVED))
         self.label_shot_id.setLabel(getString(self.SID_SHOT_ID)
                                     % shot['shot_id'])
-        self.setVisibleState((self.image_gif, self.label_solution,
-                              self.image_solution), False)
+        self.setVisibleState((self.image_gif, ), False)
 
     def guessTitle(self):
         heading = getString(self.SID_KEYBOARD_HEADING)
@@ -137,7 +139,13 @@ class GUI(xbmcgui.WindowXMLDialog):
             guess = keyboard.getText()
         else:
             return
+        self.setVisibleState((self.label_solution,
+                              self.image_solution), True)
+        message = getString(self.SID_CHECKING)
+        self.label_solution.setLabel(message)
         answer = self.Quiz.guessShot(guess)
+        self.setVisibleState((self.label_solution,
+                              self.image_solution), False)
         if answer['is_right'] == True:
             self.answerRight(answer['title_year'])
         else:
@@ -148,7 +156,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.setVisibleState((self.label_solution,
                               self.image_solution), True)
         self.label_solution.setLabel('%s %s' % (message,
-                                                title_year)) # fixme controlid
+                                                title_year))
         self.getRandomShot()
         self.score += 1
         self.updateScore()
@@ -159,7 +167,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.setVisibleState((self.label_solution,
                               self.image_solution), True)
         message = getString(self.SID_ANSWER_WRONG)
-        self.label_solution.setLabel(message) # fixme controlid
+        self.label_solution.setLabel(message)
 
     def login(self):
         self.score = 0
