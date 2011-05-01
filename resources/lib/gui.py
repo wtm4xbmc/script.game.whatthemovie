@@ -83,11 +83,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.getRandomShot()
 
     def startApi(self):
-        script_id = sys.modules['__main__'].__id__
-        cookie_dir = 'special://profile/addon_data/%s' % script_id
-        self.createCheckPath(cookie_dir)
-        cookie_file = xbmc.translatePath('%s/cookie.txt' % cookie_dir)
-        self.Quiz = whatthemovie.WhatTheMovie(cookie_file)
+        self.Quiz = whatthemovie.WhatTheMovie()
 
     def onAction(self, action):
         # onAction will be called on keyboard or mouse action
@@ -170,9 +166,13 @@ class GUI(xbmcgui.WindowXMLDialog):
         if getSetting('login') == 'false':
             self.label_state.setLabel(getString(self.SID_NOT_LOGGED_IN))
         else:
+            script_id = sys.modules['__main__'].__id__
+            cookie_dir = 'special://profile/addon_data/%s' % script_id
+            self.createCheckPath(cookie_dir)
+            cookie_file = xbmc.translatePath('%s/cookie.txt' % cookie_dir)
             user = getSetting('username')
             password = getSetting('password')
-            success = self.Quiz.login(user, password)
+            success = self.Quiz.login(user, password, cookie_file)
             if success == False:
                 dialog = xbmcgui.Dialog()
                 dialog.ok(getString(self.SID_LOGIN_FAILED_HEADING),

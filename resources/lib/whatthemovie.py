@@ -1,5 +1,5 @@
-# WhatTheMovie Python Class
-# Copyright (C) Tristan 'sphere' Fischer 2011.
+print "WhatTheMovie Python Class"
+print "Copyright (C) Tristan 'sphere' Fischer 2011."
 
 from mechanize import Browser, LWPCookieJar
 from BeautifulSoup import BeautifulSoup
@@ -9,13 +9,11 @@ class WhatTheMovie:
 
     MAIN_URL = 'http://whatthemovie.com'
 
-    def __init__(self, cookie_path=None):
+    def __init__(self):
         # Get browser stuff
         self.cookies = LWPCookieJar()
         self.browser = Browser()
         self.browser.set_cookiejar(self.cookies)
-        # Set variables
-        self.cookie_path = cookie_path
         # Set empty returns
         self.is_login = False
         self.shot = dict()
@@ -37,10 +35,10 @@ class WhatTheMovie:
             self.is_login = True
         return self.is_login
 
-    def login(self, user, password):
+    def login(self, user, password, cookie_path):
         login_url = '%s/user/login/' % self.MAIN_URL
         try:
-            self.cookies.revert('cookie.txt')
+            self.cookies.revert(cookie_path)
             # cookie found
         except:
             # no cookie found
@@ -56,7 +54,7 @@ class WhatTheMovie:
             self.browser.submit()
             if self._checkLogin(login_url):
                 # logged in via auth
-                self.cookies.save('cookie.txt')
+                self.cookies.save(cookie_path)
                 self.username = user
             else:
                 # could not log in
