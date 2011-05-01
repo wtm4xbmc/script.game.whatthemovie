@@ -117,7 +117,6 @@ class GUI(xbmcgui.WindowXMLDialog):
     def getRandomShot(self):
         self.image_gif.setVisible(True)
         shot = self.Quiz.getRandomShot()
-        shot = self.Quiz.shot  # fixme, strange error without?!
         local_image_path = self.downloadPic(shot['image_url'],
                                             shot['shot_id'])
         self.image_main.setImage(local_image_path)

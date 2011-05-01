@@ -64,7 +64,7 @@ class WhatTheMovie:
         return self.is_login
 
     def getRandomShot(self):
-        self.getShot('random')
+        return self.getShot('random')
 
     def getShot(self, shot_id):
         self.shot = dict()
