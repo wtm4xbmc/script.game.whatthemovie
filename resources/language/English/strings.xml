@@ -3,7 +3,7 @@
   <string id="3100">Guess!</string>
   <string id="3101">Random</string>
   <string id="3102">Exit</string>
-  <string id="3103">Right[CR]You scored one point. Awesome</string>
+  <string id="3103">Right. Correct answer is:</string>  <!-- fixme controlid -->
   <string id="3104">Wrong</string>
   <string id="3105">Type the movie title</string>
   <string id="3106">Not Logged in</string>

@@ -74,6 +74,10 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.button_random.setLabel(getString(self.SID_RANDOM))
         self.button_exit.setLabel(getString(self.SID_EXIT))
 
+        # set control visibility
+        self.label_solution.setVisible(False)  # fixme, could be earlier but conflicts with startApi and getControl
+        self.image_solution.setVisible(False)  # fixme
+
         # start the api
         self.login()
         self.getRandomShot()
@@ -128,6 +132,8 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_shot_id.setLabel(getString(self.SID_SHOT_ID)
                                     % shot['shot_id'])
         self.image_gif.setVisible(False)
+        self.label_solution.setVisible(False) # fixme controlid
+        self.image_solution.setVisible(False) # fixme controlid
 
     def guessTitle(self):
         heading = getString(self.SID_KEYBOARD_HEADING)
@@ -145,17 +151,20 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def answerRight(self, title_year):
         message = getString(self.SID_ANSWER_RIGHT)
+        self.label_solution.setVisible(True)
+        self.image_solution.setVisible(True)
+        self.label_solution.setLabel('%s %s' % (message, title_year)) # fixme controlid
         self.getRandomShot()
         self.score += 1
         self.updateScore()
-        print title_year  # fixme: plz put me in any label
-        dialog = xbmcgui.Dialog()
-        dialog.ok('right', message)  # fixme
+        self.label_solution.setVisible(False)
+        self.image_solution.setVisible(False)
 
     def answerWrong(self):
+        self.label_solution.setVisible(True) # fixme controlid
+        self.image_solution.setVisible(True) # fixme controlid
         message = getString(self.SID_ANSWER_WRONG)
-        dialog = xbmcgui.Dialog()
-        dialog.ok('wrong', message)  # fixme
+        self.label_solution.setLabel(message) # fixme controlid
 
     def login(self):
         self.score = 0
