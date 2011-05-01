@@ -155,6 +155,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         keyboard.doModal()
         if keyboard.isConfirmed() and keyboard.getText() is not '':
             guess = keyboard.getText()
+            self.image_solution.setColorDiffuse('FFFFFF00')
             self.setVisibleState((self.label_solution,
                                   self.image_solution), True)
             message = getString(self.SID_CHECKING)
@@ -169,6 +170,7 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def answerRight(self, title_year):
         message = getString(self.SID_ANSWER_RIGHT)
+        self.image_solution.setColorDiffuse('FF00FF00')
         self.setVisibleState((self.label_solution,
                               self.image_solution,
                               self.image_correct), True)
@@ -181,6 +183,7 @@ class GUI(xbmcgui.WindowXMLDialog):
                               self.image_correct), False)
 
     def answerWrong(self):
+        self.image_solution.setColorDiffuse('FFFF0000')
         self.setVisibleState((self.label_solution,
                               self.image_solution,
                               self.image_wrong), True)
