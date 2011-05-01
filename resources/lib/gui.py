@@ -120,6 +120,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.close()
 
     def getRandomShot(self):
+        self.button_guess.setLabel(getString(SID_GUESS))
         self.setVisibleState((self.image_gif, ), True)
         shot = self.Quiz.getRandomShot()
         local_image_path = self.downloadPic(shot['image_url'],
@@ -155,6 +156,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         keyboard.doModal()
         if keyboard.isConfirmed() and keyboard.getText() is not '':
             guess = keyboard.getText()
+            self.button_guess.setLabel(guess)
             self.image_solution.setColorDiffuse('FFFFFF00')
             self.setVisibleState((self.label_solution,
                                   self.image_solution), True)
@@ -167,6 +169,7 @@ class GUI(xbmcgui.WindowXMLDialog):
                 self.answerRight(answer['title_year'])
             else:
                 self.answerWrong()
+                self.button_guess.setLabel(getString(SID_GUESS))
 
     def answerRight(self, title_year):
         message = getString(self.SID_ANSWER_RIGHT)
