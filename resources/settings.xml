@@ -9,5 +9,6 @@
         <setting id="visible_posted_by" type="bool" label="3210" default="true" />
         <setting id="visible_solved" type="bool" label="3211" default="true" />
         <setting id="visible_shot_id" type="bool" label="3212" default="true" />
+        <setting id="visible_shot_date" type="bool" label="3215" default="true" />
     </category>
 </settings>

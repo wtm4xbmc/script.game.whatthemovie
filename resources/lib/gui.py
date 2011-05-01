@@ -241,3 +241,5 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.setVisibleState((self.label_solved, ), False)
         if getSetting('visible_shot_id') == 'false':
             self.setVisibleState((self.label_shot_id, ), False)
+        if getSetting('visible_shot_date') == 'false':
+            self.setVisibleState((self.label_shot_date, ), False)
