@@ -12,7 +12,7 @@
   <string id="3109">Password wrong or username unknown[CR]User [B]%s[/B]</string>
   <string id="3110">Your Score: [B]%s[/B]</string>
   <string id="3111">Checking...</string>
-  <string id="3200">Login on whatthemovie.com</string>
+  <string id="3200">Login enabled</string>
   <string id="3201">Username</string>
   <string id="3202">Password</string>
   <string id="3203">Posted by: [B]%s[/B]</string>
@@ -20,4 +20,9 @@
   <string id="3205">Not solved yet</string>
   <string id="3206"></string>
   <string id="3207">Shot [B]#%s[/B]</string>
+  <string id="3208">Login</string>
+  <string id="3209">Labels</string>
+  <string id="3210">Show "Posted by"</string>
+  <string id="3211">Show "Solved"</string>
+  <string id="3212">Show "Shot ID"</string>
 </strings>

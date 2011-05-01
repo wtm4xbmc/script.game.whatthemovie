@@ -76,6 +76,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         # set control visibility
         self.setVisibleState((self.label_solution,
                               self.image_solution), False)
+        self.hideLabels()
 
         # start the api
         self.Quiz = whatthemovie.WhatTheMovie()
@@ -208,3 +209,11 @@ class GUI(xbmcgui.WindowXMLDialog):
     def setVisibleState(self, control_list, visible):
         for control in control_list:
             control.setVisible(visible)
+
+    def hideLabels(self):
+        if getSetting('visible_posted_by') == 'false':
+            self.setVisibleState((self.label_posted_by, ), False)
+        if getSetting('visible_solved') == 'false':
+            self.setVisibleState((self.label_solved, ), False)
+        if getSetting('visible_shot_id') == 'false':
+            self.setVisibleState((self.label_shot_id, ), False)

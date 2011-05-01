@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-	<setting id="login" type="bool" label="3200" default="false" />
-	<setting id="username" type="text" label="3201" enable="eq(-1,true)"/>
-    <setting id="password" type="text" label="3202" enable="eq(-2,true)" option="hidden" />
+    <category label="3208">
+        <setting id="login" type="bool" label="3200" default="false" />
+        <setting id="username" type="text" label="3201" enable="eq(-1,true)"/>
+        <setting id="password" type="text" label="3202" enable="eq(-2,true)" option="hidden" />
+    </category>
+    <category label="3209">
+        <setting id="visible_posted_by" type="bool" label="3210" default="true" />
+        <setting id="visible_solved" type="bool" label="3211" default="true" />
+        <setting id="visible_shot_id" type="bool" label="3212" default="true" />
+    </category>
 </settings>
