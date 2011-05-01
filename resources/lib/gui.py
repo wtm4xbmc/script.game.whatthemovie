@@ -127,6 +127,8 @@ class GUI(xbmcgui.WindowXMLDialog):
         else:
             self.label_solved.setLabel(getString(self.SID_UNSOLVED))
         self.image_gif.setVisible(False)
+        self.label_solution.setVisible(False) # fixme controlid
+        self.image_solution.setVisible(False) # fixme controlid
 
     def guessTitle(self):
         heading = getString(self.SID_KEYBOARD_HEADING)
@@ -146,19 +148,18 @@ class GUI(xbmcgui.WindowXMLDialog):
         message = getString(self.SID_ANSWER_RIGHT)
         self.label_solution.setVisible(True)
         self.image_solution.setVisible(True)
-        self.label_solution.setLabel(title_year)
+        self.label_solution.setLabel('%s %s' % (message, title_year)) # fixme controlid
         self.getRandomShot()
         self.score += 1
         self.updateScore()
         self.label_solution.setVisible(False)
         self.image_solution.setVisible(False)
-        dialog = xbmcgui.Dialog()
-        dialog.ok('right', message)  # fixme
 
     def answerWrong(self):
+        self.label_solution.setVisible(True) # fixme controlid
+        self.image_solution.setVisible(True) # fixme controlid
         message = getString(self.SID_ANSWER_WRONG)
-        dialog = xbmcgui.Dialog()
-        dialog.ok('wrong', message)  # fixme
+        self.label_solution.setLabel(message) # fixme controlid
 
     def login(self):
         self.score = 0
