@@ -137,6 +137,10 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.setVisibleState((self.image_gif, ), False)
 
     def guessTitle(self):
+        self.setVisibleState((self.label_solution,
+                              self.image_solution,
+                              self.image_wrong,
+                              self.image_correct), False)
         heading = getString(self.SID_KEYBOARD_HEADING)
         keyboard = xbmc.Keyboard(default='', heading=heading)
         keyboard.doModal()
