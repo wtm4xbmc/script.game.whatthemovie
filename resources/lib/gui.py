@@ -87,8 +87,6 @@ class GUI(xbmcgui.WindowXMLDialog):
                               self.image_wrong), False)
         self.hideLabels()
 
-        Skin.SetString('test', 'init')
-
         # start the api
         self.Quiz = whatthemovie.WhatTheMovie()
         self.login()
