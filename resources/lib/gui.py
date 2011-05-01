@@ -18,7 +18,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_IMAGE_MAIN = 1000
     CID_IMAGE_GIF = 1002
     CID_IMAGE_SOLUTION = 1006
-    CID_LABEL_STATE = 1001
+    CID_LABEL_LOGINSTATE = 1001
     CID_LABEL_SCORE = 1003
     CID_LABEL_POSTED_BY = 1004
     CID_LABEL_SOLVED = 1005
@@ -59,7 +59,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.button_guess = self.getControl(self.CID_BUTTON_GUESS)
         self.button_random = self.getControl(self.CID_BUTTON_RANDOM)
         self.button_exit = self.getControl(self.CID_BUTTON_EXIT)
-        self.label_state = self.getControl(self.CID_LABEL_STATE)
+        self.label_loginstate = self.getControl(self.CID_LABEL_LOGINSTATE)
         self.label_score = self.getControl(self.CID_LABEL_SCORE)
         self.label_posted_by = self.getControl(self.CID_LABEL_POSTED_BY)
         self.label_solved =  self.getControl(self.CID_LABEL_SOLVED)
@@ -75,8 +75,8 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.button_exit.setLabel(getString(self.SID_EXIT))
 
         # set control visibility
-        self.label_solution.setVisible(False)  # fixme, could be earlier but conflicts with startApi and getControl
-        self.image_solution.setVisible(False)  # fixme
+        self.setVisibleState((self.label_solution,
+                              self.image_solution), False)
 
         # start the api
         self.login()
@@ -111,7 +111,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.close()
 
     def getRandomShot(self):
-        self.image_gif.setVisible(True)
+        self.setVisibleState((self.image_gif, ), True)
         shot = self.Quiz.getRandomShot()
         local_image_path = self.downloadPic(shot['image_url'],
                                             shot['shot_id'])
@@ -126,9 +126,8 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.label_solved.setLabel(getString(self.SID_UNSOLVED))
         self.label_shot_id.setLabel(getString(self.SID_SHOT_ID)
                                     % shot['shot_id'])
-        self.image_gif.setVisible(False)
-        self.label_solution.setVisible(False) # fixme controlid
-        self.image_solution.setVisible(False) # fixme controlid
+        self.setVisibleState((self.image_gif, self.label_solution,
+                              self.image_solution), False)
 
     def guessTitle(self):
         heading = getString(self.SID_KEYBOARD_HEADING)
@@ -146,25 +145,26 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def answerRight(self, title_year):
         message = getString(self.SID_ANSWER_RIGHT)
-        self.label_solution.setVisible(True)
-        self.image_solution.setVisible(True)
-        self.label_solution.setLabel('%s %s' % (message, title_year)) # fixme controlid
+        self.setVisibleState((self.label_solution,
+                              self.image_solution), True)
+        self.label_solution.setLabel('%s %s' % (message,
+                                                title_year)) # fixme controlid
         self.getRandomShot()
         self.score += 1
         self.updateScore()
-        self.label_solution.setVisible(False)
-        self.image_solution.setVisible(False)
+        self.setVisibleState((self.label_solution,
+                              self.image_solution), False)
 
     def answerWrong(self):
-        self.label_solution.setVisible(True) # fixme controlid
-        self.image_solution.setVisible(True) # fixme controlid
+        self.setVisibleState((self.label_solution,
+                              self.image_solution), True)
         message = getString(self.SID_ANSWER_WRONG)
         self.label_solution.setLabel(message) # fixme controlid
 
     def login(self):
         self.score = 0
         if getSetting('login') == 'false':
-            self.label_state.setLabel(getString(self.SID_NOT_LOGGED_IN))
+            self.label_loginstate.setLabel(getString(self.SID_NOT_LOGGED_IN))
         else:
             script_id = sys.modules['__main__'].__id__
             cookie_dir = 'special://profile/addon_data/%s' % script_id
@@ -180,8 +180,8 @@ class GUI(xbmcgui.WindowXMLDialog):
                 label = getString(self.SID_NOT_LOGGED_IN)
             else:
                 label = getString(self.SID_LOGGED_IN_AS) % user
-                self.score = int(self.Quiz.getScore())
-            self.label_state.setLabel(label)
+                self.score = int(self.Quiz.getScore(user))
+            self.label_loginstate.setLabel(label)
         self.updateScore()
 
     def downloadPic(self, image_url, shot_id):
@@ -199,3 +199,8 @@ class GUI(xbmcgui.WindowXMLDialog):
     def createCheckPath(self, path):
         if not os.path.isdir(xbmc.translatePath(path)):
             os.makedirs(xbmc.translatePath(path))
+
+    def setVisibleState(self, control_list, visible):
+        for control in control_list:
+            control.setVisible(visible)
+        

@@ -1,5 +1,5 @@
-print "WhatTheMovie Python Class"
-print "Copyright (C) Tristan 'sphere' Fischer 2011."
+# WhatTheMovie Python Class
+# Copyright (C) Tristan 'sphere' Fischer 2011
 
 from mechanize import Browser, LWPCookieJar
 from BeautifulSoup import BeautifulSoup
