@@ -110,7 +110,9 @@ class WhatTheMovie:
         post_url = '%s/shot/%s/guess' % (self.MAIN_URL, shot_id)
         self.browser.open(post_url, 'guess=%s' % title_guess)
         response = self.browser.response().read()
-        str_right = str(response)[6:11]
+        # fixme, only for debug (find html entities)
+        print 'debug response: "%s"' % response
+        str_right = str(response)[6:11].replace('&amp;', '&')
         # ['right'|'wrong']
         if str_right == 'right':
             self.answer['is_right'] = True

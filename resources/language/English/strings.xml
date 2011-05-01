@@ -3,13 +3,13 @@
   <string id="3100">Guess!</string>
   <string id="3101">Random</string>
   <string id="3102">Exit</string>
-  <string id="3103">Right. Correct answer is:</string>  <!-- fixme controlid -->
+  <string id="3103">Right. Original title is: [B]%s[/B]</string>
   <string id="3104">Wrong</string>
   <string id="3105">Type the movie title</string>
   <string id="3106">Not Logged in</string>
   <string id="3107">Logged in as User: [B]%s[/B]</string>
   <string id="3108">Could not Login</string>
-  <string id="3109">Password wrong or Username unknown[CR]User [B]%s[/B]</string>
+  <string id="3109">Password wrong or username unknown[CR]User [B]%s[/B]</string>
   <string id="3110">Your Score: [B]%s[/B]</string>
   <string id="3111">Checking...</string>
   <string id="3200">Login on whatthemovie.com</string>
@@ -18,6 +18,6 @@
   <string id="3203">Posted by: [B]%s[/B]</string>
   <string id="3204">Solved [B][COLOR=ff008B00]%s[/COLOR][/B] times, first by [B]%s[/B]</string>
   <string id="3205">Not solved yet</string>
-  <string id="3206">Solution: [B]%s[/B]</string>
+  <string id="3206"></string>
   <string id="3207">Shot [B]#%s[/B]</string>
 </strings>

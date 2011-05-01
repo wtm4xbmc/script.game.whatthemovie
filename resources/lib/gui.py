@@ -41,7 +41,6 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_POSTED_BY = 3203
     SID_SOLVED = 3204
     SID_UNSOLVED = 3205
-    SID_SOLUTION = 3206
     SID_SHOT_ID = 3207
 
     # ACTION_IDs
@@ -79,12 +78,9 @@ class GUI(xbmcgui.WindowXMLDialog):
                               self.image_solution), False)
 
         # start the api
-        self.startApi()
+        self.Quiz = whatthemovie.WhatTheMovie()
         self.login()
         self.getRandomShot()
-
-    def startApi(self):
-        self.Quiz = whatthemovie.WhatTheMovie()
 
     def onAction(self, action):
         # onAction will be called on keyboard or mouse action
@@ -153,8 +149,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         message = getString(self.SID_ANSWER_RIGHT)
         self.setVisibleState((self.label_solution,
                               self.image_solution), True)
-        self.label_solution.setLabel('%s %s' % (message,
-                                                title_year))
+        self.label_solution.setLabel(message % title_year)
         self.getRandomShot()
         self.score += 1
         self.updateScore()
