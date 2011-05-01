@@ -56,7 +56,7 @@
             <posy>618</posy>
             <width>406</width>
             <height>45</height>
-            <texturefocus>inputfield.png</texturefocus>
+            <texturefocus>inputfield_active.png</texturefocus>
             <texturenofocus>inputfield.png</texturenofocus>
             <align>center</align>
             <aligny>center</aligny>
