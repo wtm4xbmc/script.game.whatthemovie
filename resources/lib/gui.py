@@ -135,21 +135,19 @@ class GUI(xbmcgui.WindowXMLDialog):
         heading = getString(self.SID_KEYBOARD_HEADING)
         keyboard = xbmc.Keyboard(default='', heading=heading)
         keyboard.doModal()
-        if keyboard.isConfirmed():
+        if keyboard.isConfirmed() and keyboard.getText() is not '':
             guess = keyboard.getText()
-        else:
-            return
-        self.setVisibleState((self.label_solution,
-                              self.image_solution), True)
-        message = getString(self.SID_CHECKING)
-        self.label_solution.setLabel(message)
-        answer = self.Quiz.guessShot(guess)
-        self.setVisibleState((self.label_solution,
-                              self.image_solution), False)
-        if answer['is_right'] == True:
-            self.answerRight(answer['title_year'])
-        else:
-            self.answerWrong()
+            self.setVisibleState((self.label_solution,
+                                  self.image_solution), True)
+            message = getString(self.SID_CHECKING)
+            self.label_solution.setLabel(message)
+            answer = self.Quiz.guessShot(guess)
+            self.setVisibleState((self.label_solution,
+                                  self.image_solution), False)
+            if answer['is_right'] == True:
+                self.answerRight(answer['title_year'])
+            else:
+                self.answerWrong()
 
     def answerRight(self, title_year):
         message = getString(self.SID_ANSWER_RIGHT)
