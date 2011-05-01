@@ -148,14 +148,15 @@
         </control>
         <control type="label" id="1007">
             <description>Solution Movie title and year</description>
-            <posx>280</posx>
+            <posx>290</posx>
             <posy>530</posy>
             <width>720</width>
             <height>30</height>
             <align>left</align>
+            <aligny>center</aligny>
             <font>font12</font>
             <scroll>true</scroll>
-            <textcolor>FFFFFFFF</textcolor>
+            <textcolor>FF000000</textcolor>
         </control>
         <control type="label" id="1008">
             <description>Shot ID</description>
