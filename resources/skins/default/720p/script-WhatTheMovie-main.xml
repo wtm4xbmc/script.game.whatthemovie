@@ -12,7 +12,6 @@
             <onup>3000</onup>
             <onleft>3000</onleft>
             <onright>3000</onright>
-            <enabled>false</enabled>
         </control>
         <control type="image">
             <description>Frame around snapshot image</description>
@@ -25,7 +24,6 @@
             <onup>3000</onup>
             <onleft>3000</onleft>
             <onright>3000</onright>
-            <enabled>false</enabled>
         </control>
         <control type="image">
             <description>Banner top</description>
@@ -38,7 +36,6 @@
             <onup>3000</onup>
             <onleft>3000</onleft>
             <onright>3000</onright>
-            <enabled>false</enabled>
         </control>
         <control type="image" id="1000">
             <description>The Picture to guess</description>
@@ -160,22 +157,49 @@
         </control>
         <control type="label" id="1008">
             <description>Shot ID</description>
-            <posx>540</posx>
-            <posy>580</posy>
+            <posx>1260</posx>
+            <posy>20</posy>
             <width>200</width>
             <height>30</height>
-            <align>center</align>
+            <align>right</align>
             <font>font12</font>
             <textcolor>FFFFFFFF</textcolor>
             <visible>true</visible>
         </control>
+        <control type="label" id="1011">
+            <description>Date of Shot</description>
+            <posx>1260</posx>
+            <posy>55</posy>
+            <width>200</width>
+            <height>30</height>
+            <align>right</align>
+            <font>font12</font>
+            <textcolor>FFFFFFFF</textcolor>
+            <visible>true</visible>
+        </control>
+        <control type="image" id="1009">
+            <description>Correct answer image</description>
+            <posx>895</posx>
+            <posy>455</posy>
+            <width>140</width>
+            <height>140</height>
+            <texture>correct.png</texture>
+        </control>
+        <control type="image" id="1010">
+            <description>Wrong answer image</description>
+            <posx>895</posx>
+            <posy>455</posy>
+            <width>140</width>
+            <height>140</height>
+            <texture>wrong.png</texture>
+        </control>
         <control type="label" id="1003">
             <description>Score Label</description>
-            <posx>1260</posx>
-            <posy>20</posy>
+            <posx>20</posx>
+            <posy>55</posy>
             <width>200</width>
             <height>40</height>
-            <align>right</align>
+            <align>left</align>
             <font>font13</font>
             <textcolor>FFFFFFFF</textcolor>
             <visible>true</visible>

@@ -24,6 +24,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_LABEL_SOLVED = 1005
     CID_LABEL_SOLUTION = 1007
     CID_LABEL_SHOT_ID = 1008
+    CID_LABEL_SHOT_DATE = 1011
     CID_IMAGE_CORRECT = 1009
     CID_IMAGE_WRONG = 1010
 
@@ -44,6 +45,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_SOLVED = 3204
     SID_UNSOLVED = 3205
     SID_SHOT_ID = 3207
+    SID_SHOT_DATE = 3213
 
     # ACTION_IDs
     AID_EXIT_BACK = [10, 13]
@@ -66,6 +68,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_solved = self.getControl(self.CID_LABEL_SOLVED)
         self.label_solution = self.getControl(self.CID_LABEL_SOLUTION)
         self.label_shot_id = self.getControl(self.CID_LABEL_SHOT_ID)
+        self.label_shot_date = self.getControl(self.CID_LABEL_SHOT_DATE)
         self.image_main = self.getControl(self.CID_IMAGE_MAIN)
         self.image_gif = self.getControl(self.CID_IMAGE_GIF)
         self.image_solution = self.getControl(self.CID_IMAGE_SOLUTION)
