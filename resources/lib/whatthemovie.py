@@ -119,14 +119,13 @@ class WhatTheMovie:
         post_url = '%s/shot/%s/guess' % (self.MAIN_URL, shot_id)
         self.browser.open(post_url, 'guess=%s' % title_guess)
         response = self.browser.response().read()
+        response_c = response.replace('&amp;', '&').decode('unicode-escape')
         # fixme, only for debug (find html entities)
-        print 'debug response: "%s"' % response
-        str_right = str(response)[6:11]
-        str_right.replace('&amp;', '&').replace('\u2026', '...')
+        print 'debug response: "%s"' % response_c
         # ['right'|'wrong']
-        if str_right == 'right':
+        if response_c[6:11] == 'right':
             self.answer['is_right'] = True
-            self.answer['title_year'] = response.split('"')[3]
+            self.answer['title_year'] = response_c.split('"')[3]
         return self.answer
 
     def getScore(self, username=None):
