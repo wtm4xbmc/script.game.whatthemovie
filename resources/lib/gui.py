@@ -48,6 +48,9 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_SHOT_ID = 3207
     SID_SHOT_DATE = 3213
     SID_DATE_FORMAT = 3214
+    SID_ERROR_LOGIN = 3216
+    SID_ERROR_SHOT = 3217
+    SID_ERROR_GUESS = 3218
 
     # ACTION_IDs
     AID_EXIT_BACK = [10, 13]
@@ -91,7 +94,12 @@ class GUI(xbmcgui.WindowXMLDialog):
 
         # start the api
         self.Quiz = whatthemovie.WhatTheMovie()
-        self.login()
+        try:
+            self.login()
+        except Exception, error:
+            self.errorMessage(getString(self.SID_ERROR_LOGIN),
+                              error)
+            self.close()
         self.getRandomShot()
 
     def onAction(self, action):
@@ -121,9 +129,14 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def getRandomShot(self):
         self.setVisibleState((self.image_gif, ), True)
-        shot = self.Quiz.getRandomShot()
-        local_image_path = self.downloadPic(shot['image_url'],
-                                            shot['shot_id'])
+        try:
+            shot = self.Quiz.getRandomShot()
+            local_image_path = self.downloadPic(shot['image_url'],
+                                                shot['shot_id'])
+        except Exception, error:
+            self.errorMessage(getString(self.SID_ERROR_SHOT),
+                              error)
+            return
         self.button_guess.setLabel(getString(self.SID_GUESS))
         self.setVisibleState((self.label_solution,
                               self.image_solution,
@@ -162,7 +175,12 @@ class GUI(xbmcgui.WindowXMLDialog):
                                   self.image_solution), True)
             message = getString(self.SID_CHECKING)
             self.label_solution.setLabel(message)
-            answer = self.Quiz.guessShot(guess)
+            try:
+                answer = self.Quiz.guessShot(guess)
+            except Exception, error:
+                self.errorMessage(getString(self.SID_ERROR_GUESS),
+                                  error)
+                return
             self.setVisibleState((self.label_solution,
                                   self.image_solution), False)
             if answer['is_right'] == True:
@@ -248,3 +266,9 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.setVisibleState((self.label_shot_id, ), False)
         if getSetting('visible_shot_date') == 'false':
             self.setVisibleState((self.label_shot_date, ), False)
+
+    def errorMessage(self, heading, error):
+        print 'ERROR: %s: %s ' % (heading, str(error))
+        dialog = xbmcgui.Dialog()
+        dialog.ok(heading, error)
+

@@ -28,4 +28,7 @@
   <string id="3213">Shot Date: [B]%s[/B]</string>
   <string id="3214">%Y-%m-%d</string>
   <string id="3215">Show "Shot Date"</string>
+  <string id="3216">Login site Unreachable</string>
+  <string id="3217">Could not get the shot</string>
+  <string id="3218">Could not check the guess</string>
 </strings>
