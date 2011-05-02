@@ -121,7 +121,7 @@ class WhatTheMovie:
         response = self.browser.response().read()
         response_c = response.replace('&amp;', '&').decode('unicode-escape')
         # fixme, only for debug (find html entities)
-        print 'debug response: "%s"' % response_c
+        print 'debug response: ' + response_c
         # ['right'|'wrong']
         if response_c[6:11] == 'right':
             self.answer['is_right'] = True
