@@ -174,8 +174,8 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.image_solution.setColorDiffuse('FFFFFF00')
             self.setVisibleState((self.label_solution,
                                   self.image_solution), True)
-            message = getString(self.SID_CHECKING % guess)
-            self.label_solution.setLabel(message)
+            message = getString(self.SID_CHECKING)
+            self.label_solution.setLabel(message % guess)
             try:
                 answer = self.Quiz.guessShot(guess)
             except Exception, error:
@@ -203,10 +203,10 @@ class GUI(xbmcgui.WindowXMLDialog):
                               self.image_solution,
                               self.image_correct), False)
 
-    def answerWrong(self, quess):
-        message = getString(self.SID_ANSWER_WRONG % guess)
+    def answerWrong(self, guess):
+        message = getString(self.SID_ANSWER_WRONG)
+        self.label_solution.setLabel(message % guess)
         self.image_solution.setColorDiffuse('FFFF0000')
-        self.label_solution.setLabel(message)
         self.setVisibleState((self.label_solution,
                               self.image_solution,
                               self.image_wrong), True)

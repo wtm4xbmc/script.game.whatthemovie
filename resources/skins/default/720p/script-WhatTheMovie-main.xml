@@ -173,7 +173,7 @@
             <visible>true</visible>
         </control>
         <control type="label" id="1011">
-            <description>Date of Shot</description>
+            <description>Shot date label</description>
             <posx>1000</posx>
             <posy>580</posy>
             <width>300</width>
@@ -187,7 +187,7 @@
         <control type="image" id="1009">
             <description>Correct answer image</description>
             <posx>895</posx>
-            <posy>455</posy>
+            <posy>450</posy>
             <width>140</width>
             <height>140</height>
             <texture>guess_correct.png</texture>
@@ -195,7 +195,7 @@
         <control type="image" id="1010">
             <description>Wrong answer image</description>
             <posx>895</posx>
-            <posy>455</posy>
+            <posy>450</posy>
             <width>140</width>
             <height>140</height>
             <texture>guess_wrong.png</texture>
