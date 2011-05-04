@@ -26,6 +26,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_LABEL_SOLUTION = 1007
     CID_LABEL_SHOT_ID = 1008
     CID_LABEL_SHOT_DATE = 1011
+    CID_LABEL_SHOT_TYPE = 1012
     CID_IMAGE_CORRECT = 1009
     CID_IMAGE_WRONG = 1010
 
@@ -47,6 +48,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_UNSOLVED = 3205
     SID_SHOT_ID = 3207
     SID_SHOT_DATE = 3213
+    SID_SHOT_TYPE = 3219
     SID_DATE_FORMAT = 3214
     SID_ERROR_LOGIN = 3216
     SID_ERROR_SHOT = 3217
@@ -74,6 +76,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_solution = self.getControl(self.CID_LABEL_SOLUTION)
         self.label_shot_id = self.getControl(self.CID_LABEL_SHOT_ID)
         self.label_shot_date = self.getControl(self.CID_LABEL_SHOT_DATE)
+        self.label_shot_type = self.getControl(self.CID_LABEL_SHOT_TYPE)
         self.image_main = self.getControl(self.CID_IMAGE_MAIN)
         self.image_gif = self.getControl(self.CID_IMAGE_GIF)
         self.image_solution = self.getControl(self.CID_IMAGE_SOLUTION)
@@ -212,6 +215,7 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def login(self):
         self.score = 0
+        self.label_shot_type.setLabel(getString(self.SID_SHOT_TYPE)) #fixme correct position?!
         if getSetting('login') == 'false':
             self.label_loginstate.setLabel(getString(self.SID_NOT_LOGGED_IN))
         else:
