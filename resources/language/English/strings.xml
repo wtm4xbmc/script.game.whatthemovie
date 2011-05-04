@@ -4,14 +4,14 @@
   <string id="3101">Random</string>
   <string id="3102">Exit</string>
   <string id="3103">Right. Original title is: [B]%s[/B]</string>
-  <string id="3104">Wrong</string>
+  <string id="3104">Wrong answer: [B]%s[/B]</string>
   <string id="3105">Type the movie title</string>
   <string id="3106">Not Logged in</string>
   <string id="3107">Logged in as User: [B]%s[/B]</string>
   <string id="3108">Could not Login</string>
   <string id="3109">Password wrong or username unknown[CR]User [B]%s[/B]</string>
   <string id="3110">Your Score: [B]%s[/B]</string>
-  <string id="3111">Checking...</string>
+  <string id="3111">Checking: [B]%s[/B]</string>
   <string id="3200">Login enabled</string>
   <string id="3201">Username</string>
   <string id="3202">Password</string>

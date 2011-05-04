@@ -140,7 +140,6 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.errorMessage(getString(self.SID_ERROR_SHOT),
                               error)
             return
-        self.button_guess.setLabel(getString(self.SID_GUESS))
         self.setVisibleState((self.label_solution,
                               self.image_solution,
                               self.image_correct,
@@ -172,11 +171,10 @@ class GUI(xbmcgui.WindowXMLDialog):
         keyboard.doModal()
         if keyboard.isConfirmed() and keyboard.getText() is not '':
             guess = keyboard.getText()
-            self.button_guess.setLabel(guess)
             self.image_solution.setColorDiffuse('FFFFFF00')
             self.setVisibleState((self.label_solution,
                                   self.image_solution), True)
-            message = getString(self.SID_CHECKING)
+            message = getString(self.SID_CHECKING % guess)
             self.label_solution.setLabel(message)
             try:
                 answer = self.Quiz.guessShot(guess)
@@ -189,15 +187,15 @@ class GUI(xbmcgui.WindowXMLDialog):
             if answer['is_right'] == True:
                 self.answerRight(answer['title_year'])
             else:
-                self.answerWrong()
+                self.answerWrong(guess)
 
     def answerRight(self, title_year):
         message = getString(self.SID_ANSWER_RIGHT)
+        self.label_solution.setLabel(message % title_year)
         self.image_solution.setColorDiffuse('FF00FF00')
         self.setVisibleState((self.label_solution,
                               self.image_solution,
                               self.image_correct), True)
-        self.label_solution.setLabel(message % title_year)
         self.getRandomShot()
         self.score += 1
         self.updateScore()
@@ -205,13 +203,13 @@ class GUI(xbmcgui.WindowXMLDialog):
                               self.image_solution,
                               self.image_correct), False)
 
-    def answerWrong(self):
+    def answerWrong(self, quess):
+        message = getString(self.SID_ANSWER_WRONG % guess)
         self.image_solution.setColorDiffuse('FFFF0000')
+        self.label_solution.setLabel(message)
         self.setVisibleState((self.label_solution,
                               self.image_solution,
                               self.image_wrong), True)
-        message = getString(self.SID_ANSWER_WRONG)
-        self.label_solution.setLabel(message)
 
     def login(self):
         self.score = 0
