@@ -7,32 +7,7 @@
             <posy>0</posy>
             <width>1280</width>
             <height>720</height>
-            <texture>background.jpg</texture>
-            <onfocus>SetFocus(3000)</onfocus>
-        </control>
-        <control type="image">
-            <description>Shadow left snapshot image</description>
-            <posx>265</posx>
-            <posy>155</posy>
-            <width>20</width>
-            <height>410</height>
-            <texture>img_frame_shadow_l.png</texture>
-        </control>
-        <control type="image">
-            <description>Shadow right snapshot image</description>
-            <posx>995</posx>
-            <posy>155</posy>
-            <width>20</width>
-            <height>410</height>
-            <texture>img_frame_shadow_r.png</texture>
-        </control>
-        <control type="image">
-            <description>Frame around snapshot image</description>
-            <posx>280</posx>
-            <posy>160</posy>
-            <width>720</width>
-            <height>400</height>
-            <texture>black.png</texture>
+            <texture>background.png</texture>
         </control>
         <control type="image">
             <description>Banner top</description>
@@ -42,69 +17,152 @@
             <height>100</height>
             <texture>banner.png</texture>
         </control>
-        <control type="image" id="1000">
-            <description>The Picture to guess</description>
-            <posx>280</posx>
-            <posy>160</posy>
+        <control type="group">
+            <description>Snapshot image controls</description>
+            <posx>265</posx>
+            <posy>155</posy>
             <width>720</width>
-            <height>400</height>
-            <texture></texture>
-            <aspectratio>keep</aspectratio>
+            <height>36</height>
+            <control type="image">
+                <description>Shadow left snapshot image</description>
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>20</width>
+                <height>410</height>
+                <texture>img_frame_shadow_l.png</texture>
+            </control>
+            <control type="image">
+                <description>Shadow right snapshot image</description>
+                <posx>730</posx>
+                <posy>0</posy>
+                <width>20</width>
+                <height>410</height>
+                <texture>img_frame_shadow_r.png</texture>
+            </control>
+            <control type="image">
+                <description>Frame around snapshot image</description>
+                <posx>15</posx>
+                <posy>5</posy>
+                <width>720</width>
+                <height>400</height>
+                <texture>black.png</texture>
+            </control>
+            <control type="image" id="1000">
+                <description>The Picture to guess</description>
+                <posx>15</posx>
+                <posy>5</posy>
+                <width>720</width>
+                <height>400</height>
+                <texture></texture>
+                <aspectratio>keep</aspectratio>
+            </control>
+            <control type="image" id="1006">
+                <description>Solution background image</description>
+                <posx>15</posx>
+                <posy>375</posy>
+                <width>720</width>
+                <height>30</height>
+                <texture>solution_back.png</texture>
+                <visible>Control.IsVisible(1007)</visible>
+            </control>
+            <control type="label" id="1007">
+                <description>Solution movie title and year</description>
+                <posx>25</posx>
+                <posy>375</posy>
+                <width>720</width>
+                <height>30</height>
+                <align>left</align>
+                <aligny>center</aligny>
+                <font>font12</font>
+                <scroll>true</scroll>
+                <textcolor>FF000000</textcolor>
+            </control>
+            <control type="image" id="1009">
+                <description>Correct answer image</description>
+                <posx>630</posx>
+                <posy>295</posy>
+                <width>140</width>
+                <height>140</height>
+                <texture>guess_correct.png</texture>
+            </control>
+            <control type="image" id="1010">
+                <description>Wrong answer image</description>
+                <posx>630</posx>
+                <posy>295</posy>
+                <width>140</width>
+                <height>140</height>
+                <texture>guess_wrong.png</texture>
+            </control>
+            <control type="image" id="1002">
+                <description>Animated Gif</description>
+                <posx>60</posx>
+                <posy>35</posy>
+                <width>48</width>
+                <height>48</height>
+                <texture>loader.gif</texture>
+            </control>
         </control>
-        <control type="button" id="3002">
-            <description>Exit Button</description>
+        <control type="group">
+            <description>Bottom button controls</description>
             <posx>280</posx>
             <posy>620</posy>
-            <width>150</width>
+            <width>720</width>
             <height>36</height>
-            <texturefocus>button_active.png</texturefocus>
-            <texturenofocus>button.png</texturenofocus>
-            <align>center</align>
-            <aligny>center</aligny>
-            <onleft>3001</onleft>
-            <onright>3000</onright>
-            <onup>3001</onup>
-            <ondown>3000</ondown>
-            <font>font12</font>
-            <textcolor>FFFFFFFF</textcolor>
-            <label>$LOCALIZE[SCRIPT3102]</label>
-        </control>
-        <control type="button" id="3000">
-            <description>Guess Button</description>
-            <posx>440</posx>
-            <posy>620</posy>
-            <width>400</width>
-            <height>36</height>
-            <texturefocus>button_guess_active.png</texturefocus>
-            <texturenofocus>button_guess.png</texturenofocus>
-            <align>center</align>
-            <aligny>center</aligny>
-            <onright>3001</onright>
-            <onleft>3002</onleft>
-            <onup>3002</onup>
-            <ondown>3001</ondown>
-            <font>font12</font>
-            <textcolor>FFFFFFFF</textcolor>
-            <label>$LOCALIZE[SCRIPT3100]</label>
-        </control>
-        <control type="button" id="3001">
-            <description>Random next Button</description>
-            <posx>850</posx>
-            <posy>620</posy>
-            <width>150</width>
-            <height>36</height>
-            <texturefocus>button_active.png</texturefocus>
-            <texturenofocus>button.png</texturenofocus>
-            <align>center</align>
-            <aligny>center</aligny>
-            <onleft>3000</onleft>
-            <onright>3002</onright>
-            <onup>3000</onup>
-            <ondown>3002</ondown>
-            <font>font12</font>
-            <textcolor>FFFFFFFF</textcolor>
-            <label>$LOCALIZE[SCRIPT3101]</label>
-            <onclick>SetFocus(3000)</onclick>
+            <control type="button" id="3002">
+                <description>Exit Button</description>
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>150</width>
+                <height>36</height>
+                <texturefocus>button_active.png</texturefocus>
+                <texturenofocus>button.png</texturenofocus>
+                <align>center</align>
+                <aligny>center</aligny>
+                <onleft>3001</onleft>
+                <onright>3000</onright>
+                <onup>3001</onup>
+                <ondown>3000</ondown>
+                <font>font12</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <label>$LOCALIZE[SCRIPT3102]</label>
+            </control>
+            <control type="button" id="3000">
+                <description>Guess Button</description>
+                <posx>160</posx>
+                <posy>0</posy>
+                <width>400</width>
+                <height>36</height>
+                <texturefocus>button_guess_active.png</texturefocus>
+                <texturenofocus>button_guess.png</texturenofocus>
+                <align>center</align>
+                <aligny>center</aligny>
+                <onright>3001</onright>
+                <onleft>3002</onleft>
+                <onup>3002</onup>
+                <ondown>3001</ondown>
+                <font>font12</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <label>$LOCALIZE[SCRIPT3100]</label>
+            </control>
+            <control type="button" id="3001">
+                <description>Random next Button</description>
+                <posx>570</posx>
+                <posy>0</posy>
+                <width>150</width>
+                <height>36</height>
+                <texturefocus>button_active.png</texturefocus>
+                <texturenofocus>button.png</texturenofocus>
+                <align>center</align>
+                <aligny>center</aligny>
+                <onleft>3000</onleft>
+                <onright>3002</onright>
+                <onup>3000</onup>
+                <ondown>3002</ondown>
+                <font>font12</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <label>$LOCALIZE[SCRIPT3101]</label>
+                <onclick>SetFocus(3000)</onclick>
+            </control>
         </control>
         <control type="label" id="1001">
             <description>Login state label</description>
@@ -143,27 +201,6 @@
             <shadowcolor>FF000000</shadowcolor>
             <visible>true</visible>
         </control>
-        <control type="image" id="1006">
-            <description>Solution background image</description>
-            <posx>280</posx>
-            <posy>530</posy>
-            <width>720</width>
-            <height>30</height>
-            <texture>solution_back.png</texture>
-            <visible>Control.IsVisible(1007)</visible>
-        </control>
-        <control type="label" id="1007">
-            <description>Solution movie title and year</description>
-            <posx>290</posx>
-            <posy>530</posy>
-            <width>720</width>
-            <height>30</height>
-            <align>left</align>
-            <aligny>center</aligny>
-            <font>font12</font>
-            <scroll>true</scroll>
-            <textcolor>FF000000</textcolor>
-        </control>
         <control type="label" id="1008">
             <description>Shot ID</description>
             <posx>280</posx>
@@ -188,22 +225,6 @@
             <shadowcolor>FF000000</shadowcolor>
             <visible>true</visible>
         </control>
-        <control type="image" id="1009">
-            <description>Correct answer image</description>
-            <posx>895</posx>
-            <posy>450</posy>
-            <width>140</width>
-            <height>140</height>
-            <texture>guess_correct.png</texture>
-        </control>
-        <control type="image" id="1010">
-            <description>Wrong answer image</description>
-            <posx>895</posx>
-            <posy>450</posy>
-            <width>140</width>
-            <height>140</height>
-            <texture>guess_wrong.png</texture>
-        </control>
         <control type="label" id="1003">
             <description>Score Label</description>
             <posx>1260</posx>
@@ -227,13 +248,49 @@
             <textcolor>FF777777</textcolor>
             <visible>true</visible>
         </control>
-        <control type="image" id="1002">
-            <description>Animated Gif</description>
-            <posx>325</posx>
-            <posy>190</posy>
-            <width>66</width>
-            <height>66</height>
-            <texture>loader.gif</texture>
+        <control type="group" id="1013">
+            <description>Input language flags</description>
+            <posx>560</posx>
+            <posy>573</posy>
+            <width min="32" max="320">auto</width>
+            <height>32</height>
+            <align>center</align>
+            <visible>false</visible>
+            <control type="image">
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>32</width>
+                <height>32</height>
+                <texture>flags/de.png</texture>
+            </control>
+            <control type="image">
+                <posx>42</posx>
+                <posy>0</posy>
+                <width>32</width>
+                <height>32</height>
+                <texture>flags/fr.png</texture>
+            </control>
+            <control type="image">
+                <posx>84</posx>
+                <posy>0</posy>
+                <width>32</width>
+                <height>32</height>
+                <texture>flags/en.png</texture>
+            </control>
+            <control type="image">
+                <posx>126</posx>
+                <posy>0</posy>
+                <width>32</width>
+                <height>32</height>
+                <texture>flags/es.png</texture>
+            </control>
+            <control type="image">
+                <posx>168</posx>
+                <posy>0</posy>
+                <width>32</width>
+                <height>32</height>
+                <texture>flags/pt.png</texture>
+            </control>
         </control>
     </controls>
 </window>

@@ -29,6 +29,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_LABEL_SHOT_TYPE = 1012
     CID_IMAGE_CORRECT = 1009
     CID_IMAGE_WRONG = 1010
+    CID_GROUP_FLAGS = 1013
 
     # STRING_IDs
     SID_GUESS = 3100
@@ -84,6 +85,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.image_solution = self.getControl(self.CID_IMAGE_SOLUTION)
         self.image_correct = self.getControl(self.CID_IMAGE_CORRECT)
         self.image_wrong = self.getControl(self.CID_IMAGE_WRONG)
+        self.group_flags = self.getControl(self.CID_GROUP_FLAGS)
 
         # set control visibility
         self.setVisibleState((self.label_solution,
