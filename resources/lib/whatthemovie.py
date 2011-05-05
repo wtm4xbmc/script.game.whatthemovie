@@ -154,12 +154,10 @@ class WhatTheMovie:
         if not shot_id:
             shot_id = self.shot['shot_id']
         post_url = '%s/shot/%s/guess' % (self.MAIN_URL, shot_id)
-        post_data = 'guess=%s' % title_guess.encode('utf8')
+        post_data = urlencode({'guess': title_guess})
         self.browser.open(post_url, post_data)
         response = self.browser.response().read()
         response_c = response.replace('&amp;', '&').decode('unicode-escape')
-        # fixme, only for debug (find html entities)
-        print 'debug response: ' + response_c
         # ['right'|'wrong']
         if response_c[6:11] == 'right':
             self.answer['is_right'] = True
