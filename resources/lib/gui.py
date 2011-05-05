@@ -115,7 +115,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         # onClick will be called on any click
         # controlID is the ID of the item which is clicked
         if controlId == self.CID_BUTTON_GUESS:
-            self.guessTitle()
+            self.guessTitle(self.shot['shot_id'])
         if controlId == self.CID_BUTTON_RANDOM:
             self.getRandomShot()
         elif controlId == self.CID_BUTTON_EXIT:
@@ -128,6 +128,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.setVisibleState((self.image_gif, ), True)
         try:
             shot = self.Quiz.getRandomShot()
+            self.shot = shot
             local_image_path = self.downloadPic(shot['image_url'],
                                                 shot['shot_id'])
         except Exception, error:
@@ -154,7 +155,7 @@ class GUI(xbmcgui.WindowXMLDialog):
                                       % date_string)
         self.setVisibleState((self.image_gif, ), False)
 
-    def guessTitle(self):
+    def guessTitle(self, shot_id):
         self.setVisibleState((self.label_solution,
                               self.image_wrong,
                               self.image_correct), False)
@@ -168,26 +169,27 @@ class GUI(xbmcgui.WindowXMLDialog):
             message = getString(self.SID_CHECKING)
             self.label_solution.setLabel(message % guess)
             try:
-                answer = self.Quiz.guessShot(guess)
+                answer = self.Quiz.guessShot(guess, shot_id)
             except Exception, error:
                 self.errorMessage(getString(self.SID_ERROR_GUESS),
                                   str(error))
                 return
             self.setVisibleState((self.label_solution, ), False)
             if answer['is_right'] == True:
-                self.answerRight(answer['title_year'])
+                self.answerRight(answer['title_year'], self.shot['gives_point'])
             else:
                 self.answerWrong(guess)
 
-    def answerRight(self, title_year):
+    def answerRight(self, title_year, gives_point):
         message = getString(self.SID_ANSWER_RIGHT)
         self.label_solution.setLabel(message % title_year)
         self.image_solution.setColorDiffuse('FF00FF00')
         self.setVisibleState((self.label_solution,
                               self.image_correct), True)
         self.getRandomShot()
-        self.score += 1
-        self.updateScore()
+        if gives_point:
+            self.score += 1
+            self.updateScore()
         self.setVisibleState((self.label_solution,
                               self.image_correct), False)
 

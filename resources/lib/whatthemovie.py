@@ -4,6 +4,7 @@
 from mechanize import Browser, LWPCookieJar
 from BeautifulSoup import BeautifulSoup
 from time import strptime
+from re import compile
 
 
 class WhatTheMovie:
@@ -101,12 +102,22 @@ class WhatTheMovie:
             solved['first_by'] = sections[2].a.string
         except:
             solved['first_by'] = 'nobody'
+        js_list = tree.findAll('script',
+                               attrs={'type': 'text/javascript'},
+                               text=compile('guess_problem'))
+        if len(js_list) == 0:
+            gives_point = True
+        else:
+            # todo: scrape reason for not getting point for solving
+            # ex. guess_problem(153105,'You already solved this snapshot.');
+            gives_point = False
         self.shot['shot_id'] = shot_id
         self.shot['image_url'] = image_url
         self.shot['lang_list'] = lang_list
         self.shot['posted_by'] = posted_by
         self.shot['solved'] = solved
         self.shot['struct_date'] = struct_date
+        self.shot['gives_point'] = gives_point
         # fixme, only for debug
         print 'debug languages: %s' % str(self.shot['lang_list'])
         return self.shot
