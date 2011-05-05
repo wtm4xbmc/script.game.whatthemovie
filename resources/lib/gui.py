@@ -53,9 +53,11 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_ERROR_LOGIN = 3216
     SID_ERROR_SHOT = 3217
     SID_ERROR_GUESS = 3218
+    SID_ENTER_ID = 3206
 
     # ACTION_IDs
     AID_EXIT_BACK = [10, 13]
+    AID_CONTEXT_MENU = [117]
 
     def __init__(self, *args, **kwargs):
         # __init__ will be called when python creates object from this class
@@ -104,8 +106,16 @@ class GUI(xbmcgui.WindowXMLDialog):
         # action is the action which was triggered
         if action in self.AID_EXIT_BACK:
             self.closeDialog()
+        elif action in self.AID_CONTEXT_MENU:
+            self.askShotID()
         #else:
         #    print action.getId()
+
+    def askShotID(self):
+        Dialog = xbmcgui.Dialog()
+        shot_id = Dialog.numeric(0, getString(self.SID_ENTER_ID))
+        if shot_id and shot_id is not '':
+            self.getShot(shot_id)
 
     def onFocus(self, controlId):
         # onFocus will be called on any focus
@@ -116,7 +126,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         # controlID is the ID of the item which is clicked
         if controlId == self.CID_BUTTON_GUESS:
             self.guessTitle(self.shot['shot_id'])
-        if controlId == self.CID_BUTTON_RANDOM:
+        elif controlId == self.CID_BUTTON_RANDOM:
             self.getRandomShot()
         elif controlId == self.CID_BUTTON_EXIT:
             self.closeDialog()
@@ -125,9 +135,15 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.close()
 
     def getRandomShot(self):
+        self.getShot()
+
+    def getShot(self, shot_id=None):
         self.setVisibleState((self.image_gif, ), True)
         try:
-            shot = self.Quiz.getRandomShot()
+            if shot_id:
+                shot = self.Quiz.getShot(shot_id)
+            else:
+                shot = self.Quiz.getRandomShot()
             self.shot = shot
             local_image_path = self.downloadPic(shot['image_url'],
                                                 shot['shot_id'])

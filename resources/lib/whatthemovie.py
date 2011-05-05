@@ -68,27 +68,32 @@ class WhatTheMovie:
 
     def getShot(self, shot_id):
         self.shot = dict()
-        random_url = '%s/shot/%s' % (self.MAIN_URL, shot_id)
-        self.browser.open(random_url)
+        shot_url = '%s/shot/%s' % (self.MAIN_URL, shot_id)
+        self.browser.open(shot_url)
         html = self.browser.response().read()
         tree = BeautifulSoup(html)
+        # id
         shot_id = tree.find('li', attrs={'class': 'number'}).string.strip()
+        # image url
         image_url = tree.find('img', alt='guess this movie snapshot')['src']
+        # languages
         lang_list = list()
         section = tree.find('ul', attrs={'class': 'language_flags'})
         langs = section.findAll(lambda tag: len(tag.attrs) == 0)
         for lang in langs:
             lang_list.append(str(lang.img['alt'])[:-6])
-
+        # date
         date_info = tree.find('ul',
                               attrs={'class': 'nav_date'}).findAll('li')
         struct_date = strptime('%s %s %s' % (date_info[1].a.string,
                                              date_info[2].a.string,
                                              date_info[3].a.string[:-2]),
                                '%Y %B %d')
+        # posted by
         sections = tree.find('ul',
                              attrs={'class': 'nav_shotinfo'}).findAll('li')
         posted_by = sections[0].a.string
+        # solved
         solved = dict()
         try:
             solved_string, solved_count = sections[1].string[8:].split()
@@ -102,6 +107,7 @@ class WhatTheMovie:
             solved['first_by'] = sections[2].a.string
         except:
             solved['first_by'] = 'nobody'
+        # gives_point
         js_list = tree.findAll('script',
                                attrs={'type': 'text/javascript'},
                                text=compile('guess_problem'))
@@ -111,6 +117,7 @@ class WhatTheMovie:
             # todo: scrape reason for not getting point for solving
             # ex. guess_problem(153105,'You already solved this snapshot.');
             gives_point = False
+        # return dict
         self.shot['shot_id'] = shot_id
         self.shot['image_url'] = image_url
         self.shot['lang_list'] = lang_list
