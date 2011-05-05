@@ -97,6 +97,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.Quiz = whatthemovie.WhatTheMovie()
         try:
             self.login()
+#            self.Quiz.setOptions() # fixme: needs GUI Stuff
         except Exception, error:
             self.errorMessage(getString(self.SID_ERROR_LOGIN),
                               str(error))

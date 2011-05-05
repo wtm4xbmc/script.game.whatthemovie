@@ -1,7 +1,8 @@
 # WhatTheMovie Python Class
 # Copyright (C) Tristan 'sphere' Fischer 2011
 
-from mechanize import Browser, LWPCookieJar
+from mechanize import Browser, LWPCookieJar, Request
+from urllib import urlencode
 from BeautifulSoup import BeautifulSoup
 from time import strptime
 from re import compile
@@ -62,6 +63,24 @@ class WhatTheMovie:
                 # could not log in
                 pass
         return self.is_login
+
+    def setOptions(self, options_dict=None):
+        option_url = '%s/shot/setrandomoptions' % self.MAIN_URL
+        if not options_dict:
+            options_dict = dict()
+            options_dict['difficulty'] = 'all' # 'easy'|'medium'|'all'
+            # silly server-side - if the key exists 
+            #options_dict['include_archive'] = '1' # 1|remove-key
+            #options_dict['include_solved'] = '1' # 1|remove-key
+            #options_dict['keyword'] = ''
+        post_data = urlencode(options_dict)
+        req = Request(option_url, post_data)
+        req.add_header('Accept', 'text/javascript, */*')
+        req.add_header('Content-Type',
+                       'application/x-www-form-urlencoded; charset=UTF-8')
+        req.add_header('X-Requested-With', 'XMLHttpRequest')
+        self.browser.open(req)
+        self.browser.response().read() # needed?
 
     def getRandomShot(self):
         return self.getShot('random')
