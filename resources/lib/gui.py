@@ -101,7 +101,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.login()
         except Exception, error:
             self.errorMessage(getString(self.SID_ERROR_LOGIN),
-                              error)
+                              str(error))
             self.close()
         self.getRandomShot()
 
@@ -138,7 +138,7 @@ class GUI(xbmcgui.WindowXMLDialog):
                                                 shot['shot_id'])
         except Exception, error:
             self.errorMessage(getString(self.SID_ERROR_SHOT),
-                              error)
+                              str(error))
             return
         self.setVisibleState((self.label_solution,
                               self.image_solution,
@@ -180,7 +180,7 @@ class GUI(xbmcgui.WindowXMLDialog):
                 answer = self.Quiz.guessShot(guess)
             except Exception, error:
                 self.errorMessage(getString(self.SID_ERROR_GUESS),
-                                  error)
+                                  str(error))
                 return
             self.setVisibleState((self.label_solution,
                                   self.image_solution), False)
