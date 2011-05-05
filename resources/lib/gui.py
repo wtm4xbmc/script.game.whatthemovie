@@ -240,7 +240,8 @@ class GUI(xbmcgui.WindowXMLDialog):
         cache_dir = 'special://profile/addon_data/%s/cache' % script_id
         self.checkCreatePath(cache_dir)
         image_path = xbmc.translatePath('%s/%s.jpg' % (cache_dir, shot_id))
-        dl = urllib.urlretrieve(image_url, image_path, )
+        if not os.path.isfile(image_path):
+            dl = urllib.urlretrieve(image_url, image_path, )
         return image_path
 
     def updateScore(self):
