@@ -117,7 +117,8 @@ class WhatTheMovie:
         if not shot_id:
             shot_id = self.shot['shot_id']
         post_url = '%s/shot/%s/guess' % (self.MAIN_URL, shot_id)
-        self.browser.open(post_url, 'guess=%s' % title_guess)
+        post_data = 'guess=%s' % title_guess.encode('utf8')
+        self.browser.open(post_url, post_data)
         response = self.browser.response().read()
         response_c = response.replace('&amp;', '&').decode('unicode-escape')
         # fixme, only for debug (find html entities)

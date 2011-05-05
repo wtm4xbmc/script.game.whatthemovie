@@ -170,7 +170,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         keyboard = xbmc.Keyboard(default='', heading=heading)
         keyboard.doModal()
         if keyboard.isConfirmed() and keyboard.getText() is not '':
-            guess = keyboard.getText()
+            guess = keyboard.getText().decode('utf8')
             self.image_solution.setColorDiffuse('FFFFFF00')
             self.setVisibleState((self.label_solution,
                                   self.image_solution), True)
