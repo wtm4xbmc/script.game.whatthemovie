@@ -83,11 +83,6 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.image_correct = self.getControl(self.CID_IMAGE_CORRECT)
         self.image_wrong = self.getControl(self.CID_IMAGE_WRONG)
 
-        # translate buttons
-        self.button_guess.setLabel(getString(self.SID_GUESS))
-        self.button_random.setLabel(getString(self.SID_RANDOM))
-        self.button_exit.setLabel(getString(self.SID_EXIT))
-
         # set control visibility
         self.setVisibleState((self.label_solution,
                               self.image_solution,

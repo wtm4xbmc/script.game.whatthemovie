@@ -67,6 +67,7 @@
             <ondown>3000</ondown>
             <font>font12</font>
             <textcolor>FFFFFFFF</textcolor>
+            <label>$LOCALIZE[SCRIPT3102]</label>
         </control>
         <control type="button" id="3000">
             <description>Guess Button</description>
@@ -84,6 +85,7 @@
             <ondown>3001</ondown>
             <font>font12</font>
             <textcolor>FFFFFFFF</textcolor>
+            <label>$LOCALIZE[SCRIPT3100]</label>
         </control>
         <control type="button" id="3001">
             <description>Random next Button</description>
@@ -101,6 +103,7 @@
             <ondown>3002</ondown>
             <font>font12</font>
             <textcolor>FFFFFFFF</textcolor>
+            <label>$LOCALIZE[SCRIPT3101]</label>
             <onclick>SetFocus(3000)</onclick>
         </control>
         <control type="label" id="1001">
