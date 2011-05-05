@@ -85,7 +85,6 @@ class GUI(xbmcgui.WindowXMLDialog):
 
         # set control visibility
         self.setVisibleState((self.label_solution,
-                              self.image_solution,
                               self.image_correct,
                               self.image_wrong), False)
         self.hideLabels()
@@ -136,7 +135,6 @@ class GUI(xbmcgui.WindowXMLDialog):
                               str(error))
             return
         self.setVisibleState((self.label_solution,
-                              self.image_solution,
                               self.image_correct,
                               self.image_wrong), False)
         self.image_main.setImage(local_image_path)
@@ -158,7 +156,6 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def guessTitle(self):
         self.setVisibleState((self.label_solution,
-                              self.image_solution,
                               self.image_wrong,
                               self.image_correct), False)
         heading = getString(self.SID_KEYBOARD_HEADING)
@@ -167,8 +164,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         if keyboard.isConfirmed() and keyboard.getText() is not '':
             guess = keyboard.getText().decode('utf8')
             self.image_solution.setColorDiffuse('FFFFFF00')
-            self.setVisibleState((self.label_solution,
-                                  self.image_solution), True)
+            self.setVisibleState((self.label_solution, ), True)
             message = getString(self.SID_CHECKING)
             self.label_solution.setLabel(message % guess)
             try:
@@ -177,8 +173,7 @@ class GUI(xbmcgui.WindowXMLDialog):
                 self.errorMessage(getString(self.SID_ERROR_GUESS),
                                   str(error))
                 return
-            self.setVisibleState((self.label_solution,
-                                  self.image_solution), False)
+            self.setVisibleState((self.label_solution, ), False)
             if answer['is_right'] == True:
                 self.answerRight(answer['title_year'])
             else:
@@ -189,13 +184,11 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_solution.setLabel(message % title_year)
         self.image_solution.setColorDiffuse('FF00FF00')
         self.setVisibleState((self.label_solution,
-                              self.image_solution,
                               self.image_correct), True)
         self.getRandomShot()
         self.score += 1
         self.updateScore()
         self.setVisibleState((self.label_solution,
-                              self.image_solution,
                               self.image_correct), False)
 
     def answerWrong(self, guess):
@@ -203,7 +196,6 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_solution.setLabel(message % guess)
         self.image_solution.setColorDiffuse('FFFF0000')
         self.setVisibleState((self.label_solution,
-                              self.image_solution,
                               self.image_wrong), True)
 
     def login(self):

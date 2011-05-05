@@ -150,6 +150,7 @@
             <width>720</width>
             <height>30</height>
             <texture>solution_back.png</texture>
+            <visible>Control.IsVisible(1007)</visible>
         </control>
         <control type="label" id="1007">
             <description>Solution movie title and year</description>
