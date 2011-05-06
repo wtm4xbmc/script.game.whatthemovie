@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
-    <category label="3208">
+    <!-- General --->
+    <category label="3208"> 
+        <!-- Login --->
+        <setting type="lsep" label="3228" />
         <setting id="login" type="bool" label="3200" default="false" />
         <setting id="username" type="text" label="3201" enable="eq(-1,true)"/>
         <setting id="password" type="text" label="3202" enable="eq(-2,true)" option="hidden" />
+        <!-- Random options --->
+        <setting type="lsep" label="3229" />
         <setting id="difficulty" type="enum" label="3220" lvalues="3221|3222|3223" default="0" />
         <setting id="include_archive" type="bool" label="3224" default="false" />
         <setting id="include_solved" type="bool" label="3225" default="false" />
     </category>
+    <!-- Look/Feel --->
     <category label="3209">
+        <!-- Look --->
+        <setting label="3230" type="lsep" />
         <setting id="visible_posted_by" type="bool" label="3210" default="true" />
         <setting id="visible_solved" type="bool" label="3211" default="true" />
         <setting id="visible_shot_id" type="bool" label="3212" default="true" />
         <setting id="visible_shot_date" type="bool" label="3215" default="true" />
+        <!-- Behaviour --->
+        <setting label="3231" type="lsep" />
+        <setting id="auto_random" type="bool" label="3226" default="true" />
+        <setting id="auto_random_sleep" type="enum" label="3227" default="2" values="0|1|2|3|4|5" enable="eq(-1,true)" />
     </category>
 </settings>
