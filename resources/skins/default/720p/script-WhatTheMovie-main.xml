@@ -53,7 +53,7 @@
                 <posy>5</posy>
                 <width>720</width>
                 <height>400</height>
-		<fadetime>500</fadetime>
+                <fadetime>500</fadetime>
                 <texture>$INFO[Window(10000).Property(wtm.main_image)]</texture>
                 <aspectratio>keep</aspectratio>
             </control>
@@ -65,7 +65,7 @@
                 <height>30</height>
                 <texture>solution_back.png</texture>
                 <visible>Control.IsVisible(1007)</visible>
-		<animation effect="fade" time="200">VisibleChange</animation>
+                <animation effect="fade" time="200">VisibleChange</animation>
             </control>
             <control type="label" id="1007">
                 <description>Solution movie title and year</description>
@@ -78,8 +78,8 @@
                 <font>font12</font>
                 <scroll>true</scroll>
                 <textcolor>FF000000</textcolor>
-		<visible>!StringCompare(Window(10000).Property(wtm.solved_status),inactive) + !StringCompare(Window(10000).Property(wtm.solved_status),)</visible>
-		<animation effect="fade" time="200">VisibleChange</animation>
+                <visible>!StringCompare(Window(10000).Property(wtm.solved_status),inactive) + !StringCompare(Window(10000).Property(wtm.solved_status),) + !StringCompare(Window(10000).Property(wtm.solved_status),loading)</visible>
+                <animation effect="fade" time="200">VisibleChange</animation>
             </control>
             <control type="image" id="1009">
                 <description>Correct answer image</description>
@@ -88,8 +88,8 @@
                 <width>140</width>
                 <height>140</height>
                 <texture>guess_correct.png</texture>
-		<visible>StringCompare(Window(10000).Property(wtm.solved_status),correct)</visible>
-		<animation effect="fade" time="200">VisibleChange</animation>
+                <visible>StringCompare(Window(10000).Property(wtm.solved_status),correct)</visible>
+                <animation effect="fade" time="200">VisibleChange</animation>
             </control>
             <control type="image" id="1010">
                 <description>Wrong answer image</description>
@@ -98,8 +98,8 @@
                 <width>140</width>
                 <height>140</height>
                 <texture>guess_wrong.png</texture>
-		<visible>StringCompare(Window(10000).Property(wtm.solved_status),wrong)</visible>
-		<animation effect="fade" time="200">VisibleChange</animation>
+                <visible>StringCompare(Window(10000).Property(wtm.solved_status),wrong)</visible>
+                <animation effect="fade" time="200">VisibleChange</animation>
             </control>
             <control type="image" id="1002">
                 <description>Animated Gif</description>
@@ -108,6 +108,8 @@
                 <width>48</width>
                 <height>48</height>
                 <texture>loader.gif</texture>
+                <visible>StringCompare(Window(10000).Property(wtm.busy),loading)</visible>
+                <animation effect="fade" time="200">VisibleChange</animation>
             </control>
         </control>
         <control type="group">
@@ -263,7 +265,7 @@
             <posy>60</posy>
             <width>200</width>
             <height>40</height>
-	    <label>$INFO[Window(10000).Property(wtm.solved_status)]</label>
+            <label>$INFO[Window(10000).Property(wtm.solved_status)]</label>
             <align>center</align>
             <font>font12</font>
             <textcolor>FF777777</textcolor>

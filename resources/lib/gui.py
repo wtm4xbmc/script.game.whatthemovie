@@ -16,7 +16,6 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_BUTTON_GUESS = 3000
     CID_BUTTON_RANDOM = 3001
     CID_BUTTON_EXIT = 3002
-    CID_IMAGE_MAIN = 1000
     CID_IMAGE_GIF = 1002
     CID_IMAGE_SOLUTION = 1006
     CID_LABEL_LOGINSTATE = 1001
@@ -77,12 +76,11 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_shot_id = self.getControl(self.CID_LABEL_SHOT_ID)
         self.label_shot_date = self.getControl(self.CID_LABEL_SHOT_DATE)
         self.label_shot_type = self.getControl(self.CID_LABEL_SHOT_TYPE)
-        self.image_main = self.getControl(self.CID_IMAGE_MAIN)
         self.image_gif = self.getControl(self.CID_IMAGE_GIF)
         self.image_solution = self.getControl(self.CID_IMAGE_SOLUTION)
         self.group_flags = self.getControl(self.CID_GROUP_FLAGS)
 
-        self.home_win = xbmcgui.Window(10000)
+        self.window_home = xbmcgui.Window(10000)
         self.setWTMProperty('solved_status', 'inactive')
 
         # set control visibility
@@ -137,7 +135,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.getShot()
 
     def getShot(self, shot_id=None):
-        self.setVisibleState((self.image_gif, ), True)
+        self.setWTMProperty('busy', 'loading')
         try:
             if shot_id:
                 shot = self.Quiz.getShot(shot_id)
@@ -165,7 +163,7 @@ class GUI(xbmcgui.WindowXMLDialog):
                                     shot['struct_date'])
         self.label_shot_date.setLabel(getString(self.SID_SHOT_DATE)
                                       % date_string)
-        self.setVisibleState((self.image_gif, ), False)
+        self.setWTMProperty('busy', '')
 
     def guessTitle(self, shot_id):
         self.setWTMProperty('solved_status', 'inactive')
@@ -278,7 +276,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             control.setVisible(visible)
 
     def setWTMProperty(self, prop, value):
-    	self.home_win.setProperty('wtm.%s' % prop, value)
+    	self.window_home.setProperty('wtm.%s' % prop, value)
 
     def hideLabels(self):
         if getSetting('visible_posted_by') == 'false':
