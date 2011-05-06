@@ -64,7 +64,7 @@
                 <height>30</height>
                 <texture>solution_back.png</texture>
                 <visible>Control.IsVisible(1007)</visible>
-		<animation effect="fade" time="500">VisibleChange</animation>
+		<animation effect="fade" time="200">VisibleChange</animation>
             </control>
             <control type="label" id="1007">
                 <description>Solution movie title and year</description>
@@ -77,6 +77,8 @@
                 <font>font12</font>
                 <scroll>true</scroll>
                 <textcolor>FF000000</textcolor>
+		<visible>!StringCompare(Window(10000).Property(wtm.solved_status),inactive) + !StringCompare(Window(10000).Property(wtm.solved_status),)</visible>
+		<animation effect="fade" time="200">VisibleChange</animation>
             </control>
             <control type="image" id="1009">
                 <description>Correct answer image</description>

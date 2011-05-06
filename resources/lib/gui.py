@@ -87,7 +87,6 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.setWTMProperty('solved_status', 'inactive')
 
         # set control visibility
-        self.setVisibleState((self.label_solution, ), False)
         self.hideLabels()
 
         # start the api
@@ -151,7 +150,6 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.errorMessage(getString(self.SID_ERROR_SHOT),
                               str(error))
             return
-        self.setVisibleState((self.label_solution, ), False)
         self.image_main.setImage(local_image_path)
         self.label_posted_by.setLabel(getString(self.SID_POSTED_BY)
                                       % shot['posted_by'])
@@ -170,14 +168,14 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.setVisibleState((self.image_gif, ), False)
 
     def guessTitle(self, shot_id):
-        self.setVisibleState((self.label_solution, ), False)
+        self.setWTMProperty('solved_status', 'inactive')
         heading = getString(self.SID_KEYBOARD_HEADING)
         keyboard = xbmc.Keyboard(default='', heading=heading)
         keyboard.doModal()
         if keyboard.isConfirmed() and keyboard.getText() is not '':
             guess = keyboard.getText().decode('utf8')
             self.image_solution.setColorDiffuse('FFFFFF00')
-            self.setVisibleState((self.label_solution, ), True)
+            self.setWTMProperty('solved_status', 'checking')
             message = getString(self.SID_CHECKING)
             self.label_solution.setLabel(message % guess)
             try:
@@ -186,7 +184,6 @@ class GUI(xbmcgui.WindowXMLDialog):
                 self.errorMessage(getString(self.SID_ERROR_GUESS),
                                   str(error))
                 return
-            self.setVisibleState((self.label_solution, ), False)
             if answer['is_right'] == True:
                 self.answerRight(answer['title_year'], self.shot['gives_point'])
             else:
@@ -197,20 +194,17 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_solution.setLabel(message % title_year)
         self.setWTMProperty('solved_status', 'correct')
         self.image_solution.setColorDiffuse('FF00FF00')
-        self.setVisibleState((self.label_solution, ), True)
         self.getRandomShot()
         if gives_point:
             self.score += 1
             self.updateScore()
         self.setWTMProperty('solved_status', 'inactive')
-        self.setVisibleState((self.label_solution, ), False)
 
     def answerWrong(self, guess):
         message = getString(self.SID_ANSWER_WRONG)
         self.label_solution.setLabel(message % guess)
         self.setWTMProperty('solved_status', 'wrong')
         self.image_solution.setColorDiffuse('FFFF0000')
-        self.setVisibleState((self.label_solution, ), True)
 
     def login(self):
         self.score = 0
