@@ -27,8 +27,6 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_LABEL_SHOT_ID = 1008
     CID_LABEL_SHOT_DATE = 1011
     CID_LABEL_SHOT_TYPE = 1012
-    CID_IMAGE_CORRECT = 1009
-    CID_IMAGE_WRONG = 1010
     CID_GROUP_FLAGS = 1013
 
     # STRING_IDs
@@ -83,14 +81,13 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.image_main = self.getControl(self.CID_IMAGE_MAIN)
         self.image_gif = self.getControl(self.CID_IMAGE_GIF)
         self.image_solution = self.getControl(self.CID_IMAGE_SOLUTION)
-        self.image_correct = self.getControl(self.CID_IMAGE_CORRECT)
-        self.image_wrong = self.getControl(self.CID_IMAGE_WRONG)
         self.group_flags = self.getControl(self.CID_GROUP_FLAGS)
 
+        self.home_win = xbmcgui.Window(10000)
+        self.setWTMProperty('solved_status', 'inactive')
+
         # set control visibility
-        self.setVisibleState((self.label_solution,
-                              self.image_correct,
-                              self.image_wrong), False)
+        self.setVisibleState((self.label_solution, ), False)
         self.hideLabels()
 
         # start the api
@@ -129,6 +126,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         if controlId == self.CID_BUTTON_GUESS:
             self.guessTitle(self.shot['shot_id'])
         elif controlId == self.CID_BUTTON_RANDOM:
+            self.setWTMProperty('solved_status', 'inactive')
             self.getRandomShot()
         elif controlId == self.CID_BUTTON_EXIT:
             self.closeDialog()
@@ -153,9 +151,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.errorMessage(getString(self.SID_ERROR_SHOT),
                               str(error))
             return
-        self.setVisibleState((self.label_solution,
-                              self.image_correct,
-                              self.image_wrong), False)
+        self.setVisibleState((self.label_solution, ), False)
         self.image_main.setImage(local_image_path)
         self.label_posted_by.setLabel(getString(self.SID_POSTED_BY)
                                       % shot['posted_by'])
@@ -174,9 +170,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.setVisibleState((self.image_gif, ), False)
 
     def guessTitle(self, shot_id):
-        self.setVisibleState((self.label_solution,
-                              self.image_wrong,
-                              self.image_correct), False)
+        self.setVisibleState((self.label_solution, ), False)
         heading = getString(self.SID_KEYBOARD_HEADING)
         keyboard = xbmc.Keyboard(default='', heading=heading)
         keyboard.doModal()
@@ -201,22 +195,22 @@ class GUI(xbmcgui.WindowXMLDialog):
     def answerRight(self, title_year, gives_point):
         message = getString(self.SID_ANSWER_RIGHT)
         self.label_solution.setLabel(message % title_year)
+        self.setWTMProperty('solved_status', 'correct')
         self.image_solution.setColorDiffuse('FF00FF00')
-        self.setVisibleState((self.label_solution,
-                              self.image_correct), True)
+        self.setVisibleState((self.label_solution, ), True)
         self.getRandomShot()
         if gives_point:
             self.score += 1
             self.updateScore()
-        self.setVisibleState((self.label_solution,
-                              self.image_correct), False)
+        self.setWTMProperty('solved_status', 'inactive')
+        self.setVisibleState((self.label_solution, ), False)
 
     def answerWrong(self, guess):
         message = getString(self.SID_ANSWER_WRONG)
         self.label_solution.setLabel(message % guess)
+        self.setWTMProperty('solved_status', 'wrong')
         self.image_solution.setColorDiffuse('FFFF0000')
-        self.setVisibleState((self.label_solution,
-                              self.image_wrong), True)
+        self.setVisibleState((self.label_solution, ), True)
 
     def login(self):
         self.score = 0
@@ -285,6 +279,9 @@ class GUI(xbmcgui.WindowXMLDialog):
     def setVisibleState(self, control_list, visible):
         for control in control_list:
             control.setVisible(visible)
+
+    def setWTMProperty(self, prop, value):
+    	self.home_win.setProperty('wtm.%s' % prop, value)
 
     def hideLabels(self):
         if getSetting('visible_posted_by') == 'false':
