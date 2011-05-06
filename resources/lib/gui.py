@@ -198,7 +198,10 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.setWTMProperty('solved_status', 'correct')
         self.image_solution.setColorDiffuse('FF00FF00')
         self.setVisibleState((self.label_solution, ), True)
-        self.getRandomShot()
+        if getSetting('auto_random') == 'true':
+            time_to_sleep = int(getSetting('auto_random_sleep')) * 1000
+            xbmc.sleep(time_to_sleep)
+            self.getRandomShot()
         if gives_point:
             self.score += 1
             self.updateScore()

@@ -20,8 +20,8 @@
   <string id="3205">Not solved yet</string>
   <string id="3206">Enter Shot ID</string>
   <string id="3207">Shot ID: [B]%s[/B]</string>
-  <string id="3208">Login</string>
-  <string id="3209">Labels</string>
+  <string id="3208">General</string>
+  <string id="3209">Look+Feel</string>
   <string id="3210">Show "Posted by"</string>
   <string id="3211">Show "Solved"</string>
   <string id="3212">Show "Shot ID"</string>
@@ -38,4 +38,10 @@
   <string id="3223">all</string>
   <string id="3224">Include Archive</string>
   <string id="3225">Include Solved</string>
+  <string id="3226">Auto jump to next after guess was right</string>
+  <string id="3227">...after x Seconds</string>
+  <string id="3228">Login</string>
+  <string id="3229">Random Options (need Login)</string>
+  <string id="3230">Look</string>
+  <string id="3231">Behaviour</string>
 </strings>
