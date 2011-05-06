@@ -166,7 +166,6 @@
                 <font>font12</font>
                 <textcolor>FFFFFFFF</textcolor>
                 <label>$LOCALIZE[SCRIPT3101]</label>
-                <onclick>SetFocus(3000)</onclick>
             </control>
         </control>
         <control type="label" id="1001">
