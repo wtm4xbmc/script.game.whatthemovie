@@ -65,7 +65,6 @@ class GUI(xbmcgui.WindowXMLDialog):
     def onInit(self):
         # onInit will be called from xbmc (after __init__)
         # store xbmc keycodes for exit and backspace
-
         # get controls
         self.button_guess = self.getControl(self.CID_BUTTON_GUESS)
         self.button_random = self.getControl(self.CID_BUTTON_RANDOM)
@@ -131,6 +130,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.closeDialog()
 
     def closeDialog(self):
+        self.setWTMProperty('main_image', '')
         self.close()
 
     def getRandomShot(self):
@@ -150,7 +150,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.errorMessage(getString(self.SID_ERROR_SHOT),
                               str(error))
             return
-        self.image_main.setImage(local_image_path)
+        self.setWTMProperty('main_image', local_image_path)
         self.label_posted_by.setLabel(getString(self.SID_POSTED_BY)
                                       % shot['posted_by'])
         if shot['solved']['status']:

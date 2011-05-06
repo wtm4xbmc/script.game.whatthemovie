@@ -53,7 +53,8 @@
                 <posy>5</posy>
                 <width>720</width>
                 <height>400</height>
-                <texture></texture>
+		<fadetime>500</fadetime>
+                <texture>$INFO[Window(10000).Property(wtm.main_image)]</texture>
                 <aspectratio>keep</aspectratio>
             </control>
             <control type="image" id="1006">
