@@ -4,6 +4,9 @@
         <setting id="login" type="bool" label="3200" default="false" />
         <setting id="username" type="text" label="3201" enable="eq(-1,true)"/>
         <setting id="password" type="text" label="3202" enable="eq(-2,true)" option="hidden" />
+        <setting id="difficulty" type="enum" label="3220" lvalues="3221|3222|3223" default="0" />
+        <setting id="include_archive" type="bool" label="3224" default="false" />
+        <setting id="include_solved" type="bool" label="3225" default="false" />
     </category>
     <category label="3209">
         <setting id="visible_posted_by" type="bool" label="3210" default="true" />

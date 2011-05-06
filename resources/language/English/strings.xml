@@ -32,4 +32,10 @@
   <string id="3217">Could not get the shot</string>
   <string id="3218">Could not check the guess</string>
   <string id="3219">Feature Films</string>
+  <string id="3220">Difficulty</string>
+  <string id="3221">easy</string>
+  <string id="3222">medium</string>
+  <string id="3223">all</string>
+  <string id="3224">Include Archive</string>
+  <string id="3225">Include Solved</string>
 </strings>

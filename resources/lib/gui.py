@@ -97,7 +97,6 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.Quiz = whatthemovie.WhatTheMovie()
         try:
             self.login()
-#            self.Quiz.setOptions() # fixme: needs GUI Stuff
         except Exception, error:
             self.errorMessage(getString(self.SID_ERROR_LOGIN),
                               str(error))
@@ -231,7 +230,8 @@ class GUI(xbmcgui.WindowXMLDialog):
             cookie_file = xbmc.translatePath('%s/cookie.txt' % cookie_dir)
             user = getSetting('username')
             password = getSetting('password')
-            success = self.Quiz.login(user, password, cookie_file)
+            options = self.getOptions()
+            success = self.Quiz.login(user, password, cookie_file, options)
             if success == False:
                 dialog = xbmcgui.Dialog()
                 dialog.ok(getString(self.SID_LOGIN_FAILED_HEADING),
@@ -242,6 +242,24 @@ class GUI(xbmcgui.WindowXMLDialog):
                 self.score = int(self.Quiz.getScore(user))
             self.label_loginstate.setLabel(label)
         self.updateScore()
+
+    def getOptions(self):
+        options = dict()
+        if getSetting('difficulty') == '2': # 'all'
+            options['difficulty'] = 'all'
+        elif getSetting('difficulty') == '1': # 'medium'
+            options['difficulty'] = 'medium'
+        elif getSetting('difficulty') == '0': # 'easy'
+            options['difficulty'] = 'easy'
+        if getSetting('include_archive') == 'true':
+            options['include_archive'] = '1'
+        else:
+            options['include_archive'] = '0'
+        if getSetting('include_solved') == 'true':
+            options['include_solved'] = '1'
+        else:
+            options['include_solved'] = '1'
+        return options
 
     def downloadPic(self, image_url, shot_id):
         script_id = sys.modules['__main__'].__id__

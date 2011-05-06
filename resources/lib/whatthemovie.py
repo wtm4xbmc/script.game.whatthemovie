@@ -38,7 +38,7 @@ class WhatTheMovie:
             self.is_login = True
         return self.is_login
 
-    def login(self, user, password, cookie_path):
+    def login(self, user, password, cookie_path, options=None):
         login_url = '%s/user/login/' % self.MAIN_URL
         try:
             self.cookies.revert(cookie_path)
@@ -57,6 +57,8 @@ class WhatTheMovie:
             self.browser.submit()
             if self._checkLogin(login_url):
                 # logged in via auth
+                if options and len(options) > 0:
+                    self.setOptions(options)
                 self.cookies.save(cookie_path)
                 self.username = user
             else:
@@ -64,15 +66,12 @@ class WhatTheMovie:
                 pass
         return self.is_login
 
-    def setOptions(self, options_dict=None):
+    def setOptions(self, options_dict):
         option_url = '%s/shot/setrandomoptions' % self.MAIN_URL
-        if not options_dict:
-            options_dict = dict()
-            options_dict['difficulty'] = 'all' # 'easy'|'medium'|'all'
-            # silly server-side - if the key exists 
-            #options_dict['include_archive'] = '1' # 1|remove-key
-            #options_dict['include_solved'] = '1' # 1|remove-key
-            #options_dict['keyword'] = ''
+        if options_dict['include_archive'] == '0':
+            options_dict.pop('include_archive')
+        if options_dict['include_solved'] == '0':
+            options_dict.pop('include_solved')
         post_data = urlencode(options_dict)
         req = Request(option_url, post_data)
         req.add_header('Accept', 'text/javascript, */*')

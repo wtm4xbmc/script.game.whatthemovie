@@ -15,7 +15,7 @@ getSetting = Addon.getSetting
 
 print '[SCRIPT][%s] version %s initialized!' % (__scriptname__, __version__)
 
-if (__name__ == "__main__"):
+if (__name__ == '__main__'):
     import resources.lib.gui as gui
     ui = gui.GUI('script-%s-main.xml' % __scriptname__, __path__, 'default')
     ui.doModal()
