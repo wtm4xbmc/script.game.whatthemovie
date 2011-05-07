@@ -21,6 +21,7 @@ class WhatTheMovie:
         # Set empty returns
         self.is_login = False
         self.shot = dict()
+        self.shots = list()
         self.username = None
         self.score = None
         self.answer = None
@@ -86,7 +87,14 @@ class WhatTheMovie:
     def getRandomShot(self):
         return self.getShot('random')
 
+    def getLastShot(self):
+        if len(self.shots) > 0:
+            self.shot = self.shots.pop()
+        return self.shot
+
     def getShot(self, shot_id):
+        if self.shot: # if there is already a shot - put it in list
+            self.shots.append(self.shot)
         self.shot = dict()
         shot_url = '%s/shot/%s' % (self.MAIN_URL, shot_id)
         self.browser.open(shot_url)
