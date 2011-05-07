@@ -55,7 +55,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_SHOT_TYPE = 3350
 
     # ACTION_IDs
-    AID_EXIT_BACK = [10, 13]
+    AID_EXIT_BACK = [9, 10, 13]
     AID_CONTEXT_MENU = [117]
 
     def __init__(self, *args, **kwargs):
