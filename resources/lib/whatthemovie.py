@@ -5,7 +5,7 @@ from mechanize import Browser, LWPCookieJar, Request
 from urllib import urlencode
 from BeautifulSoup import BeautifulSoup
 from time import strptime, mktime
-from datetime import datetime
+from datetime import datetime, timedelta
 from re import compile
 
 
@@ -132,10 +132,14 @@ class WhatTheMovie:
                                attrs={'type': 'text/javascript'},
                                text=compile('guess_problem'))
         if len(js_list) == 0:
+            # at least no guess_problem
             gives_point = True
+            age = datetime.now() - date
+            if age > timedelta(days=30):
+                # from archive
+                gives_point = False
         else:
-            # todo: scrape reason for not getting point for solving
-            # ex. guess_problem(153105,'You already solved this snapshot.');
+            # already solved
             gives_point = False
         # return dict
         self.shot['shot_id'] = shot_id
