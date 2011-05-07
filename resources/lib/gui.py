@@ -149,6 +149,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.errorMessage(getString(self.SID_ERROR_SHOT),
                               str(error))
             return
+        self.label_shot_type.setLabel(getString(self.SID_SHOT_TYPE)) # fixme
         self.setWTMProperty('main_image', local_image_path)
         self.label_posted_by.setLabel(getString(self.SID_POSTED_BY)
                                       % shot['posted_by'])
@@ -161,7 +162,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_shot_id.setLabel(getString(self.SID_SHOT_ID)
                                     % shot['shot_id'])
         date = shot['date']
-        date_string =  date.strftime(str(getString(self.SID_DATE_FORMAT)))
+        date_string = date.strftime(str(getString(self.SID_DATE_FORMAT)))
         self.label_shot_date.setLabel(getString(self.SID_SHOT_DATE)
                                       % date_string)
         self.setWTMProperty('busy', '')
@@ -184,7 +185,8 @@ class GUI(xbmcgui.WindowXMLDialog):
                                   str(error))
                 return
             if answer['is_right'] == True:
-                self.answerRight(answer['title_year'], self.shot['gives_point'])
+                self.answerRight(answer['title_year'],
+                                 self.shot['gives_point'])
             else:
                 self.answerWrong(guess)
 
@@ -210,7 +212,6 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def login(self):
         self.score = 0
-        self.label_shot_type.setLabel(getString(self.SID_SHOT_TYPE)) #fixme correct position?!
         if getSetting('login') == 'false':
             self.label_loginstate.setLabel(getString(self.SID_NOT_LOGGED_IN))
         else:
@@ -277,7 +278,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             control.setVisible(visible)
 
     def setWTMProperty(self, prop, value):
-    	self.window_home.setProperty('wtm.%s' % prop, value)
+        self.window_home.setProperty('wtm.%s' % prop, value)
 
     def hideLabels(self):
         if getSetting('visible_posted_by') == 'false':
@@ -293,4 +294,3 @@ class GUI(xbmcgui.WindowXMLDialog):
         print 'ERROR: %s: %s ' % (heading, str(error))
         dialog = xbmcgui.Dialog()
         dialog.ok(heading, error)
-
