@@ -19,6 +19,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_BUTTON_BACK = 3002
     CID_IMAGE_GIF = 1002
     CID_IMAGE_SOLUTION = 1006
+    CID_IMAGE_MAIN = 1000
     CID_LABEL_LOGINSTATE = 1001
     CID_LABEL_SCORE = 1003
     CID_LABEL_POSTED_BY = 1004
@@ -59,6 +60,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     # ACTION_IDs
     AID_EXIT_BACK = [9, 10, 13]
     AID_CONTEXT_MENU = [117]
+    AID_INFO = [11]
 
     def __init__(self, *args, **kwargs):
         # __init__ will be called when python creates object from this class
@@ -82,6 +84,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_shot_id = self.getControl(self.CID_LABEL_SHOT_ID)
         self.label_shot_date = self.getControl(self.CID_LABEL_SHOT_DATE)
         self.label_shot_type = self.getControl(self.CID_LABEL_SHOT_TYPE)
+        self.image_main = self.getControl(self.CID_IMAGE_MAIN)
         self.image_gif = self.getControl(self.CID_IMAGE_GIF)
         self.image_solution = self.getControl(self.CID_IMAGE_SOLUTION)
         self.list_flags = self.getControl(self.CID_LIST_FLAGS)
@@ -106,8 +109,10 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.closeDialog()
         elif action in self.AID_CONTEXT_MENU:
             self.askShotID()
-        #else:
-        #    print action.getId()
+        elif action in self.AID_INFO:
+            self.setFocus(self.image_main)
+        else:
+            print action.getId()
 
     def askShotID(self):
         Dialog = xbmcgui.Dialog()
