@@ -2,6 +2,7 @@ import sys
 import os
 import urllib
 import datetime
+import traceback
 import xbmcgui
 import xbmc
 import whatthemovie
@@ -115,6 +116,7 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def onFocus(self, controlId):
         # onFocus will be called on any focus
+        #print controlID
         pass
 
     def onClick(self, controlId):
@@ -295,5 +297,9 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def errorMessage(self, heading, error):
         print 'ERROR: %s: %s ' % (heading, str(error))
+        exc_type, exc_value, exc_traceback = sys.exc_info()
+        print 'TRACEBACK:' + repr(traceback.format_exception(exc_type,
+                                                             exc_value,
+                                                             exc_traceback))
         dialog = xbmcgui.Dialog()
         dialog.ok(heading, error)
