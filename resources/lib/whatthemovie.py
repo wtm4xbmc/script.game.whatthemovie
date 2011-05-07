@@ -21,6 +21,7 @@ class WhatTheMovie:
         # Set empty returns
         self.is_login = False
         self.shot = dict()
+        self.shots = list()
         self.username = None
         self.score = None
         self.answer = None
@@ -58,13 +59,14 @@ class WhatTheMovie:
             self.browser.submit()
             if self._checkLogin(login_url):
                 # logged in via auth
-                if options and len(options) > 0:
-                    self.setOptions(options)
                 self.cookies.save(cookie_path)
                 self.username = user
             else:
                 # could not log in
                 pass
+        if self.is_login:
+            if options and len(options) > 0:
+                    self.setOptions(options)
         return self.is_login
 
     def setOptions(self, options_dict):
@@ -85,7 +87,14 @@ class WhatTheMovie:
     def getRandomShot(self):
         return self.getShot('random')
 
+    def getLastShot(self):
+        if len(self.shots) > 0:
+            self.shot = self.shots.pop()
+        return self.shot
+
     def getShot(self, shot_id):
+        if self.shot: # if there is already a shot - put it in list
+            self.shots.append(self.shot)
         self.shot = dict()
         shot_url = '%s/shot/%s' % (self.MAIN_URL, shot_id)
         self.browser.open(shot_url)
@@ -112,7 +121,10 @@ class WhatTheMovie:
         # posted by
         sections = tree.find('ul',
                              attrs={'class': 'nav_shotinfo'}).findAll('li')
-        posted_by = sections[0].a.string
+        try:
+            posted_by = sections[0].a.string
+        except:
+            posted_by = '' # fixme: catch deleted accounts (not in a.string)
         # solved
         solved = dict()
         try:

@@ -15,7 +15,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     # CONTROL_IDs
     CID_BUTTON_GUESS = 3000
     CID_BUTTON_RANDOM = 3001
-    CID_BUTTON_EXIT = 3002
+    CID_BUTTON_BACK = 3002
     CID_IMAGE_GIF = 1002
     CID_IMAGE_SOLUTION = 1006
     CID_LABEL_LOGINSTATE = 1001
@@ -71,7 +71,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         # get controls
         self.button_guess = self.getControl(self.CID_BUTTON_GUESS)
         self.button_random = self.getControl(self.CID_BUTTON_RANDOM)
-        self.button_exit = self.getControl(self.CID_BUTTON_EXIT)
+        self.button_back = self.getControl(self.CID_BUTTON_BACK)
         self.label_loginstate = self.getControl(self.CID_LABEL_LOGINSTATE)
         self.label_score = self.getControl(self.CID_LABEL_SCORE)
         self.label_posted_by = self.getControl(self.CID_LABEL_POSTED_BY)
@@ -125,8 +125,8 @@ class GUI(xbmcgui.WindowXMLDialog):
         elif controlId == self.CID_BUTTON_RANDOM:
             self.setWTMProperty('solved_status', 'inactive')
             self.getRandomShot()
-        elif controlId == self.CID_BUTTON_EXIT:
-            self.closeDialog()
+        elif controlId == self.CID_BUTTON_BACK:
+            self.getShot('last')
 
     def closeDialog(self):
         self.setWTMProperty('main_image', '')
@@ -139,7 +139,10 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.setWTMProperty('busy', 'loading')
         try:
             if shot_id:
-                shot = self.Quiz.getShot(shot_id)
+                if shot_id.isdigit():
+                    shot = self.Quiz.getShot(shot_id)
+                elif shot_id == 'last':
+                    shot = self.Quiz.getLastShot()
             else:
                 shot = self.Quiz.getRandomShot()
             self.shot = shot
@@ -149,6 +152,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.errorMessage(getString(self.SID_ERROR_SHOT),
                               str(error))
             return
+        self.label_shot_type.setLabel(getString(self.SID_SHOT_TYPE)) # fixme
         self.setWTMProperty('main_image', local_image_path)
         self.label_posted_by.setLabel(getString(self.SID_POSTED_BY)
                                       % shot['posted_by'])
@@ -161,7 +165,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_shot_id.setLabel(getString(self.SID_SHOT_ID)
                                     % shot['shot_id'])
         date = shot['date']
-        date_string =  date.strftime(str(getString(self.SID_DATE_FORMAT)))
+        date_string = date.strftime(str(getString(self.SID_DATE_FORMAT)))
         self.label_shot_date.setLabel(getString(self.SID_SHOT_DATE)
                                       % date_string)
         self.setWTMProperty('busy', '')
@@ -169,7 +173,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     def guessTitle(self, shot_id):
         self.setWTMProperty('solved_status', 'inactive')
         heading = getString(self.SID_KEYBOARD_HEADING)
-        keyboard = xbmc.Keyboard(default='', heading=heading)
+        keyboard = xbmc.Keyboard('', heading)
         keyboard.doModal()
         if keyboard.isConfirmed() and keyboard.getText() is not '':
             guess = keyboard.getText().decode('utf8')
@@ -184,7 +188,8 @@ class GUI(xbmcgui.WindowXMLDialog):
                                   str(error))
                 return
             if answer['is_right'] == True:
-                self.answerRight(answer['title_year'], self.shot['gives_point'])
+                self.answerRight(answer['title_year'],
+                                 self.shot['gives_point'])
             else:
                 self.answerWrong(guess)
 
@@ -210,7 +215,6 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def login(self):
         self.score = 0
-        self.label_shot_type.setLabel(getString(self.SID_SHOT_TYPE)) #fixme correct position?!
         if getSetting('login') == 'false':
             self.label_loginstate.setLabel(getString(self.SID_NOT_LOGGED_IN))
         else:
@@ -248,16 +252,20 @@ class GUI(xbmcgui.WindowXMLDialog):
         if getSetting('include_solved') == 'true':
             options['include_solved'] = '1'
         else:
-            options['include_solved'] = '1'
+            options['include_solved'] = '0'
         return options
 
     def downloadPic(self, image_url, shot_id):
-        script_id = sys.modules['__main__'].__id__
-        cache_dir = 'special://profile/addon_data/%s/cache' % script_id
-        self.checkCreatePath(cache_dir)
-        image_path = xbmc.translatePath('%s/%s.jpg' % (cache_dir, shot_id))
-        if not os.path.isfile(image_path):
-            dl = urllib.urlretrieve(image_url, image_path, )
+        subst_image_url = 'http://static.whatthemovie.com/images/substitute'
+        if not image_url.startswith(subst_image_url):
+            script_id = sys.modules['__main__'].__id__
+            cache_dir = 'special://profile/addon_data/%s/cache' % script_id
+            self.checkCreatePath(cache_dir)
+            image_path = xbmc.translatePath('%s/%s.jpg' % (cache_dir, shot_id))
+            if not os.path.isfile(image_path):
+                dl = urllib.urlretrieve(image_url, image_path, )
+        else:
+            image_path = image_url
         return image_path
 
     def updateScore(self):
@@ -273,7 +281,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         return result
 
     def setWTMProperty(self, prop, value):
-    	self.window_home.setProperty('wtm.%s' % prop, value)
+        self.window_home.setProperty('wtm.%s' % prop, value)
 
     def hideLabels(self):
         if getSetting('visible_posted_by') == 'false':
@@ -289,4 +297,3 @@ class GUI(xbmcgui.WindowXMLDialog):
         print 'ERROR: %s: %s ' % (heading, str(error))
         dialog = xbmcgui.Dialog()
         dialog.ok(heading, error)
-
