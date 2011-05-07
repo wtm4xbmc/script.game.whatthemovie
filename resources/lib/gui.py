@@ -170,7 +170,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     def guessTitle(self, shot_id):
         self.setWTMProperty('solved_status', 'inactive')
         heading = getString(self.SID_KEYBOARD_HEADING)
-        keyboard = xbmc.Keyboard(default='', heading=heading)
+        keyboard = xbmc.Keyboard('', heading)
         keyboard.doModal()
         if keyboard.isConfirmed() and keyboard.getText() is not '':
             guess = keyboard.getText().decode('utf8')
