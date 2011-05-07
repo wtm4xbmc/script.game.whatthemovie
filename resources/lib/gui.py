@@ -249,7 +249,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         if getSetting('include_solved') == 'true':
             options['include_solved'] = '1'
         else:
-            options['include_solved'] = '1'
+            options['include_solved'] = '0'
         return options
 
     def downloadPic(self, image_url, shot_id):

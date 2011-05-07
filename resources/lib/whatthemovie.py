@@ -58,13 +58,14 @@ class WhatTheMovie:
             self.browser.submit()
             if self._checkLogin(login_url):
                 # logged in via auth
-                if options and len(options) > 0:
-                    self.setOptions(options)
                 self.cookies.save(cookie_path)
                 self.username = user
             else:
                 # could not log in
                 pass
+        if self.is_login:
+            if options and len(options) > 0:
+                    self.setOptions(options)
         return self.is_login
 
     def setOptions(self, options_dict):
