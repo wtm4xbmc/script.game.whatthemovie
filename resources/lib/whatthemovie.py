@@ -6,7 +6,7 @@ from urllib import urlencode
 from BeautifulSoup import BeautifulSoup
 from time import strptime, mktime
 from datetime import datetime, timedelta
-from re import compile
+from re import compile, search
 
 
 class WhatTheMovie:
@@ -153,7 +153,13 @@ class WhatTheMovie:
         else:
             # already solved
             gives_point = False
-        # return dict
+        # voting
+        section = tree.find('script',
+                               attrs={'type': 'text/javascript'},
+                               text=compile('tt_shot_rating_stars'))
+        regexp = '<strong>(?P<rating>[0-9\.]+)</strong> \((?P<votes>[0-9]+)'
+        voting = search(regexp, section).groupdict()
+        # create return dict
         self.shot['shot_id'] = shot_id
         self.shot['image_url'] = image_url
         self.shot['lang_list'] = lang_list
@@ -161,6 +167,7 @@ class WhatTheMovie:
         self.shot['solved'] = solved
         self.shot['date'] = date
         self.shot['gives_point'] = gives_point
+        self.shot['voting'] = voting
         # fixme, only for debug
         print 'debug languages: %s' % str(self.shot['lang_list'])
         return self.shot
