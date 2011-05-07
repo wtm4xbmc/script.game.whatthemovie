@@ -11,7 +11,7 @@ Headings = 3350-3399
     <!-- Buttons-->
     <string id="3000">Guess!</string>
     <string id="3001">Random</string>
-    <string id="3002">Exit</string>
+    <string id="3002">Back</string>
     <!-- Messages-->
     <string id="3050">Could not Login</string>
     <string id="3051">Password wrong or username unknown[CR]User [B]%s[/B]</string>
