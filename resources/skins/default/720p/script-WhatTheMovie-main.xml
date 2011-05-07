@@ -105,8 +105,8 @@
                 <description>Animated Gif</description>
                 <posx>60</posx>
                 <posy>35</posy>
-                <width>160</width>
-                <height>24</height>
+                <width>48</width>
+                <height>48</height>
                 <texture>loader.gif</texture>
                 <visible>StringCompare(Window(10000).Property(wtm.busy),loading)</visible>
                 <animation effect="fade" time="200">VisibleChange</animation>
