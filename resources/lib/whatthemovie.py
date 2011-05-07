@@ -4,7 +4,8 @@
 from mechanize import Browser, LWPCookieJar, Request
 from urllib import urlencode
 from BeautifulSoup import BeautifulSoup
-from time import strptime
+from time import strptime, mktime
+from datetime import datetime
 from re import compile
 
 
@@ -107,6 +108,7 @@ class WhatTheMovie:
                                              date_info[2].a.string,
                                              date_info[3].a.string[:-2]),
                                '%Y %B %d')
+        date = datetime.fromtimestamp(mktime(struct_date))
         # posted by
         sections = tree.find('ul',
                              attrs={'class': 'nav_shotinfo'}).findAll('li')
@@ -141,7 +143,7 @@ class WhatTheMovie:
         self.shot['lang_list'] = lang_list
         self.shot['posted_by'] = posted_by
         self.shot['solved'] = solved
-        self.shot['struct_date'] = struct_date
+        self.shot['date'] = date
         self.shot['gives_point'] = gives_point
         # fixme, only for debug
         print 'debug languages: %s' % str(self.shot['lang_list'])

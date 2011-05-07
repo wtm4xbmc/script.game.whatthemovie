@@ -1,7 +1,7 @@
 import sys
 import os
 import urllib
-import time
+import datetime
 import xbmcgui
 import xbmc
 import whatthemovie
@@ -160,8 +160,8 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.label_solved.setLabel(getString(self.SID_UNSOLVED))
         self.label_shot_id.setLabel(getString(self.SID_SHOT_ID)
                                     % shot['shot_id'])
-        date_string = time.strftime(getString(self.SID_DATE_FORMAT),
-                                    shot['struct_date'])
+        date = shot['date']
+        date_string =  date.strftime(str(getString(self.SID_DATE_FORMAT)))
         self.label_shot_date.setLabel(getString(self.SID_SHOT_DATE)
                                       % date_string)
         self.setWTMProperty('busy', '')
