@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <settings>
     <!-- General --->
-    <category label="3208"> 
+    <category label="3200"> 
         <!-- Login --->
-        <setting type="lsep" label="3228" />
-        <setting id="login" type="bool" label="3200" default="false" />
-        <setting id="username" type="text" label="3201" enable="eq(-1,true)"/>
-        <setting id="password" type="text" label="3202" enable="eq(-2,true)" option="hidden" />
+        <setting type="lsep" label="3201" />
+        <setting id="login" type="bool" label="3202" default="false" />
+        <setting id="username" type="text" label="3203" enable="eq(-1,true)"/>
+        <setting id="password" type="text" label="3204" enable="eq(-2,true)" option="hidden" />
         <!-- Random options --->
-        <setting type="lsep" label="3229" />
-        <setting id="difficulty" type="enum" label="3220" lvalues="3221|3222|3223" default="0" />
-        <setting id="include_archive" type="bool" label="3224" default="false" />
-        <setting id="include_solved" type="bool" label="3225" default="false" />
+        <setting type="lsep" label="3205" />
+        <setting id="difficulty" type="enum" label="3206" lvalues="3207|3208|3209" default="0" />
+        <setting id="include_archive" type="bool" label="3210" default="false" />
+        <setting id="include_solved" type="bool" label="3211" default="false" />
     </category>
     <!-- Look/Feel --->
-    <category label="3209">
+    <category label="3212">
         <!-- Look --->
-        <setting label="3230" type="lsep" />
-        <setting id="visible_posted_by" type="bool" label="3210" default="true" />
-        <setting id="visible_solved" type="bool" label="3211" default="true" />
-        <setting id="visible_shot_id" type="bool" label="3212" default="true" />
-        <setting id="visible_shot_date" type="bool" label="3215" default="true" />
+        <setting label="3213" type="lsep" />
+        <setting id="visible_posted_by" type="bool" label="3214" default="true" />
+        <setting id="visible_solved" type="bool" label="3215" default="true" />
+        <setting id="visible_shot_id" type="bool" label="3216" default="true" />
+        <setting id="visible_shot_date" type="bool" label="3217" default="true" />
         <!-- Behaviour --->
-        <setting label="3231" type="lsep" />
-        <setting id="auto_random" type="bool" label="3226" default="true" />
-        <setting id="auto_random_sleep" type="enum" label="3227" default="2" values="0|1|2|3|4|5" enable="eq(-1,true)" />
+        <setting label="3218" type="lsep" />
+        <setting id="auto_random" type="bool" label="3219" default="true" />
+        <setting id="auto_random_sleep" type="enum" label="3220" default="2" values="0|1|2|3|4|5" enable="eq(-1,true)" />
     </category>
 </settings>
