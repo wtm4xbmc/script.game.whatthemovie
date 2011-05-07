@@ -253,12 +253,16 @@ class GUI(xbmcgui.WindowXMLDialog):
         return options
 
     def downloadPic(self, image_url, shot_id):
-        script_id = sys.modules['__main__'].__id__
-        cache_dir = 'special://profile/addon_data/%s/cache' % script_id
-        self.checkCreatePath(cache_dir)
-        image_path = xbmc.translatePath('%s/%s.jpg' % (cache_dir, shot_id))
-        if not os.path.isfile(image_path):
-            dl = urllib.urlretrieve(image_url, image_path, )
+        subst_image_url = 'http://static.whatthemovie.com/images/substitute'
+        if not image_url.startswith(subst_image_url):
+            script_id = sys.modules['__main__'].__id__
+            cache_dir = 'special://profile/addon_data/%s/cache' % script_id
+            self.checkCreatePath(cache_dir)
+            image_path = xbmc.translatePath('%s/%s.jpg' % (cache_dir, shot_id))
+            if not os.path.isfile(image_path):
+                dl = urllib.urlretrieve(image_url, image_path, )
+        else:
+            image_path = image_url
         return image_path
 
     def updateScore(self):
