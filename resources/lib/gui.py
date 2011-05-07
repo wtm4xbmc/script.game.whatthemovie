@@ -61,6 +61,9 @@ class GUI(xbmcgui.WindowXMLDialog):
     def __init__(self, *args, **kwargs):
         # __init__ will be called when python creates object from this class
         xbmcgui.WindowXMLDialog.__init__(self, *args, **kwargs)
+        self.window_home = xbmcgui.Window(10000)
+        self.setWTMProperty('solved_status', 'inactive')
+        self.setWTMProperty('busy', 'loading')
 
     def onInit(self):
         # onInit will be called from xbmc (after __init__)
@@ -80,9 +83,6 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.image_gif = self.getControl(self.CID_IMAGE_GIF)
         self.image_solution = self.getControl(self.CID_IMAGE_SOLUTION)
         self.group_flags = self.getControl(self.CID_GROUP_FLAGS)
-
-        self.window_home = xbmcgui.Window(10000)
-        self.setWTMProperty('solved_status', 'inactive')
 
         # set control visibility
         self.hideLabels()
@@ -272,22 +272,18 @@ class GUI(xbmcgui.WindowXMLDialog):
             result = os.makedirs(xbmc.translatePath(path))
         return result
 
-    def setVisibleState(self, control_list, visible):
-        for control in control_list:
-            control.setVisible(visible)
-
     def setWTMProperty(self, prop, value):
     	self.window_home.setProperty('wtm.%s' % prop, value)
 
     def hideLabels(self):
         if getSetting('visible_posted_by') == 'false':
-            self.setVisibleState((self.label_posted_by, ), False)
+            self.label_posted_by.setVisible(False)
         if getSetting('visible_solved') == 'false':
-            self.setVisibleState((self.label_solved, ), False)
+            self.label_solved.setVisible(False)
         if getSetting('visible_shot_id') == 'false':
-            self.setVisibleState((self.label_shot_id, ), False)
+            self.label_shot_id.setVisible(False)
         if getSetting('visible_shot_date') == 'false':
-            self.setVisibleState((self.label_shot_date, ), False)
+            self.label_shot_date.setVisible(False)
 
     def errorMessage(self, heading, error):
         print 'ERROR: %s: %s ' % (heading, str(error))
