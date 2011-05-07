@@ -32,6 +32,7 @@ Headings = 3350-3399
     <string id="3108">Shot ID: [B]%s[/B]</string>
     <string id="3109">Shot Date: [B]%s[/B]</string>
     <string id="3110">Posted by: [B]%s[/B]</string>
+	<string id="3111">Not released</string>
     <!-- Settings-->
     <string id="3200">General</string>
     <string id="3201">Login</string>

@@ -50,6 +50,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_SHOT_ID = 3108
     SID_SHOT_DATE = 3109
     SID_POSTED_BY = 3110
+    SID_NOT_RELEASED = 3111
     #  Misc
     SID_DATE_FORMAT = 3300
     #  Headings
@@ -167,7 +168,10 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_shot_id.setLabel(getString(self.SID_SHOT_ID)
                                     % shot['shot_id'])
         date = shot['date']
-        date_string = date.strftime(str(getString(self.SID_DATE_FORMAT)))
+        if date:
+            date_string = date.strftime(str(getString(self.SID_DATE_FORMAT)))
+        else:
+            date_string = getString(self.SID_NOT_RELEASED)
         self.label_shot_date.setLabel(getString(self.SID_SHOT_DATE)
                                       % date_string)
         self.setWTMProperty('busy', '')

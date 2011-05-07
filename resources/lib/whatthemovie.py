@@ -111,13 +111,16 @@ class WhatTheMovie:
         for lang in langs:
             lang_list.append(str(lang.img['alt'])[:-6])
         # date
-        date_info = tree.find('ul',
-                              attrs={'class': 'nav_date'}).findAll('li')
-        struct_date = strptime('%s %s %s' % (date_info[1].a.string,
-                                             date_info[2].a.string,
-                                             date_info[3].a.string[:-2]),
-                               '%Y %B %d')
-        date = datetime.fromtimestamp(mktime(struct_date))
+        try:
+            date_info = tree.find('ul',
+                                  attrs={'class': 'nav_date'}).findAll('li')
+            struct_date = strptime('%s %s %s' % (date_info[1].a.string,
+                                                 date_info[2].a.string,
+                                                 date_info[3].a.string[:-2]),
+                                   '%Y %B %d')
+            date = datetime.fromtimestamp(mktime(struct_date))
+        except:
+            date = None
         # posted by
         sections = tree.find('ul',
                              attrs={'class': 'nav_shotinfo'}).findAll('li')
@@ -143,7 +146,7 @@ class WhatTheMovie:
         js_list = tree.findAll('script',
                                attrs={'type': 'text/javascript'},
                                text=compile('guess_problem'))
-        if len(js_list) == 0:
+        if len(js_list) == 0 and date:
             # at least no guess_problem
             gives_point = True
             age = datetime.now() - date
@@ -154,11 +157,13 @@ class WhatTheMovie:
             # already solved
             gives_point = False
         # voting
+        voting = dict()
         section = tree.find('script',
                                attrs={'type': 'text/javascript'},
                                text=compile('tt_shot_rating_stars'))
-        regexp = '<strong>(?P<rating>[0-9\.]+)</strong> \((?P<votes>[0-9]+)'
-        voting = search(regexp, section).groupdict()
+        regexp = '<strong>(?P<rating>.+)</strong> \((?P<votes>[0-9]+)'
+        if section:
+            voting = search(regexp, section).groupdict()
         # create return dict
         self.shot['shot_id'] = shot_id
         self.shot['image_url'] = image_url
