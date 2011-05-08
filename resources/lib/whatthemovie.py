@@ -23,8 +23,6 @@ class WhatTheMovie:
         self.shot = dict()
         self.shots = list()
         self.username = None
-        self.score = None
-        self.answer = None
 
     def _checkLogin(self, url=None):
         self.is_login = False
@@ -196,8 +194,8 @@ class WhatTheMovie:
         return self.shot
 
     def guessShot(self, title_guess, shot_id=None):
-        self.answer = dict()
-        self.answer['is_right'] = False
+        answer = dict()
+        answer['is_right'] = False
         if not shot_id:
             shot_id = self.shot['shot_id']
         post_url = '%s/shot/%s/guess' % (self.MAIN_URL, shot_id)
@@ -207,17 +205,17 @@ class WhatTheMovie:
         response_c = response.replace('&amp;', '&').decode('unicode-escape')
         # ['right'|'wrong']
         if response_c[6:11] == 'right':
-            self.answer['is_right'] = True
-            self.answer['title_year'] = response_c.split('"')[3]
-        return self.answer
+            answer['is_right'] = True
+            answer['title_year'] = response_c.split('"')[3]
+        return answer
 
     def getScore(self, username=None):
-        self.score = 0
+        score = 0
         if not username:
             # No username given trying logged in user
             if not self.username:
                 # Not logged in
-                return self.score
+                return score
             else:
                 username = self.username
         profile_url = '%s/user/%s/' % (self.MAIN_URL, username)
@@ -225,5 +223,5 @@ class WhatTheMovie:
         html = self.browser.response().read()
         tree = BeautifulSoup(html)
         box = tree.find('div', attrs={'class': 'box_white'})
-        self.score = box.p.strong.string[0:-13]
-        return self.score
+        score = box.p.strong.string[0:-13]
+        return score
