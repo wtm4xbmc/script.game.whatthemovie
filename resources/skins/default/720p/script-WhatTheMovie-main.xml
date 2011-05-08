@@ -272,49 +272,37 @@
             <visible>true</visible>
         </control>
 -->
-        <control type="group" id="1013">
+        <control type="list" id="1013">
             <description>Input language flags</description>
             <posx>560</posx>
             <posy>573</posy>
             <width min="32" max="320">auto</width>
             <height>32</height>
             <align>center</align>
-            <visible>false</visible>
-            <control type="image">
-                <posx>0</posx>
-                <posy>0</posy>
-                <width>32</width>
-                <height>32</height>
-                <texture>flags/de.png</texture>
-            </control>
-            <control type="image">
-                <posx>42</posx>
-                <posy>0</posy>
-                <width>32</width>
-                <height>32</height>
-                <texture>flags/fr.png</texture>
-            </control>
-            <control type="image">
-                <posx>84</posx>
-                <posy>0</posy>
-                <width>32</width>
-                <height>32</height>
-                <texture>flags/en.png</texture>
-            </control>
-            <control type="image">
-                <posx>126</posx>
-                <posy>0</posy>
-                <width>32</width>
-                <height>32</height>
-                <texture>flags/es.png</texture>
-            </control>
-            <control type="image">
-                <posx>168</posx>
-                <posy>0</posy>
-                <width>32</width>
-                <height>32</height>
-                <texture>flags/pt.png</texture>
-            </control>
+            <itemgap>42</itemgap>
+            <orientation>horizontal</orientation>
+            <onleft>3000</onleft>
+            <onright>3000</onright>
+            <onup>3000</onup>
+            <ondown>3000</ondown>
+            <itemlayout width="42" height="32">
+                <control type="image">
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>32</width>
+                    <height>32</height>
+                    <texture>$INFO[ListItem.Icon]</texture>
+                </control>
+            </itemlayout>
+            <focusedlayout width="42" height="32">
+                <control type="image">
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>32</width>
+                    <height>32</height>
+                    <texture>$INFO[ListItem.Icon]</texture>
+                </control>
+            </focusedlayout>
         </control>
     </controls>
 </window>

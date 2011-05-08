@@ -27,7 +27,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_LABEL_SHOT_ID = 1008
     CID_LABEL_SHOT_DATE = 1011
     CID_LABEL_SHOT_TYPE = 1012
-    CID_GROUP_FLAGS = 1013
+    CID_LIST_FLAGS = 1013
 
     # STRING_IDs
     #  Messages
@@ -84,7 +84,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_shot_type = self.getControl(self.CID_LABEL_SHOT_TYPE)
         self.image_gif = self.getControl(self.CID_IMAGE_GIF)
         self.image_solution = self.getControl(self.CID_IMAGE_SOLUTION)
-        self.group_flags = self.getControl(self.CID_GROUP_FLAGS)
+        self.list_flags = self.getControl(self.CID_LIST_FLAGS)
 
         # set control visibility
         self.hideLabels()
@@ -174,7 +174,18 @@ class GUI(xbmcgui.WindowXMLDialog):
             date_string = getString(self.SID_NOT_RELEASED)
         self.label_shot_date.setLabel(getString(self.SID_SHOT_DATE)
                                       % date_string)
+        languages = shot['lang_list']['main']
+        # languages = shot['lang_list']['main'] + shot['lang_list']['hidden']
+        self.addFlags(languages)
         self.setWTMProperty('busy', '')
+
+    def addFlags(self, language_list):
+        self.list_flags.reset()
+        avail_flags = ('de', 'en', 'es', 'fr', 'pt') # fixme add items+imgs
+        for language in (l for l in language_list if l in avail_flags):
+            flag_img = 'flags/%s.png' % language
+            flag_item = xbmcgui.ListItem(iconImage=flag_img)
+            self.list_flags.addItem(flag_item)
 
     def guessTitle(self, shot_id):
         self.setWTMProperty('solved_status', 'inactive')
@@ -298,6 +309,8 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.label_shot_id.setVisible(False)
         if getSetting('visible_shot_date') == 'false':
             self.label_shot_date.setVisible(False)
+        if getSetting('visible_shot_flags') == 'false':
+            self.list_flags.setVisible(False)
 
     def errorMessage(self, heading, error):
         print 'ERROR: %s: %s ' % (heading, str(error))

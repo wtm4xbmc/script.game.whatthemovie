@@ -55,8 +55,9 @@ Headings = 3350-3399
     <string id="3218">Behaviour</string>
     <string id="3219">Auto jump to next after guess was right</string>
     <string id="3220">...after x Seconds</string>
+    <string id="3221">Show "Shot Flags"</string>
     <!-- Misc-->
     <string id="3300">%Y-%m-%d</string>
     <!-- Headings-->
-    <string id="3350">Feature Films</string>    
+    <string id="3350">Feature Films</string>
 </strings>
