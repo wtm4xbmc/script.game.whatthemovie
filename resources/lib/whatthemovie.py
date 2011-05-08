@@ -116,7 +116,8 @@ class WhatTheMovie:
         for lang in langs_main:
             if lang.img:
                 lang_list['main'].append(lang.img['src'][-6:-4])
-        langs_hidden = section.findAll('li', attrs={'class': 'hidden_languages'})
+        langs_hidden = section.findAll('li',
+                                       attrs={'class': 'hidden_languages'})
         for lang in langs_hidden:
             if lang.img:
                 lang_list['hidden'].append(lang.img['src'][-6:-4])
@@ -169,8 +170,8 @@ class WhatTheMovie:
         # voting
         voting = dict()
         section = tree.find('script',
-                               attrs={'type': 'text/javascript'},
-                               text=compile('tt_shot_rating_stars'))
+                            attrs={'type': 'text/javascript'},
+                            text=compile('tt_shot_rating_stars'))
         regexp = '<strong>(?P<rating>.+)</strong> \((?P<votes>[0-9]+)'
         if section:
             voting = search(regexp, section).groupdict()
@@ -192,8 +193,6 @@ class WhatTheMovie:
         self.shot['gives_point'] = gives_point
         self.shot['voting'] = voting
         self.shot['tags'] = tags
-        # fixme, only for debug
-        print 'debug languages: %s' % str(self.shot['lang_list'])
         return self.shot
 
     def guessShot(self, title_guess, shot_id=None):
