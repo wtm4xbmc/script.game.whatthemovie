@@ -18,109 +18,6 @@
             <texture>banner.png</texture>
         </control>
         <control type="group">
-            <description>Snapshot image controls</description>
-            <posx>265</posx>
-            <posy>155</posy>
-            <width>720</width>
-            <height>36</height>
-	    <control type="button" id="3003">
-		<visible allowhiddenfocus="true">false</visible>
-		<onright>3001</onright>
-		<onleft>3002</onleft>
-		<onup>3000</onup>
-		<ondown>3000</ondown>
-	    </control>
-            <control type="image">
-                <description>Shadow left snapshot image</description>
-                <posx>0</posx>
-                <posy>0</posy>
-                <width>20</width>
-                <height>410</height>
-                <texture>img_frame_shadow_l.png</texture>
-            </control>
-            <control type="image">
-                <description>Shadow right snapshot image</description>
-                <posx>730</posx>
-                <posy>0</posy>
-                <width>20</width>
-                <height>410</height>
-                <texture>img_frame_shadow_r.png</texture>
-            </control>
-            <control type="image">
-                <description>Frame around snapshot image</description>
-                <posx>15</posx>
-                <posy>5</posy>
-                <width>720</width>
-                <height>400</height>
-                <texture>black.png</texture>
-            </control>
-            <control type="image" id="1000">
-                <description>The Picture to guess</description>
-                <posx>15</posx>
-                <posy>5</posy>
-                <width>720</width>
-                <height>400</height>
-                <fadetime>500</fadetime>
-                <texture>$INFO[Window(10000).Property(wtm.main_image)]</texture>
-		<animation effect="zoom" end="177,177" center="auto" time="200" condition="Control.HasFocus(3003)">Conditional</animation>
-                <aspectratio>keep</aspectratio>
-            </control>
-            <control type="image" id="1006">
-                <description>Solution background image</description>
-                <posx>15</posx>
-                <posy>375</posy>
-                <width>720</width>
-                <height>30</height>
-                <texture>solution_back.png</texture>
-                <visible>Control.IsVisible(1007)</visible>
-                <animation effect="fade" time="200">VisibleChange</animation>
-            </control>
-            <control type="label" id="1007">
-                <description>Solution movie title and year</description>
-                <posx>25</posx>
-                <posy>375</posy>
-                <width>720</width>
-                <height>30</height>
-                <align>left</align>
-                <aligny>center</aligny>
-                <font>font12</font>
-                <scroll>true</scroll>
-                <textcolor>FF000000</textcolor>
-                <visible>!StringCompare(Window(10000).Property(wtm.solved_status),inactive) + !StringCompare(Window(10000).Property(wtm.solved_status),) + !StringCompare(Window(10000).Property(wtm.solved_status),loading)</visible>
-                <animation effect="fade" time="200">VisibleChange</animation>
-            </control>
-            <control type="image" id="1009">
-                <description>Correct answer image</description>
-                <posx>630</posx>
-                <posy>295</posy>
-                <width>140</width>
-                <height>140</height>
-                <texture>guess_correct.png</texture>
-                <visible>StringCompare(Window(10000).Property(wtm.solved_status),correct)</visible>
-                <animation effect="fade" time="200">VisibleChange</animation>
-            </control>
-            <control type="image" id="1010">
-                <description>Wrong answer image</description>
-                <posx>630</posx>
-                <posy>295</posy>
-                <width>140</width>
-                <height>140</height>
-                <texture>guess_wrong.png</texture>
-                <visible>StringCompare(Window(10000).Property(wtm.solved_status),wrong)</visible>
-                <animation effect="fade" time="200">VisibleChange</animation>
-            </control>
-            <control type="image" id="1002">
-                <description>Animated Gif</description>
-                <posx>60</posx>
-                <posy>35</posy>
-                <width>48</width>
-                <height>48</height>
-                <texture>loader.gif</texture>
-                <visible>StringCompare(Window(10000).Property(wtm.busy),loading)</visible>
-                <animation effect="fade" time="200">VisibleChange</animation>
-            </control>
-        </control>
-        <control type="group">
             <description>Bottom button controls</description>
             <posx>280</posx>
             <posy>620</posy>
@@ -311,6 +208,109 @@
                     <texture>$INFO[ListItem.Icon]</texture>
                 </control>
             </focusedlayout>
+        </control>
+        <control type="group">
+            <description>Snapshot image controls</description>
+            <posx>265</posx>
+            <posy>155</posy>
+            <width>720</width>
+            <height>36</height>
+            <control type="button" id="3003">
+                <visible allowhiddenfocus="true">false</visible>
+                <onright>3001</onright>
+                <onleft>3002</onleft>
+                <onup>3000</onup>
+                <ondown>3000</ondown>
+            </control>
+            <control type="image">
+                <description>Shadow left snapshot image</description>
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>20</width>
+                <height>410</height>
+                <texture>img_frame_shadow_l.png</texture>
+            </control>
+            <control type="image">
+                <description>Shadow right snapshot image</description>
+                <posx>730</posx>
+                <posy>0</posy>
+                <width>20</width>
+                <height>410</height>
+                <texture>img_frame_shadow_r.png</texture>
+            </control>
+            <control type="image">
+                <description>Frame around snapshot image</description>
+                <posx>15</posx>
+                <posy>5</posy>
+                <width>720</width>
+                <height>400</height>
+                <texture>black.png</texture>
+            </control>
+            <control type="image" id="1000">
+                <description>The Picture to guess</description>
+                <posx>15</posx>
+                <posy>5</posy>
+                <width>720</width>
+                <height>400</height>
+                <fadetime>500</fadetime>
+                <texture>$INFO[Window(10000).Property(wtm.main_image)]</texture>
+                <animation effect="zoom" end="177,177" center="auto" time="500" tween="circle" easing="inout" condition="Control.HasFocus(3003)">Conditional</animation>
+                <aspectratio>keep</aspectratio>
+            </control>
+            <control type="image" id="1006">
+                <description>Solution background image</description>
+                <posx>15</posx>
+                <posy>375</posy>
+                <width>720</width>
+                <height>30</height>
+                <texture>solution_back.png</texture>
+                <visible>Control.IsVisible(1007)</visible>
+                <animation effect="fade" time="200">VisibleChange</animation>
+            </control>
+            <control type="label" id="1007">
+                <description>Solution movie title and year</description>
+                <posx>25</posx>
+                <posy>375</posy>
+                <width>720</width>
+                <height>30</height>
+                <align>left</align>
+                <aligny>center</aligny>
+                <font>font12</font>
+                <scroll>true</scroll>
+                <textcolor>FF000000</textcolor>
+                <visible>!StringCompare(Window(10000).Property(wtm.solved_status),inactive) + !StringCompare(Window(10000).Property(wtm.solved_status),) + !StringCompare(Window(10000).Property(wtm.solved_status),loading)</visible>
+                <animation effect="fade" time="200">VisibleChange</animation>
+            </control>
+            <control type="image" id="1009">
+                <description>Correct answer image</description>
+                <posx>630</posx>
+                <posy>295</posy>
+                <width>140</width>
+                <height>140</height>
+                <texture>guess_correct.png</texture>
+                <visible>StringCompare(Window(10000).Property(wtm.solved_status),correct)</visible>
+                <animation effect="fade" time="200">VisibleChange</animation>
+            </control>
+            <control type="image" id="1010">
+                <description>Wrong answer image</description>
+                <posx>630</posx>
+                <posy>295</posy>
+                <width>140</width>
+                <height>140</height>
+                <texture>guess_wrong.png</texture>
+                <visible>StringCompare(Window(10000).Property(wtm.solved_status),wrong)</visible>
+                <animation effect="fade" time="200">VisibleChange</animation>
+            </control>
+            <control type="image" id="1002">
+                <description>Animated Gif</description>
+                <posx>60</posx>
+                <posy>35</posy>
+                <width>48</width>
+                <height>48</height>
+                <texture>loader.gif</texture>
+                <visible>StringCompare(Window(10000).Property(wtm.busy),loading)</visible>
+                <animation effect="fade" time="200">VisibleChange</animation>
+            </control>
         </control>
     </controls>
 </window>

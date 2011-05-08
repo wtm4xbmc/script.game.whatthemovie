@@ -60,7 +60,6 @@ class GUI(xbmcgui.WindowXMLDialog):
     # ACTION_IDs
     AID_EXIT_BACK = [9, 10, 13]
     AID_CONTEXT_MENU = [117]
-    AID_INFO = [11]
 
     def __init__(self, *args, **kwargs):
         # __init__ will be called when python creates object from this class
@@ -109,10 +108,8 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.closeDialog()
         elif action in self.AID_CONTEXT_MENU:
             self.askShotID()
-        elif action in self.AID_INFO:
-            self.setFocus(self.image_main)
-        else:
-            print action.getId()
+        #else:
+        #    print action.getId()
 
     def askShotID(self):
         Dialog = xbmcgui.Dialog()
