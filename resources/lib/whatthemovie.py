@@ -164,6 +164,14 @@ class WhatTheMovie:
         regexp = '<strong>(?P<rating>.+)</strong> \((?P<votes>[0-9]+)'
         if section:
             voting = search(regexp, section).groupdict()
+        # tags
+        tags = list()
+        tags_list = tree.find('ul', attrs={'id':
+                                           'shot_tag_list'}).findAll('li')
+        for tag in tags_list:
+            if tag.a:
+                tags.append(tag.a.string)
+        print tags # fixme debug
         # create return dict
         self.shot['shot_id'] = shot_id
         self.shot['image_url'] = image_url
@@ -173,6 +181,7 @@ class WhatTheMovie:
         self.shot['date'] = date
         self.shot['gives_point'] = gives_point
         self.shot['voting'] = voting
+        self.shot['tags'] = tags
         # fixme, only for debug
         print 'debug languages: %s' % str(self.shot['lang_list'])
         return self.shot
