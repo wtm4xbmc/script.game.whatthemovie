@@ -77,8 +77,9 @@ class WhatTheMovie:
             options_dict.pop('include_solved')
         self._sendAjaxReq(option_url, options_dict)
 
-    def _sendAjaxReq(self, url, data_dict):
-        post_data = urlencode(data_dict)
+    def _sendAjaxReq(self, url, data_dict=None):
+        if data_dict:
+            post_data = urlencode(data_dict)
         req = Request(url, post_data)
         req.add_header('Accept', 'text/javascript, */*')
         req.add_header('Content-Type',
