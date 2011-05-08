@@ -108,11 +108,18 @@ class WhatTheMovie:
         # image url
         image_url = tree.find('img', alt='guess this movie snapshot')['src']
         # languages
-        lang_list = list()
+        lang_list = dict()
+        lang_list['main'] = list()
+        lang_list['hidden'] = list()
         section = tree.find('ul', attrs={'class': 'language_flags'})
-        langs = section.findAll(lambda tag: len(tag.attrs) == 0)
-        for lang in langs:
-            lang_list.append(str(lang.img['alt'])[:-6])
+        langs_main = section.findAll(lambda tag: len(tag.attrs) == 0)
+        for lang in langs_main:
+            if lang.img:
+                lang_list['main'].append(lang.img['src'][-6:-4])
+        langs_hidden = section.findAll('li', attrs={'class': 'hidden_languages'})
+        for lang in langs_hidden:
+            if lang.img:
+                lang_list['hidden'].append(lang.img['src'][-6:-4])
         # date
         try:
             date_info = tree.find('ul',
