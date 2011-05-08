@@ -5,13 +5,13 @@
         <!-- Login --->
         <setting type="lsep" label="3201" />
         <setting id="login" type="bool" label="3202" default="false" />
-        <setting id="username" type="text" label="3203" enable="eq(-1,true)"/>
+        <setting id="username" type="text" label="3203" enable="eq(-1,true)" />
         <setting id="password" type="text" label="3204" enable="eq(-2,true)" option="hidden" />
         <!-- Random options --->
         <setting type="lsep" label="3205" />
-        <setting id="difficulty" type="enum" label="3206" lvalues="3207|3208|3209" default="0" />
-        <setting id="include_archive" type="bool" label="3210" default="false" />
-        <setting id="include_solved" type="bool" label="3211" default="false" />
+        <setting id="difficulty" type="enum" label="3206" lvalues="3207|3208|3209" enable="eq(-4,true)"  default="0" />
+        <setting id="include_archive" type="bool" label="3210" enable="eq(-5,true)" default="false" />
+        <setting id="include_solved" type="bool" label="3211" enable="eq(-6,true)" default="false" />
     </category>
     <!-- Look/Feel --->
     <category label="3212">

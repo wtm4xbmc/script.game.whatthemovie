@@ -36,13 +36,13 @@ Headings = 3350-3399
     <!-- Settings-->
     <string id="3200">General</string>
     <string id="3201">Login</string>
-    <string id="3202">Login enabled</string>
+    <string id="3202">Use whatthemovie.com account</string>
     <string id="3203">Username</string>
     <string id="3204">Password</string>
     <string id="3205">Random Options (need Login)</string>
     <string id="3206">Difficulty</string>
     <string id="3207">easy</string>
-    <string id="3208">medium</string>
+    <string id="3208">easy+medium</string>
     <string id="3209">all</string>
     <string id="3210">Include Archive</string>
     <string id="3211">Include Solved</string>
