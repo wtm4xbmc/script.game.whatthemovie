@@ -22,7 +22,6 @@ class WhatTheMovie:
         self.is_login = False
         self.shot = dict()
         self.shots = list()
-        self.username = None
 
     def _checkLogin(self, url=None):
         self.is_login = False
@@ -46,10 +45,7 @@ class WhatTheMovie:
         except:
             # no cookie found
             pass
-        if self._checkLogin(login_url):
-            # logged in via cookie
-            self.username = user
-        else:
+        if not self._checkLogin(login_url):
             # need to login
             self.browser.select_form(nr=0)
             self.browser['name'] = user
@@ -58,7 +54,6 @@ class WhatTheMovie:
             if self._checkLogin(login_url):
                 # logged in via auth
                 self.cookies.save(cookie_path)
-                self.username = user
             else:
                 # could not log in
                 pass
@@ -120,15 +115,15 @@ class WhatTheMovie:
             if lang.img:
                 lang_list['hidden'].append(lang.img['src'][-6:-4])
         # date
-        try:
-            date_info = tree.find('ul',
-                                  attrs={'class': 'nav_date'}).findAll('li')
+        date_info = tree.find('ul',
+                              attrs={'class': 'nav_date'}).findAll('li')
+        if len(date_info) >= 4:
             struct_date = strptime('%s %s %s' % (date_info[1].a.string,
                                                  date_info[2].a.string,
                                                  date_info[3].a.string[:-2]),
                                    '%Y %B %d')
             date = datetime.fromtimestamp(mktime(struct_date))
-        except:
+        else:
             date = None
         # posted by
         sections = tree.find('ul',
@@ -180,7 +175,6 @@ class WhatTheMovie:
         for tag in tags_list:
             if tag.a:
                 tags.append(tag.a.string)
-        print tags # fixme debug
         # create return dict
         self.shot['shot_id'] = shot_id
         self.shot['image_url'] = image_url
@@ -209,15 +203,8 @@ class WhatTheMovie:
             answer['title_year'] = response_c.split('"')[3]
         return answer
 
-    def getScore(self, username=None):
+    def getScore(self, username):
         score = 0
-        if not username:
-            # No username given trying logged in user
-            if not self.username:
-                # Not logged in
-                return score
-            else:
-                username = self.username
         profile_url = '%s/user/%s/' % (self.MAIN_URL, username)
         self.browser.open(profile_url)
         html = self.browser.response().read()
