@@ -75,14 +75,16 @@ class WhatTheMovie:
             options_dict.pop('include_archive')
         if options_dict['include_solved'] == '0':
             options_dict.pop('include_solved')
-        post_data = urlencode(options_dict)
-        req = Request(option_url, post_data)
+        self._sendAjaxReq(option_url, options_dict)
+
+    def _sendAjaxReq(self, url, data_dict):
+        post_data = urlencode(data_dict)
+        req = Request(url, post_data)
         req.add_header('Accept', 'text/javascript, */*')
         req.add_header('Content-Type',
                        'application/x-www-form-urlencoded; charset=UTF-8')
         req.add_header('X-Requested-With', 'XMLHttpRequest')
         self.browser.open(req)
-        self.browser.response().read() # needed?
 
     def getRandomShot(self):
         return self.getShot('random')
