@@ -132,10 +132,10 @@ class WhatTheMovie:
         # posted by
         sections = tree.find('ul',
                              attrs={'class': 'nav_shotinfo'}).findAll('li')
-        try:
+        if sections[0].a:
             posted_by = sections[0].a.string
-        except:
-            posted_by = ''  # fixme: catch deleted accounts (not in a.string)
+        else:
+            posted_by = None
         # solved
         solved = dict()
         try:

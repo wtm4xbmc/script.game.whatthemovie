@@ -48,6 +48,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_SHOT_DATE = 3109
     SID_POSTED_BY = 3110
     SID_NOT_RELEASED = 3111
+    SID_DEL_USER = 3112
     #  Misc
     SID_DATE_FORMAT = 3300
     #  Headings
@@ -158,8 +159,12 @@ class GUI(xbmcgui.WindowXMLDialog):
             return
         self.label_shot_type.setLabel(self.getString(self.SID_SHOT_TYPE))
         self.setWTMProperty('main_image', local_image_path)
+        if shot['posted_by']:
+            user = shot['posted_by']
+        else:
+            user = self.getString(self.SID_DEL_USER)
         self.label_posted_by.setLabel(self.getString(self.SID_POSTED_BY)
-                                      % shot['posted_by'])
+                                      % user)
         if shot['solved']['status']:
             self.label_solved.setLabel(self.getString(self.SID_SOLVED)
                                        % (shot['solved']['count'],
