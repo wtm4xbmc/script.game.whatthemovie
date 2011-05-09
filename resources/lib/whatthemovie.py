@@ -18,7 +18,7 @@ class WhatTheMovie:
         self.cookies = LWPCookieJar()
         self.browser = Browser()
         self.browser.set_cookiejar(self.cookies)
-        self.browser.addheaders = [('user-agent', user_agent)]        
+        self.browser.addheaders = [('user-agent', user_agent)]
         # Set empty returns
         self.shot = dict()
         self.last_shots = list()

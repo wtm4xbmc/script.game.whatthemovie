@@ -163,7 +163,7 @@ class GUI(xbmcgui.WindowXMLDialog):
                               str(error))
             self.setWTMProperty('busy', '')
             return
-        self.label_shot_type.setLabel(self.getString(self.SID_SHOT_TYPE))  # fixme
+        self.label_shot_type.setLabel(self.getString(self.SID_SHOT_TYPE))
         self.setWTMProperty('main_image', local_image_path)
         self.label_posted_by.setLabel(self.getString(self.SID_POSTED_BY)
                                       % shot['posted_by'])
@@ -177,7 +177,8 @@ class GUI(xbmcgui.WindowXMLDialog):
                                     % shot['shot_id'])
         date = shot['date']
         if date:
-            date_string = date.strftime(str(self.getString(self.SID_DATE_FORMAT)))
+            date_format = str(self.getString(self.SID_DATE_FORMAT))
+            date_string = date.strftime(date_format)
         else:
             date_string = self.getString(self.SID_NOT_RELEASED)
         self.label_shot_date.setLabel(self.getString(self.SID_SHOT_DATE)
@@ -244,7 +245,8 @@ class GUI(xbmcgui.WindowXMLDialog):
     def login(self):
         self.score = 0
         if self.getSetting('login') == 'false':
-            self.label_loginstate.setLabel(self.getString(self.SID_NOT_LOGGED_IN))
+            label = self.getString(self.SID_NOT_LOGGED_IN)
+            self.label_loginstate.setLabel(label)
         else:
             cookie_dir = 'special://profile/addon_data/%s' % self.ADDON_ID
             self.checkCreatePath(cookie_dir)
