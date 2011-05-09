@@ -1,6 +1,5 @@
 import sys
 import os
-import urllib
 import datetime
 import traceback
 import xbmcgui
@@ -285,7 +284,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.checkCreatePath(cache_dir)
             image_path = xbmc.translatePath('%s/%s.jpg' % (cache_dir, shot_id))
             if not os.path.isfile(image_path):
-                dl = urllib.urlretrieve(image_url, image_path, )
+                self.Quiz.downloadFile(image_url, image_path)
         else:
             image_path = image_url
         return image_path

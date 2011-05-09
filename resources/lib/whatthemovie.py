@@ -76,7 +76,7 @@ class WhatTheMovie:
         if data_dict:
             post_data = urlencode(data_dict)
         else:
-            data_dict = ' '
+            post_data = ' '
         req = Request(url, post_data)
         req.add_header('Accept', 'text/javascript, */*')
         req.add_header('Content-Type',
@@ -189,6 +189,9 @@ class WhatTheMovie:
         self.shot['voting'] = voting
         self.shot['tags'] = tags
         return self.shot
+
+    def downloadFile(self, url, local_path):
+        self.browser.retrieve(url, local_path, )
 
     def guessShot(self, title_guess, shot_id=None):
         answer = dict()
