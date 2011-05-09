@@ -156,7 +156,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.errorMessage(getString(self.SID_ERROR_SHOT),
                               str(error))
             return
-        self.label_shot_type.setLabel(getString(self.SID_SHOT_TYPE)) # fixme
+        self.label_shot_type.setLabel(getString(self.SID_SHOT_TYPE))  # fixme
         self.setWTMProperty('main_image', local_image_path)
         self.label_posted_by.setLabel(getString(self.SID_POSTED_BY)
                                       % shot['posted_by'])
@@ -260,11 +260,11 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def getOptions(self):
         options = dict()
-        if getSetting('difficulty') == '2': # 'all'
+        if getSetting('difficulty') == '2':  # 'all'
             options['difficulty'] = 'all'
-        elif getSetting('difficulty') == '1': # 'medium'
+        elif getSetting('difficulty') == '1':  # 'medium'
             options['difficulty'] = 'medium'
-        elif getSetting('difficulty') == '0': # 'easy'
+        elif getSetting('difficulty') == '0':  # 'easy'
             options['difficulty'] = 'easy'
         if getSetting('include_archive') == 'true':
             options['include_archive'] = '1'

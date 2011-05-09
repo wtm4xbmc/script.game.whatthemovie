@@ -93,7 +93,7 @@ class WhatTheMovie:
         return self.shot
 
     def getShot(self, shot_id):
-        if self.shot: # if there is already a shot - put it in list
+        if self.shot:  # if there is already a shot - put it in list
             self.last_shots.append(self.shot)
         self.shot = dict()
         shot_url = '%s/shot/%s' % (self.MAIN_URL, shot_id)
@@ -134,7 +134,7 @@ class WhatTheMovie:
         try:
             posted_by = sections[0].a.string
         except:
-            posted_by = '' # fixme: catch deleted accounts (not in a.string)
+            posted_by = ''  # fixme: catch deleted accounts (not in a.string)
         # solved
         solved = dict()
         try:
@@ -168,9 +168,9 @@ class WhatTheMovie:
         section = tree.find('script',
                             attrs={'type': 'text/javascript'},
                             text=compile('tt_shot_rating_stars'))
-        regexp = '<strong>(?P<rating>[0-9.]+|hidden)</strong> \((?P<votes>[0-9]+)'
+        r = '<strong>(?P<rating>[0-9.]+|hidden)</strong> \((?P<votes>[0-9]+)'
         if section:
-            voting = search(regexp, section).groupdict()
+            voting = search(r, section).groupdict()
         # tags
         tags = list()
         tags_list = tree.find('ul', attrs={'id':
