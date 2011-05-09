@@ -13,11 +13,12 @@ class WhatTheMovie:
 
     MAIN_URL = 'http://whatthemovie.com'
 
-    def __init__(self):
+    def __init__(self, user-agent):
         # Get browser stuff
         self.cookies = LWPCookieJar()
         self.browser = Browser()
         self.browser.set_cookiejar(self.cookies)
+        self.browser.addheaders = [('user-agent', user_agent)]        
         # Set empty returns
         self.shot = dict()
         self.last_shots = list()

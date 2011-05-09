@@ -91,7 +91,8 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.hideLabels()
 
         # start the api
-        self.Quiz = whatthemovie.WhatTheMovie()
+        user_agent = 'XBMC - script.game.whatthemovie - V0.0.4'
+        self.Quiz = whatthemovie.WhatTheMovie(user_agent)
         try:
             self.login()
         except Exception, error:
