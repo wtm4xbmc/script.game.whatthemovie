@@ -95,15 +95,16 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.hideLabels()
 
         # start the api
-        user_agent = 'XBMC - script.game.whatthemovie - V0.0.4'
+        user_agent = 'XBMC-ADDON - %s - V%s' % (self.ADDON_ID,
+                                                self.ADDON_VERSION)
         self.Quiz = whatthemovie.WhatTheMovie(user_agent)
         try:
             self.login()
+            self.getRandomShot()
         except Exception, error:
             self.errorMessage(self.getString(self.SID_ERROR_LOGIN),
                               str(error))
             self.close()
-        self.getRandomShot()
 
     def onAction(self, action):
         # onAction will be called on keyboard or mouse action
@@ -160,6 +161,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         except Exception, error:
             self.errorMessage(self.getString(self.SID_ERROR_SHOT),
                               str(error))
+            self.setWTMProperty('busy', '')
             return
         self.label_shot_type.setLabel(self.getString(self.SID_SHOT_TYPE))  # fixme
         self.setWTMProperty('main_image', local_image_path)
