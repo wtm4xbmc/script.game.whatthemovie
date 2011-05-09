@@ -19,12 +19,11 @@ class WhatTheMovie:
         self.browser = Browser()
         self.browser.set_cookiejar(self.cookies)
         # Set empty returns
-        self.is_login = False
         self.shot = dict()
-        self.shots = list()
+        self.last_shots = list()
 
     def _checkLogin(self, url=None):
-        self.is_login = False
+        is_login = False
         if url is not None:
             self.browser.open(url)
         try:
@@ -34,10 +33,11 @@ class WhatTheMovie:
             html = self.browser.response().read()
         tree = BeautifulSoup(html)
         if tree.find('a', href='http://whatthemovie.com/user/logout'):
-            self.is_login = True
-        return self.is_login
+            is_login = True
+        return is_login
 
     def login(self, user, password, cookie_path, options=None):
+        is_login = False
         login_url = '%s/user/login/' % self.MAIN_URL
         try:
             self.cookies.revert(cookie_path)
@@ -45,22 +45,24 @@ class WhatTheMovie:
         except:
             # no cookie found
             pass
-        if not self._checkLogin(login_url):
+        is_login = self._checkLogin(login_url)
+        if not is_login:
             # need to login
             self.browser.select_form(nr=0)
             self.browser['name'] = user
             self.browser['upassword'] = password
             self.browser.submit()
-            if self._checkLogin(login_url):
+            is_login = self._checkLogin(login_url)
+            if is_login:
                 # logged in via auth
                 self.cookies.save(cookie_path)
             else:
                 # could not log in
                 pass
-        if self.is_login:
+        if is_login:
             if options and len(options) > 0:
                     self.setOptions(options)
-        return self.is_login
+        return is_login
 
     def setOptions(self, options_dict):
         option_url = '%s/shot/setrandomoptions' % self.MAIN_URL
@@ -73,6 +75,8 @@ class WhatTheMovie:
     def _sendAjaxReq(self, url, data_dict=None):
         if data_dict:
             post_data = urlencode(data_dict)
+        else:
+            data_dict = ' '
         req = Request(url, post_data)
         req.add_header('Accept', 'text/javascript, */*')
         req.add_header('Content-Type',
@@ -84,13 +88,13 @@ class WhatTheMovie:
         return self.getShot('random')
 
     def getLastShot(self):
-        if len(self.shots) > 0:
-            self.shot = self.shots.pop()
+        if len(self.last_shots) > 0:
+            self.shot = self.last_shots.pop()
         return self.shot
 
     def getShot(self, shot_id):
         if self.shot: # if there is already a shot - put it in list
-            self.shots.append(self.shot)
+            self.last_shots.append(self.shot)
         self.shot = dict()
         shot_url = '%s/shot/%s' % (self.MAIN_URL, shot_id)
         self.browser.open(shot_url)
@@ -115,6 +119,7 @@ class WhatTheMovie:
             if lang.img:
                 lang_list['hidden'].append(lang.img['src'][-6:-4])
         # date
+        date = None
         date_info = tree.find('ul',
                               attrs={'class': 'nav_date'}).findAll('li')
         if len(date_info) >= 4:
@@ -123,8 +128,6 @@ class WhatTheMovie:
                                                  date_info[3].a.string[:-2]),
                                    '%Y %B %d')
             date = datetime.fromtimestamp(mktime(struct_date))
-        else:
-            date = None
         # posted by
         sections = tree.find('ul',
                              attrs={'class': 'nav_shotinfo'}).findAll('li')
@@ -165,7 +168,7 @@ class WhatTheMovie:
         section = tree.find('script',
                             attrs={'type': 'text/javascript'},
                             text=compile('tt_shot_rating_stars'))
-        regexp = '<strong>(?P<rating>.+)</strong> \((?P<votes>[0-9]+)'
+        regexp = '<strong>(?P<rating>[0-9.]+|hidden)</strong> \((?P<votes>[0-9]+)'
         if section:
             voting = search(regexp, section).groupdict()
         # tags
