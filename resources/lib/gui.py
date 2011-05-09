@@ -62,7 +62,6 @@ class GUI(xbmcgui.WindowXMLDialog):
     ADDON_VERSION = sys.modules['__main__'].__version__
 
     def __init__(self, *args, **kwargs):
-        # __init__ will be called when python creates object from this class
         xbmcgui.WindowXMLDialog.__init__(self, *args, **kwargs)
         self.window_home = xbmcgui.Window(10000)
         self.setWTMProperty('solved_status', 'inactive')
@@ -107,8 +106,6 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.close()
 
     def onAction(self, action):
-        # onAction will be called on keyboard or mouse action
-        # action is the action which was triggered
         if action in self.AID_EXIT_BACK:
             self.closeDialog()
         elif action in self.AID_CONTEXT_MENU:
@@ -123,13 +120,9 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.getShot(shot_id)
 
     def onFocus(self, controlId):
-        # onFocus will be called on any focus
-        #print controlID
         pass
 
     def onClick(self, controlId):
-        # onClick will be called on any click
-        # controlID is the ID of the item which is clicked
         if controlId == self.CID_BUTTON_GUESS:
             self.guessTitle(self.shot['shot_id'])
         elif controlId == self.CID_BUTTON_RANDOM:
