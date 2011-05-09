@@ -183,7 +183,10 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def addFlags(self, language_list):
         self.list_flags.reset()
-        avail_flags = ('de', 'en', 'es', 'fr', 'pt') # fixme add items+imgs
+        avail_flags = ('am', 'bg', 'cn', 'de', 'dk', 'en', 'es', 'et', 'fi',
+                       'fr', 'gr', 'hu', 'il', 'in', 'is', 'it', 'jp', 'kr',
+                       'lt', 'lv', 'nl', 'no', 'pl', 'pt', 'ro', 'ru', 'se',
+                       'tr', 'ua')
         for language in (l for l in language_list if l in avail_flags):
             flag_img = 'flags/%s.png' % language
             flag_item = xbmcgui.ListItem(iconImage=flag_img)
