@@ -6,9 +6,6 @@ import xbmcgui
 import xbmc
 import whatthemovie
 
-getString = sys.modules['__main__'].getLocalizedString
-getSetting = sys.modules['__main__'].getSetting
-
 
 class GUI(xbmcgui.WindowXMLDialog):
     # Constants
@@ -60,6 +57,10 @@ class GUI(xbmcgui.WindowXMLDialog):
     AID_EXIT_BACK = [9, 10, 13]
     AID_CONTEXT_MENU = [117]
 
+    # ADDON_CONSTANTS
+    ADDON_ID = sys.modules['__main__'].__id__
+    ADDON_VERSION = sys.modules['__main__'].__version__
+
     def __init__(self, *args, **kwargs):
         # __init__ will be called when python creates object from this class
         xbmcgui.WindowXMLDialog.__init__(self, *args, **kwargs)
@@ -68,8 +69,11 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.setWTMProperty('busy', 'loading')
 
     def onInit(self):
-        # onInit will be called from xbmc (after __init__)
-        # store xbmc keycodes for exit and backspace
+        # get XBMC Addon instance and methods
+        Addon = sys.modules['__main__'].Addon
+        self.getString = Addon.getLocalizedString
+        self.getSetting = Addon.getSetting
+
         # get controls
         self.button_guess = self.getControl(self.CID_BUTTON_GUESS)
         self.button_random = self.getControl(self.CID_BUTTON_RANDOM)
@@ -96,7 +100,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         try:
             self.login()
         except Exception, error:
-            self.errorMessage(getString(self.SID_ERROR_LOGIN),
+            self.errorMessage(self.getString(self.SID_ERROR_LOGIN),
                               str(error))
             self.close()
         self.getRandomShot()
@@ -113,7 +117,7 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def askShotID(self):
         Dialog = xbmcgui.Dialog()
-        shot_id = Dialog.numeric(0, getString(self.SID_ENTER_ID))
+        shot_id = Dialog.numeric(0, self.getString(self.SID_ENTER_ID))
         if shot_id and shot_id is not '':
             self.getShot(shot_id)
 
@@ -154,27 +158,27 @@ class GUI(xbmcgui.WindowXMLDialog):
             local_image_path = self.downloadPic(shot['image_url'],
                                                 shot['shot_id'])
         except Exception, error:
-            self.errorMessage(getString(self.SID_ERROR_SHOT),
+            self.errorMessage(self.getString(self.SID_ERROR_SHOT),
                               str(error))
             return
-        self.label_shot_type.setLabel(getString(self.SID_SHOT_TYPE))  # fixme
+        self.label_shot_type.setLabel(self.getString(self.SID_SHOT_TYPE))  # fixme
         self.setWTMProperty('main_image', local_image_path)
-        self.label_posted_by.setLabel(getString(self.SID_POSTED_BY)
+        self.label_posted_by.setLabel(self.getString(self.SID_POSTED_BY)
                                       % shot['posted_by'])
         if shot['solved']['status']:
-            self.label_solved.setLabel(getString(self.SID_SOLVED)
+            self.label_solved.setLabel(self.getString(self.SID_SOLVED)
                                        % (shot['solved']['count'],
                                           shot['solved']['first_by']))
         else:
-            self.label_solved.setLabel(getString(self.SID_UNSOLVED))
-        self.label_shot_id.setLabel(getString(self.SID_SHOT_ID)
+            self.label_solved.setLabel(self.getString(self.SID_UNSOLVED))
+        self.label_shot_id.setLabel(self.getString(self.SID_SHOT_ID)
                                     % shot['shot_id'])
         date = shot['date']
         if date:
-            date_string = date.strftime(str(getString(self.SID_DATE_FORMAT)))
+            date_string = date.strftime(str(self.getString(self.SID_DATE_FORMAT)))
         else:
-            date_string = getString(self.SID_NOT_RELEASED)
-        self.label_shot_date.setLabel(getString(self.SID_SHOT_DATE)
+            date_string = self.getString(self.SID_NOT_RELEASED)
+        self.label_shot_date.setLabel(self.getString(self.SID_SHOT_DATE)
                                       % date_string)
         languages = shot['lang_list']['main']
         # languages = shot['lang_list']['main'] + shot['lang_list']['hidden']
@@ -194,19 +198,19 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def guessTitle(self, shot_id):
         self.setWTMProperty('solved_status', 'inactive')
-        heading = getString(self.SID_KEYBOARD_HEADING)
+        heading = self.getString(self.SID_KEYBOARD_HEADING)
         keyboard = xbmc.Keyboard('', heading)
         keyboard.doModal()
         if keyboard.isConfirmed() and keyboard.getText() is not '':
             guess = keyboard.getText().decode('utf8')
             self.image_solution.setColorDiffuse('FFFFFF00')
             self.setWTMProperty('solved_status', 'checking')
-            message = getString(self.SID_CHECKING)
+            message = self.getString(self.SID_CHECKING)
             self.label_solution.setLabel(message % guess)
             try:
                 answer = self.Quiz.guessShot(guess, shot_id)
             except Exception, error:
-                self.errorMessage(getString(self.SID_ERROR_GUESS),
+                self.errorMessage(self.getString(self.SID_ERROR_GUESS),
                                   str(error))
                 return
             if answer['is_right'] == True:
@@ -216,62 +220,61 @@ class GUI(xbmcgui.WindowXMLDialog):
                 self.answerWrong(guess)
 
     def answerRight(self, title_year, gives_point):
-        message = getString(self.SID_ANSWER_RIGHT)
+        message = self.getString(self.SID_ANSWER_RIGHT)
         self.label_solution.setLabel(message % title_year)
         self.setWTMProperty('solved_status', 'correct')
         self.image_solution.setColorDiffuse('FF00FF00')
         if gives_point:
             self.score += 1
             self.updateScore()
-        if getSetting('auto_random') == 'true':
-            time_to_sleep = int(getSetting('auto_random_sleep')) * 1000
+        if self.getSetting('auto_random') == 'true':
+            time_to_sleep = int(self.getSetting('auto_random_sleep')) * 1000
             xbmc.sleep(time_to_sleep)
             self.getRandomShot()
         self.setWTMProperty('solved_status', 'inactive')
 
     def answerWrong(self, guess):
-        message = getString(self.SID_ANSWER_WRONG)
+        message = self.getString(self.SID_ANSWER_WRONG)
         self.label_solution.setLabel(message % guess)
         self.setWTMProperty('solved_status', 'wrong')
         self.image_solution.setColorDiffuse('FFFF0000')
 
     def login(self):
         self.score = 0
-        if getSetting('login') == 'false':
-            self.label_loginstate.setLabel(getString(self.SID_NOT_LOGGED_IN))
+        if self.getSetting('login') == 'false':
+            self.label_loginstate.setLabel(self.getString(self.SID_NOT_LOGGED_IN))
         else:
-            script_id = sys.modules['__main__'].__id__
-            cookie_dir = 'special://profile/addon_data/%s' % script_id
+            cookie_dir = 'special://profile/addon_data/%s' % self.ADDON_ID
             self.checkCreatePath(cookie_dir)
             cookie_file = xbmc.translatePath('%s/cookie.txt' % cookie_dir)
-            user = getSetting('username')
-            password = getSetting('password')
+            user = self.getSetting('username')
+            password = self.getSetting('password')
             options = self.getOptions()
             success = self.Quiz.login(user, password, cookie_file, options)
             if success == False:
                 dialog = xbmcgui.Dialog()
-                dialog.ok(getString(self.SID_LOGIN_FAILED_HEADING),
-                          getString(self.SID_LOGIN_FAILED) % user)
-                label = getString(self.SID_NOT_LOGGED_IN)
+                dialog.ok(self.getString(self.SID_LOGIN_FAILED_HEADING),
+                          self.getString(self.SID_LOGIN_FAILED) % user)
+                label = self.getString(self.SID_NOT_LOGGED_IN)
             else:
-                label = getString(self.SID_LOGGED_IN_AS) % user
+                label = self.getString(self.SID_LOGGED_IN_AS) % user
                 self.score = int(self.Quiz.getScore(user))
             self.label_loginstate.setLabel(label)
         self.updateScore()
 
     def getOptions(self):
         options = dict()
-        if getSetting('difficulty') == '2':  # 'all'
+        if self.getSetting('difficulty') == '2':  # 'all'
             options['difficulty'] = 'all'
-        elif getSetting('difficulty') == '1':  # 'medium'
+        elif self.getSetting('difficulty') == '1':  # 'medium'
             options['difficulty'] = 'medium'
-        elif getSetting('difficulty') == '0':  # 'easy'
+        elif self.getSetting('difficulty') == '0':  # 'easy'
             options['difficulty'] = 'easy'
-        if getSetting('include_archive') == 'true':
+        if self.getSetting('include_archive') == 'true':
             options['include_archive'] = '1'
         else:
             options['include_archive'] = '0'
-        if getSetting('include_solved') == 'true':
+        if self.getSetting('include_solved') == 'true':
             options['include_solved'] = '1'
         else:
             options['include_solved'] = '0'
@@ -280,8 +283,8 @@ class GUI(xbmcgui.WindowXMLDialog):
     def downloadPic(self, image_url, shot_id):
         subst_image_url = 'http://static.whatthemovie.com/images/substitute'
         if not image_url.startswith(subst_image_url):
-            script_id = sys.modules['__main__'].__id__
-            cache_dir = 'special://profile/addon_data/%s/cache' % script_id
+            cache_dir = ('special://profile/addon_data/%s/cache'
+                         % self.ADDON_ID)
             self.checkCreatePath(cache_dir)
             image_path = xbmc.translatePath('%s/%s.jpg' % (cache_dir, shot_id))
             if not os.path.isfile(image_path):
@@ -291,7 +294,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         return image_path
 
     def updateScore(self):
-        score_string = getString(self.SID_YOUR_SCORE) % str(self.score)
+        score_string = self.getString(self.SID_YOUR_SCORE) % str(self.score)
         self.label_score.setLabel(score_string)
 
     def checkCreatePath(self, path):
@@ -306,15 +309,15 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.window_home.setProperty('wtm.%s' % prop, value)
 
     def hideLabels(self):
-        if getSetting('visible_posted_by') == 'false':
+        if self.getSetting('visible_posted_by') == 'false':
             self.label_posted_by.setVisible(False)
-        if getSetting('visible_solved') == 'false':
+        if self.getSetting('visible_solved') == 'false':
             self.label_solved.setVisible(False)
-        if getSetting('visible_shot_id') == 'false':
+        if self.getSetting('visible_shot_id') == 'false':
             self.label_shot_id.setVisible(False)
-        if getSetting('visible_shot_date') == 'false':
+        if self.getSetting('visible_shot_date') == 'false':
             self.label_shot_date.setVisible(False)
-        if getSetting('visible_shot_flags') == 'false':
+        if self.getSetting('visible_shot_flags') == 'false':
             self.list_flags.setVisible(False)
 
     def errorMessage(self, heading, error):

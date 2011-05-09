@@ -10,9 +10,6 @@ __author__ = Addon.getAddonInfo('author')
 __version__ = Addon.getAddonInfo('version')
 __path__ = Addon.getAddonInfo('path')
 
-getLocalizedString = Addon.getLocalizedString
-getSetting = Addon.getSetting
-
 print '[SCRIPT][%s] version %s initialized!' % (__scriptname__, __version__)
 
 if (__name__ == '__main__'):
