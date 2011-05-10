@@ -129,7 +129,6 @@ class GUI(xbmcgui.WindowXMLDialog):
         if controlId == self.CID_BUTTON_GUESS:
             self.guessTitle(self.shot['shot_id'])
         elif controlId == self.CID_BUTTON_RANDOM:
-            self.setWTMProperty('solved_status', 'inactive')
             self.getRandomShot()
         elif controlId == self.CID_BUTTON_BACK:
             self.getShot('last')
@@ -144,6 +143,8 @@ class GUI(xbmcgui.WindowXMLDialog):
     def getShot(self, shot_id=None):
         # set busy_gif
         self.setWTMProperty('busy', 'loading')
+        # hide label_status
+        self.setWTMProperty('solved_status', 'inactive')
         # scrape shot and download picture
         try:
             if shot_id:
@@ -259,7 +260,6 @@ class GUI(xbmcgui.WindowXMLDialog):
             time_to_sleep = int(self.getSetting('auto_random_sleep')) * 1000
             xbmc.sleep(time_to_sleep)
             self.getRandomShot()
-        self.setWTMProperty('solved_status', 'inactive')  # fixme
 
     def answerWrong(self, guess):
         # enter wrong status
