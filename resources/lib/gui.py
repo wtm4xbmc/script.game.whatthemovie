@@ -240,7 +240,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             # call answerRight or answerWrong
             if answer['is_right'] == True:
                 self.answerRight(answer['title_year'],
-                                 shot['gives_point'])
+                                 self.shot['gives_point'])
             else:
                 self.answerWrong(guess)
 
