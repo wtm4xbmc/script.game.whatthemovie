@@ -216,6 +216,11 @@
             <width>720</width>
             <height>36</height>
             <control type="button" id="3003">
+                <description>Fake Button to zoom the Picture to Guess</description>
+                <posx>15</posx>
+                <posy>5</posy>
+                <width>720</width>
+                <height>400</height>
                 <visible allowhiddenfocus="true">false</visible>
                 <onright>3001</onright>
                 <onleft>3002</onleft>
