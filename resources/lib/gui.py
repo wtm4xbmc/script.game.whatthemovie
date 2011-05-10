@@ -92,13 +92,14 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.image_solution = self.getControl(self.CID_IMAGE_SOLUTION)
         self.list_flags = self.getControl(self.CID_LIST_FLAGS)
 
-        # set control visibility
+        # set control visibility depending on xbmc-addon settings
         self.hideLabels()
 
         # start the api
         user_agent = 'XBMC-ADDON - %s - V%s' % (self.ADDON_ID,
                                                 self.ADDON_VERSION)
         self.Quiz = whatthemovie.WhatTheMovie(user_agent)
+        # try to login and get first random shot. If it fails exit
         try:
             self.login()
             self.getRandomShot()
@@ -215,22 +216,28 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.list_flags.addItem(flag_item)
 
     def guessTitle(self, shot_id):
+        # clear solved_status
         self.setWTMProperty('solved_status', 'inactive')
+        # open xbmc keyboard
         heading = self.getString(self.SID_KEYBOARD_HEADING)
         keyboard = xbmc.Keyboard('', heading)
         keyboard.doModal()
         if keyboard.isConfirmed() and keyboard.getText() is not '':
             guess = keyboard.getText().decode('utf8')
+            # enter checking status            
             self.image_solution.setColorDiffuse('FFFFFF00')
             self.setWTMProperty('solved_status', 'checking')
             message = self.getString(self.SID_CHECKING)
             self.label_solution.setLabel(message % guess)
+            # try to check the guess. If it fails abort checking
             try:
                 answer = self.Quiz.guessShot(guess, shot_id)
             except Exception, error:
                 self.errorMessage(self.getString(self.SID_ERROR_GUESS),
                                   str(error))
+                self.setWTMProperty('solved_status', 'inactive')
                 return
+            # call answerRight or answerWrong
             if answer['is_right'] == True:
                 self.answerRight(answer['title_year'],
                                  shot['gives_point'])
@@ -238,20 +245,24 @@ class GUI(xbmcgui.WindowXMLDialog):
                 self.answerWrong(guess)
 
     def answerRight(self, title_year, gives_point):
+        # enter right status 
         message = self.getString(self.SID_ANSWER_RIGHT)
         self.label_solution.setLabel(message % title_year)
         self.setWTMProperty('solved_status', 'correct')
         self.image_solution.setColorDiffuse('FF00FF00')
+        # if this shout gives points, do so
         if gives_point:
             self.score += 1
             self.updateScore()
+        # if user wants auto_random, do so
         if self.getSetting('auto_random') == 'true':
             time_to_sleep = int(self.getSetting('auto_random_sleep')) * 1000
             xbmc.sleep(time_to_sleep)
             self.getRandomShot()
-        self.setWTMProperty('solved_status', 'inactive')
+        self.setWTMProperty('solved_status', 'inactive')  # fixme
 
     def answerWrong(self, guess):
+        # enter wrong status
         message = self.getString(self.SID_ANSWER_WRONG)
         self.label_solution.setLabel(message % guess)
         self.setWTMProperty('solved_status', 'wrong')
@@ -259,6 +270,7 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def login(self):
         self.score = 0
+        # if login disabled skip, if not login and get user score
         if self.getSetting('login') == 'false':
             label = self.getString(self.SID_NOT_LOGGED_IN)
             self.label_loginstate.setLabel(label)
@@ -269,16 +281,20 @@ class GUI(xbmcgui.WindowXMLDialog):
             user = self.getSetting('username')
             password = self.getSetting('password')
             options = self.getOptions()
+            # do the login
             success = self.Quiz.login(user, password, cookie_file, options)
             if success == False:
+                # login failed
                 dialog = xbmcgui.Dialog()
                 dialog.ok(self.getString(self.SID_LOGIN_FAILED_HEADING),
                           self.getString(self.SID_LOGIN_FAILED) % user)
                 label = self.getString(self.SID_NOT_LOGGED_IN)
             else:
+                # login successfully
                 label = self.getString(self.SID_LOGGED_IN_AS) % user
                 self.score = int(self.Quiz.getScore(user))
             self.label_loginstate.setLabel(label)
+        # show the score
         self.updateScore()
 
     def getOptions(self):
