@@ -5,7 +5,6 @@ Messages = 3050-3099
 Labels   = 3100-3199
 Settings = 3200-3299
 Misc     = 3300-3349
-Headings = 3350-3399
 -->
 <strings>
     <!-- Buttons-->
@@ -34,6 +33,9 @@ Headings = 3350-3399
     <string id="3110">Posted by: [B]%s[/B]</string>
     <string id="3111">Not released</string>
     <string id="3112">Deleted user</string>
+    <string id="3113">New Submissions</string>
+    <string id="3114">Feature Films</string>
+    <string id="3115">The Archive</string>
     <!-- Settings-->
     <string id="3200">General</string>
     <string id="3201">Login</string>
@@ -59,6 +61,4 @@ Headings = 3350-3399
     <string id="3221">Show "Shot Flags"</string>
     <!-- Misc-->
     <string id="3300">%Y-%m-%d</string>
-    <!-- Headings-->
-    <string id="3350">Feature Films</string>
 </strings>

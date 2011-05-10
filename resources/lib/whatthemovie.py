@@ -150,20 +150,13 @@ class WhatTheMovie:
             solved['first_by'] = sections[2].a.string
         except:
             solved['first_by'] = 'nobody'
-        # gives_point
+        # already solved
+        already_solved = False
         js_list = tree.findAll('script',
                                attrs={'type': 'text/javascript'},
                                text=compile('guess_problem'))
-        if len(js_list) == 0 and date:
-            # at least no guess_problem
-            gives_point = True
-            age = datetime.now() - date
-            if age > timedelta(days=30):
-                # from archive
-                gives_point = False
-        else:
-            # already solved
-            gives_point = False
+        if len(js_list) > 0:
+            already_solved = True
         # voting
         voting = dict()
         section = tree.find('script',
@@ -179,6 +172,17 @@ class WhatTheMovie:
         for tag in tags_list:
             if tag.a:
                 tags.append(tag.a.string)
+        # shot_type
+        shot_type = 1  # New Submissions
+        if date:
+            shot_type = 2  # Feature Films
+            age = datetime.now() - date
+            if age > timedelta(days=30):
+                shot_type = 3  # Archive
+        # gives_point
+        gives_point = False
+        if shot_type == 2 and already_solved == False:
+            gives_point = True
         # create return dict
         self.shot['shot_id'] = shot_id
         self.shot['image_url'] = image_url
@@ -186,9 +190,11 @@ class WhatTheMovie:
         self.shot['posted_by'] = posted_by
         self.shot['solved'] = solved
         self.shot['date'] = date
-        self.shot['gives_point'] = gives_point
+        self.shot['already_solved'] = already_solved
         self.shot['voting'] = voting
         self.shot['tags'] = tags
+        self.shot['shot_type'] = shot_type
+        self.shot['gives_point'] = gives_point
         return self.shot
 
     def downloadFile(self, url, local_path):
