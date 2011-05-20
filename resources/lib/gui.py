@@ -199,17 +199,23 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_shot_date.setLabel(self.getString(self.SID_SHOT_DATE)
                                       % date_string)
         # set shot languages
-        languages = shot['lang_list']['main']
-        # languages = shot['lang_list']['main'] + shot['lang_list']['hidden']
+        languages = shot['lang_list']['main'] + shot['lang_list']['hidden']
         self.addFlags(languages)
         # unset busy_gif
         self.setWTMProperty('busy', '')
 
     def addFlags(self, language_list):
+        visible_flags = list()
+        for i in range(5):
+            visible_flags.append(self.getSetting('flag%s' % (i + 1)))
         self.list_flags.reset()
-        for language in language_list:
-            flag_img = 'flags/%s.png' % language
+        for flag in visible_flags:
+            flag_img = 'flags/%s.png' % flag
             flag_item = xbmcgui.ListItem(iconImage=flag_img)
+            if flag not in language_list:
+                # FIXME: This can be made better I think.
+                # At least with a better overlay pic
+                flag_item.setProperty('unavailable', 'True')
             self.list_flags.addItem(flag_item)
 
     def guessTitle(self, shot_id):

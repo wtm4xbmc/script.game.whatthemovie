@@ -59,6 +59,13 @@ Misc     = 3300-3349
     <string id="3219">Auto jump to next after guess was right</string>
     <string id="3220">...after x Seconds</string>
     <string id="3221">Show "Shot Flags"</string>
+    <string id="3222">Flags</string>
+    <string id="3223">Flag 1</string>
+    <string id="3224">Flag 2</string>
+    <string id="3225">Flag 3</string>
+    <string id="3226">Flag 4</string>
+    <string id="3227">Flag 5</string>
+    <string id="3228">Choose the Flags you want to see</string>
     <!-- Misc-->
     <string id="3300">%Y-%m-%d</string>
 </strings>

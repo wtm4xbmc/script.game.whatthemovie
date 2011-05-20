@@ -192,20 +192,40 @@
             <ondown>3000</ondown>
             <itemlayout width="42" height="32">
                 <control type="image">
+                    <description>The Flag</description>
                     <posx>0</posx>
                     <posy>0</posy>
                     <width>32</width>
                     <height>32</height>
                     <texture>$INFO[ListItem.Icon]</texture>
                 </control>
+                <control type="image">
+                    <description>Overlay which is visible if this language is not available</description>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>32</width>
+                    <height>32</height>
+                    <texture>guess_wrong.png</texture>
+                    <visible>ListItem.property(unavailable)</visible>
+                </control>
             </itemlayout>
             <focusedlayout width="42" height="32">
                 <control type="image">
+                    <description>The Flag</description>
                     <posx>0</posx>
                     <posy>0</posy>
                     <width>32</width>
                     <height>32</height>
                     <texture>$INFO[ListItem.Icon]</texture>
+                </control>
+                <control type="image">
+                    <description>Overlay which is visible if this language is not available</description>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>32</width>
+                    <height>32</height>
+                    <texture>guess_wrong.png</texture>
+                    <visible>ListItem.property(unavailable)</visible>
                 </control>
             </focusedlayout>
         </control>

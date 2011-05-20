@@ -27,4 +27,13 @@
         <setting id="auto_random" type="bool" label="3219" default="true" />
         <setting id="auto_random_sleep" type="enum" label="3220" default="2" values="0|1|2|3|4|5" enable="eq(-1,true)" />
     </category>
+    <!-- Flags --->
+    <category label="3222">
+        <setting label="3228" type="lsep" />
+        <setting id="flag1" type="labelenum" label="3223" values="am|bg|cn|de|dk|en|es|et|fi|fr|gr|hu|il|in|is|it|jp|kr|lt|lv|nl|no|pl|pt|ro|ru|se|tr|ua" default="de" />
+        <setting id="flag2" type="labelenum" label="3224" values="am|bg|cn|de|dk|en|es|et|fi|fr|gr|hu|il|in|is|it|jp|kr|lt|lv|nl|no|pl|pt|ro|ru|se|tr|ua" default="en" />
+        <setting id="flag3" type="labelenum" label="3225" values="am|bg|cn|de|dk|en|es|et|fi|fr|gr|hu|il|in|is|it|jp|kr|lt|lv|nl|no|pl|pt|ro|ru|se|tr|ua" default="fr" />
+        <setting id="flag4" type="labelenum" label="3226" values="am|bg|cn|de|dk|en|es|et|fi|fr|gr|hu|il|in|is|it|jp|kr|lt|lv|nl|no|pl|pt|ro|ru|se|tr|ua" default="es" />
+        <setting id="flag5" type="labelenum" label="3227" values="am|bg|cn|de|dk|en|es|et|fi|fr|gr|hu|il|in|is|it|jp|kr|lt|lv|nl|no|pl|pt|ro|ru|se|tr|ua" default="pt" />
+    </category>
 </settings>
