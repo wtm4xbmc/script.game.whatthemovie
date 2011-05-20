@@ -192,39 +192,43 @@
             <ondown>3000</ondown>
             <itemlayout width="42" height="32">
                 <control type="image">
-                    <description>The Flag</description>
+                    <description>The Flag if visible</description>
                     <posx>0</posx>
                     <posy>0</posy>
                     <width>32</width>
                     <height>32</height>
                     <texture>$INFO[ListItem.Icon]</texture>
+                    <visible>!ListItem.property(unavailable)</visible>
                 </control>
                 <control type="image">
-                    <description>Overlay which is visible if this language is not available</description>
+                    <description>The Flag if unvisible</description>
                     <posx>0</posx>
                     <posy>0</posy>
                     <width>32</width>
                     <height>32</height>
-                    <texture>guess_wrong.png</texture>
+                    <texture>$INFO[ListItem.Icon]</texture>
+                    <colordiffuse>11FFFFFF</colordiffuse>
                     <visible>ListItem.property(unavailable)</visible>
                 </control>
             </itemlayout>
             <focusedlayout width="42" height="32">
                 <control type="image">
-                    <description>The Flag</description>
+                    <description>The Flag if visible</description>
                     <posx>0</posx>
                     <posy>0</posy>
                     <width>32</width>
                     <height>32</height>
                     <texture>$INFO[ListItem.Icon]</texture>
+                    <visible>!ListItem.property(unavailable)</visible>
                 </control>
                 <control type="image">
-                    <description>Overlay which is visible if this language is not available</description>
+                    <description>The Flag if unvisible</description>
                     <posx>0</posx>
                     <posy>0</posy>
                     <width>32</width>
                     <height>32</height>
-                    <texture>guess_wrong.png</texture>
+                    <texture>$INFO[ListItem.Icon]</texture>
+                    <colordiffuse>11FFFFFF</colordiffuse>
                     <visible>ListItem.property(unavailable)</visible>
                 </control>
             </focusedlayout>
