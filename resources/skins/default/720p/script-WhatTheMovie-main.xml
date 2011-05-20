@@ -179,9 +179,9 @@
 -->
         <control type="list" id="1013">
             <description>Input language flags</description>
-            <posx>560</posx>
+            <posx>430</posx>
             <posy>573</posy>
-            <width min="32" max="320">auto</width>
+            <width>210</width>
             <height>32</height>
             <align>center</align>
             <itemgap>42</itemgap>
