@@ -179,12 +179,10 @@
 -->
         <control type="list" id="1013">
             <description>Input language flags</description>
-            <posx>430</posx>
+            <posx>520</posx>
             <posy>573</posy>
             <width>210</width>
             <height>32</height>
-            <align>center</align>
-            <itemgap>42</itemgap>
             <orientation>horizontal</orientation>
             <onleft>3000</onleft>
             <onright>3000</onright>
