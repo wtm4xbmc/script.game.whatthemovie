@@ -206,15 +206,13 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def addFlags(self, language_list):
         visible_flags = list()
-        for i in range(5):
-            visible_flags.append(self.getSetting('flag%s' % (i + 1)))
+        for i in (1, 2, 3, 4, 5):
+            visible_flags.append(self.getSetting('flag%s' % i))
         self.list_flags.reset()
         for flag in visible_flags:
             flag_img = 'flags/%s.png' % flag
             flag_item = xbmcgui.ListItem(iconImage=flag_img)
             if flag not in language_list:
-                # FIXME: This can be made better I think.
-                # At least with a better overlay pic
                 flag_item.setProperty('unavailable', 'True')
             self.list_flags.addItem(flag_item)
 
