@@ -151,6 +151,18 @@
             <shadowcolor>FF000000</shadowcolor>
             <visible>true</visible>
         </control>
+        <control type="label" id="1014">
+            <description>Rating Label - can be replaced by a better solution</description>
+            <posx>1260</posx>
+            <posy>50</posy>
+            <width>400</width>
+            <height>40</height>
+            <align>right</align>
+            <font>font12</font>
+            <textcolor>FFFFFFFF</textcolor>
+            <shadowcolor>FF000000</shadowcolor>
+            <visible>true</visible>
+        </control>
         <control type="label" id="1012">
             <description>Shot type label</description>
             <posx>540</posx>

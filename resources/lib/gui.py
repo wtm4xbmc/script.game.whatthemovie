@@ -24,6 +24,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_LABEL_SHOT_ID = 1008
     CID_LABEL_SHOT_DATE = 1011
     CID_LABEL_SHOT_TYPE = 1012
+    CID_LABEL_RATING = 1014
     CID_LIST_FLAGS = 1013
 
     # STRING_IDs
@@ -52,6 +53,10 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_NEW_SUBM = 3113
     SID_FEATURE_FILMS = 3114
     SID_THE_ARCHIVE = 3115
+    SID_OVERALL_RATING = 3116
+    SID_OWN_RATING = 3117
+    SID_RATING_HIDDEN = 3118
+    SID_RATING_UNRATED = 3119
     #  Misc
     SID_DATE_FORMAT = 3300
 
@@ -87,6 +92,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_shot_id = self.getControl(self.CID_LABEL_SHOT_ID)
         self.label_shot_date = self.getControl(self.CID_LABEL_SHOT_DATE)
         self.label_shot_type = self.getControl(self.CID_LABEL_SHOT_TYPE)
+        self.label_rating = self.getControl(self.CID_LABEL_RATING)
         self.image_main = self.getControl(self.CID_IMAGE_MAIN)
         self.image_gif = self.getControl(self.CID_IMAGE_GIF)
         self.image_solution = self.getControl(self.CID_IMAGE_SOLUTION)
@@ -201,6 +207,21 @@ class GUI(xbmcgui.WindowXMLDialog):
         # set shot languages
         languages = shot['lang_list']['main'] + shot['lang_list']['hidden']
         self.addFlags(languages)
+        # set shot rating
+        if shot['voting']['overall_rating'] != u'hidden':
+            overall_rating = shot['voting']['overall_rating']
+        else:
+            overall_rating = self.getString(self.SID_RATING_HIDDEN)
+        if shot['voting']['own_rating'] is not None:
+            own_rating = shot['voting']['own_rating']
+        else:
+            own_rating = self.getString(self.SID_RATING_UNRATED)
+        votes = shot['voting']['votes']
+        rating_string = '[CR]'.join((self.getString(self.SID_OVERALL_RATING),
+                                     self.getString(self.SID_OWN_RATING)))
+        self.label_rating.setLabel(rating_string % (overall_rating,
+                                                    votes,
+                                                    own_rating))
         # unset busy_gif
         self.setWTMProperty('busy', '')
 

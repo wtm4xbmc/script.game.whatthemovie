@@ -36,6 +36,10 @@ Misc     = 3300-3349
     <string id="3113">New Submissions</string>
     <string id="3114">Feature Films</string>
     <string id="3115">The Archive</string>
+    <string id="3116">Overall Rating: [B]%s[/B] ([B]%s[/B] Votes)</string>
+    <string id="3117">Your Rating: [B]%s[/B]</string>
+    <string id="3118">Hidden</string>
+    <string id="3119">Unrated</string>
     <!-- Settings-->
     <string id="3200">General</string>
     <string id="3201">Login</string>
