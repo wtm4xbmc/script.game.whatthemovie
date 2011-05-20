@@ -63,6 +63,8 @@ class GUI(xbmcgui.WindowXMLDialog):
     # ACTION_IDs
     AID_EXIT_BACK = [9, 10, 13]
     AID_CONTEXT_MENU = [117]
+    AID_NUMBERS = [59, 60, 61, 62, 63,
+                   64, 65, 66, 67, 58]
 
     # ADDON_CONSTANTS
     ADDON_ID = sys.modules['__main__'].__id__
@@ -119,6 +121,9 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.closeDialog()
         elif action in self.AID_CONTEXT_MENU:
             self.askShotID()
+        elif action in self.AID_NUMBERS:
+            user_rate = self.AID_NUMBERS.index(action.getId()) + 1
+            self.rateShot(self.shot['shot_id'], user_rate)
         #else:
         #    print action.getId()
 
@@ -224,6 +229,10 @@ class GUI(xbmcgui.WindowXMLDialog):
                                                     own_rating))
         # unset busy_gif
         self.setWTMProperty('busy', '')
+
+    def rateShot(self, shot_id, rating):
+        self.Quiz.rateShot(shot_id, rating)
+        # fixme: user rating view has to be updated
 
     def addFlags(self, language_list):
         visible_flags = list()

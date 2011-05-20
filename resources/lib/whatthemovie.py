@@ -218,6 +218,17 @@ class WhatTheMovie:
             answer['title_year'] = response_c.split('"')[3]
         return answer
 
+    def rateShot(self, shot_id, user_rate, rerated='false'):
+        url = '%s/shot/%s/rate.js' % (self.MAIN_URL, shot_id)
+        user_rate_5 = float(user_rate) / 2
+        rating_dict = dict()
+        rating_dict['identity'] = 'shot_rating_stars_%s' % shot_id
+        rating_dict['rated'] = user_rate_5
+        rating_dict['rerated'] = rerated
+        self._sendAjaxReq(url, rating_dict)
+        if self.shot['shot_id'] == shot_id:
+            self.shot['voting']['own_rating'] = str(user_rate)
+
     def getScore(self, username):
         score = 0
         profile_url = '%s/user/%s/' % (self.MAIN_URL, username)
