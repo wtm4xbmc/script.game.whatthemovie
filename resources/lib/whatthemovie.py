@@ -162,7 +162,9 @@ class WhatTheMovie:
         section = tree.find('script',
                             attrs={'type': 'text/javascript'},
                             text=compile('tt_shot_rating_stars'))
-        r = '<strong>(?P<rating>[0-9.]+|hidden)</strong> \((?P<votes>[0-9]+)'
+        r = '<strong>(?P<overall_rating>[0-9.]+|hidden)</strong> '
+        r += '\((?P<votes>[0-9]+) votes\)'
+        r += '(<br>Your rating: <strong>(?P<own_rating>[0-9.]+)</strong>)?'
         if section:
             voting = search(r, section).groupdict()
         # tags
