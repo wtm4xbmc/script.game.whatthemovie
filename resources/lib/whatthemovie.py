@@ -106,16 +106,13 @@ class WhatTheMovie:
         # prev/next
         nav = dict()
         section = tree.find('ul', attrs={'id': 'nav_shots'}).findAll('li')
-        nav['first_id'] = section[0].a['href'][6:]
-        nav['prev_id'] = section[1].a['href'][6:]
-        try:
-            nav['prev_unsolved_id'] = section[2].a['href'][6:]
-            nav['next_unsolved_id'] = section[4].a['href'][6:]
-        except:
-            nav['prev_unsolved_id'] = None
-            nav['next_unsolved_id'] = None
-        nav['next_id'] = section[5].a['href'][6:]
-        nav['last_id'] = section[6].a['href'][6:]
+        nav_types = ((0, 'first_id'), (1, 'prev_id'), (2, 'prev_unsolved_id'),
+                     (4, 'next_unsolved_id'), (5, 'next_id'), (6, 'last_id'))
+        for i, nav_type in nav_types:
+            if section[i].a:
+                nav[nav_type] = section[i].a['href'][6:]
+            else:
+                nav[nav_type] = None
         # image url
         image_url = tree.find('img', alt='guess this movie snapshot')['src']
         # languages
@@ -188,12 +185,17 @@ class WhatTheMovie:
             if tag.a:
                 tags.append(tag.a.string)
         # shot_type
-        shot_type = 1  # New Submissions
-        if date:
-            shot_type = 2  # Feature Films
-            age = datetime.now() - date
-            if age > timedelta(days=31):
-                shot_type = 3  # Archive
+        section = tree.find('h2', attrs={'class':
+                                         'topbar_title'}).string.strip()
+        shot_type = 0  # Unknown
+        if section == 'New Submissions':
+            shot_type = 1
+        elif section == 'Feature Films':
+            shot_type = 2
+        elif section == 'The Archive':
+            shot_type = 3
+        elif section == 'Rejected Snapshots':
+            shot_type = 4
         # gives_point
         gives_point = False
         if shot_type == 2 and already_solved == False:
@@ -201,16 +203,19 @@ class WhatTheMovie:
         # bookmarked
         bookmarked = False
         bookmark_link = tree.find('li', attrs={'id': 'watchbutton'}).a
-        if bookmark_link.has_key('class'):
+        try:
             if bookmark_link['class'] == 'active':
                 bookmarked = True
+        except KeyError:
+            pass
         # favourite
         favourite = False
-        section_id = compile('^favbutton.*')
         favourite_link = tree.find('li', attrs={'class': 'love'}).a
-        if favourite_link.has_key('class'):
+        try:
             if favourite_link['class'] == 'active':
                 favourite = True
+        except KeyError:
+            pass
         # create return dict
         self.shot['shot_id'] = shot_id
         self.shot['image_url'] = image_url
@@ -226,6 +231,7 @@ class WhatTheMovie:
         self.shot['nav'] = nav
         self.shot['bookmarked'] = bookmarked
         self.shot['favourite'] = favourite
+        print self.shot
         return self.shot
 
     def downloadFile(self, url, local_path):

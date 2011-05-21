@@ -57,6 +57,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_OWN_RATING = 3117
     SID_RATING_HIDDEN = 3118
     SID_RATING_UNRATED = 3119
+    SID_REJECTED_SHOT = 3120
     #  Misc
     SID_DATE_FORMAT = 3300
 
@@ -186,12 +187,16 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.setWTMProperty('busy', '')
 
     def _showShotType(self, shot_type):
-        if shot_type == 1:
+        if shot_type == 0:
+            type_string = 'FIND ME PLEASE'
+        elif shot_type == 1:
             type_string = self.getString(self.SID_NEW_SUBM)
         elif shot_type == 2:
             type_string = self.getString(self.SID_FEATURE_FILMS)
         elif shot_type == 3:
             type_string = self.getString(self.SID_THE_ARCHIVE)
+        elif shot_type == 4:
+            type_string = self.getString(self.SID_REJECTED_SHOT)
         self.label_shot_type.setLabel(type_string)
 
     def _showShotPostedBy(self, posted_by=None):
