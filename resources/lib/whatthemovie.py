@@ -179,7 +179,7 @@ class WhatTheMovie:
         if date:
             shot_type = 2  # Feature Films
             age = datetime.now() - date
-            if age > timedelta(days=30):
+            if age > timedelta(days=31):
                 shot_type = 3  # Archive
         # gives_point
         gives_point = False
