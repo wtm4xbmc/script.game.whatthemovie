@@ -173,68 +173,71 @@ class GUI(xbmcgui.WindowXMLDialog):
                               str(error))
             self.setWTMProperty('busy', '')
             return
-        # set label shot_type
-        if shot['shot_type'] == 1:
-            shot_type = self.getString(self.SID_NEW_SUBM)
-        elif shot['shot_type'] == 2:
-            shot_type = self.getString(self.SID_FEATURE_FILMS)
-        elif shot['shot_type'] == 3:
-            shot_type = self.getString(self.SID_THE_ARCHIVE)
-        self.label_shot_type.setLabel(shot_type)
-        # set picture
         self.setWTMProperty('main_image', local_image_path)
-        # set label posted_by
-        if shot['posted_by']:
-            user = shot['posted_by']
-        else:
-            user = self.getString(self.SID_DEL_USER)
+        self._showShotType(shot['shot_type'])
+        self._showShotPostedBy(shot['posted_by'])
+        self._showShotSolvedStatus(shot['solved'])
+        self._showShotID(shot['shot_id'])
+        self._showShotDate(shot['date'])
+        language_list = shot['lang_list']['main'] + shot['lang_list']['hidden']
+        self._showShotFlags(language_list)
+        self._showShotRating(shot['voting'])
+        # unset busy_gif
+        self.setWTMProperty('busy', '')
+
+    def _showShotType(self, shot_type):
+        if shot_type == 1:
+            type_string = self.getString(self.SID_NEW_SUBM)
+        elif shot_type == 2:
+            type_string = self.getString(self.SID_FEATURE_FILMS)
+        elif shot_type == 3:
+            type_string = self.getString(self.SID_THE_ARCHIVE)
+        self.label_shot_type.setLabel(type_string)
+
+    def _showShotPostedBy(self, posted_by=None):
+        if posted_by is None:
+            posted_by = self.getString(self.SID_DEL_USER)
         self.label_posted_by.setLabel(self.getString(self.SID_POSTED_BY)
-                                      % user)
-        # set label solved
-        if shot['solved']['status']:
-            self.label_solved.setLabel(self.getString(self.SID_SOLVED)
-                                       % (shot['solved']['count'],
-                                          shot['solved']['first_by']))
+                                      % posted_by)
+
+    def _showShotSolvedStatus(self, solved_status):
+        if solved_status['status']:
+                self.label_solved.setLabel(self.getString(self.SID_SOLVED)
+                                           % (solved_status['count'],
+                                              solved_status['first_by']))
         else:
             self.label_solved.setLabel(self.getString(self.SID_UNSOLVED))
-        # set label shot_id
+
+    def _showShotID(self, shot_id):
         self.label_shot_id.setLabel(self.getString(self.SID_SHOT_ID)
-                                    % shot['shot_id'])
-        # set label shot_date
-        date = shot['date']
-        if date:
+                                    % shot_id)
+
+    def _showShotDate(self, date):
+        if date is not None:
             date_format = str(self.getString(self.SID_DATE_FORMAT))
             date_string = date.strftime(date_format)
         else:
             date_string = self.getString(self.SID_NOT_RELEASED)
         self.label_shot_date.setLabel(self.getString(self.SID_SHOT_DATE)
                                       % date_string)
-        # set shot languages
-        languages = shot['lang_list']['main'] + shot['lang_list']['hidden']
-        self.addFlags(languages)
-        # set shot rating
-        if shot['voting']['overall_rating'] != u'hidden':
-            overall_rating = shot['voting']['overall_rating']
+
+    def _showShotRating(self, rating):
+        if rating['overall_rating'] != u'hidden':
+            overall_rating = rating['overall_rating']
         else:
             overall_rating = self.getString(self.SID_RATING_HIDDEN)
-        if shot['voting']['own_rating'] is not None:
-            own_rating = shot['voting']['own_rating']
+        if rating['own_rating'] is not None:
+            own_rating = rating['own_rating']
         else:
             own_rating = self.getString(self.SID_RATING_UNRATED)
-        votes = shot['voting']['votes']
+        votes = rating['votes']
         rating_string = '[CR]'.join((self.getString(self.SID_OVERALL_RATING),
                                      self.getString(self.SID_OWN_RATING)))
         self.label_rating.setLabel(rating_string % (overall_rating,
                                                     votes,
                                                     own_rating))
-        # unset busy_gif
-        self.setWTMProperty('busy', '')
 
-    def rateShot(self, shot_id, rating):
-        self.Quiz.rateShot(shot_id, rating)
-        # fixme: user rating view has to be updated
-
-    def addFlags(self, language_list):
+    def _showShotFlags(self, language_list):
         visible_flags = list()
         for i in (1, 2, 3, 4, 5):
             visible_flags.append(self.getSetting('flag%s' % i))
@@ -246,6 +249,14 @@ class GUI(xbmcgui.WindowXMLDialog):
                 flag_item.setProperty('unavailable', 'True')
             self.list_flags.addItem(flag_item)
 
+    def _showUserScore(self, score):
+        score_string = self.getString(self.SID_YOUR_SCORE) % str(score)
+        self.label_score.setLabel(score_string)
+
+    def rateShot(self, shot_id, own_rating):
+        self.Quiz.rateShot(shot_id, own_rating)
+        # fixme: user rating view has to be updated
+
     def guessTitle(self, shot_id):
         # clear solved_status
         self.setWTMProperty('solved_status', 'inactive')
@@ -255,7 +266,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         keyboard.doModal()
         if keyboard.isConfirmed() and keyboard.getText() is not '':
             guess = keyboard.getText().decode('utf8')
-            # enter checking status            
+            # enter checking status
             self.image_solution.setColorDiffuse('FFFFFF00')
             self.setWTMProperty('solved_status', 'checking')
             message = self.getString(self.SID_CHECKING)
@@ -276,7 +287,7 @@ class GUI(xbmcgui.WindowXMLDialog):
                 self.answerWrong(guess)
 
     def answerRight(self, title_year, gives_point):
-        # enter right status 
+        # enter right status
         message = self.getString(self.SID_ANSWER_RIGHT)
         self.label_solution.setLabel(message % title_year)
         self.setWTMProperty('solved_status', 'correct')
@@ -284,7 +295,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         # if this shout gives points, do so
         if gives_point:
             self.score += 1
-            self.updateScore()
+            self._showUserScore(self.score)
         # if user wants auto_random, do so
         if self.getSetting('auto_random') == 'true':
             time_to_sleep = int(self.getSetting('auto_random_sleep')) * 1000
@@ -325,7 +336,7 @@ class GUI(xbmcgui.WindowXMLDialog):
                 self.score = int(self.Quiz.getScore(user))
             self.label_loginstate.setLabel(label)
         # show the score
-        self.updateScore()
+        self._showUserScore(self.score)
 
     def getOptions(self):
         options = dict()
@@ -357,10 +368,6 @@ class GUI(xbmcgui.WindowXMLDialog):
         else:
             image_path = image_url
         return image_path
-
-    def updateScore(self):
-        score_string = self.getString(self.SID_YOUR_SCORE) % str(self.score)
-        self.label_score.setLabel(score_string)
 
     def checkCreatePath(self, path):
         result = False
