@@ -103,6 +103,15 @@ class WhatTheMovie:
         tree = BeautifulSoup(html)
         # id
         shot_id = tree.find('li', attrs={'class': 'number'}).string.strip()
+        # prev/next
+        nav = dict()
+        section = tree.find('ul', attrs={'id': 'nav_shots'}).findAll('li')
+        nav['first_id'] = section[0].a['href'][6:]
+        nav['prev_id'] = section[1].a['href'][6:]
+        nav['prev_unsolved_id'] = section[2].a['href'][6:]
+        nav['next_unsolved_id'] = section[4].a['href'][6:]
+        nav['next_id'] = section[5].a['href'][6:]
+        nav['last_id'] = section[6].a['href'][6:]
         # image url
         image_url = tree.find('img', alt='guess this movie snapshot')['src']
         # languages
@@ -197,6 +206,7 @@ class WhatTheMovie:
         self.shot['tags'] = tags
         self.shot['shot_type'] = shot_type
         self.shot['gives_point'] = gives_point
+        self.shot['nav'] = nav
         return self.shot
 
     def downloadFile(self, url, local_path):
