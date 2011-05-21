@@ -108,8 +108,12 @@ class WhatTheMovie:
         section = tree.find('ul', attrs={'id': 'nav_shots'}).findAll('li')
         nav['first_id'] = section[0].a['href'][6:]
         nav['prev_id'] = section[1].a['href'][6:]
-        nav['prev_unsolved_id'] = section[2].a['href'][6:]
-        nav['next_unsolved_id'] = section[4].a['href'][6:]
+        try:
+            nav['prev_unsolved_id'] = section[2].a['href'][6:]
+            nav['next_unsolved_id'] = section[4].a['href'][6:]
+        except:
+            nav['prev_unsolved_id'] = None
+            nav['next_unsolved_id'] = None
         nav['next_id'] = section[5].a['href'][6:]
         nav['last_id'] = section[6].a['href'][6:]
         # image url
@@ -194,6 +198,19 @@ class WhatTheMovie:
         gives_point = False
         if shot_type == 2 and already_solved == False:
             gives_point = True
+        # bookmarked
+        bookmarked = False
+        bookmark_link = tree.find('li', attrs={'id': 'watchbutton'}).a
+        if bookmark_link.has_key('class'):
+            if bookmark_link['class'] == 'active':
+                bookmarked = True
+        # favourite
+        favourite = False
+        section_id = compile('^favbutton.*')
+        favourite_link = tree.find('li', attrs={'class': 'love'}).a
+        if favourite_link.has_key('class'):
+            if favourite_link['class'] == 'active':
+                favourite = True
         # create return dict
         self.shot['shot_id'] = shot_id
         self.shot['image_url'] = image_url
@@ -207,6 +224,8 @@ class WhatTheMovie:
         self.shot['shot_type'] = shot_type
         self.shot['gives_point'] = gives_point
         self.shot['nav'] = nav
+        self.shot['bookmarked'] = bookmarked
+        self.shot['favourite'] = favourite
         return self.shot
 
     def downloadFile(self, url, local_path):
@@ -238,6 +257,20 @@ class WhatTheMovie:
         self._sendAjaxReq(url, rating_dict)
         if self.shot['shot_id'] == shot_id:
             self.shot['voting']['own_rating'] = str(user_rate)
+
+    def bookmarkShot(self, shot_id, state=True):
+        if state == True:
+            url = '%s/shot/%s/watch' % (self.MAIN_URL, shot_id)
+        else:
+            url = '%s/shot/%s/unwatch' % (self.MAIN_URL, shot_id)
+        self._sendAjaxReq(url)
+
+    def favouriteShot(self, shot_id, state=True):
+        if state == True:
+            url = '%s/shot/%s/fav' % (self.MAIN_URL, shot_id)
+        else:
+            url = '%s/shot/%s/unfav' % (self.MAIN_URL, shot_id)
+        self._sendAjaxReq(url)
 
     def getScore(self, username):
         score = 0
