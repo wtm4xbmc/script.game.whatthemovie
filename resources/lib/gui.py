@@ -166,14 +166,14 @@ class GUI(xbmcgui.WindowXMLDialog):
             else:
                 shot = self.Quiz.getRandomShot()
             self.shot = shot
-            local_image_path = self.downloadPic(shot['image_url'],
-                                                shot['shot_id'])
+            image_path = self.downloadPic(shot['image_url'],
+                                          shot['shot_id'])
         except Exception, error:
             self.errorMessage(self.getString(self.SID_ERROR_SHOT),
                               str(error))
             self.setWTMProperty('busy', '')
             return
-        self.setWTMProperty('main_image', local_image_path)
+        self._showShotImage(image_path)
         self._showShotType(shot['shot_type'])
         self._showShotPostedBy(shot['posted_by'])
         self._showShotSolvedStatus(shot['solved'])
@@ -249,13 +249,18 @@ class GUI(xbmcgui.WindowXMLDialog):
                 flag_item.setProperty('unavailable', 'True')
             self.list_flags.addItem(flag_item)
 
+    def _showShotImage(self, image_path):
+        self.setWTMProperty('main_image', image_path)
+
     def _showUserScore(self, score):
         score_string = self.getString(self.SID_YOUR_SCORE) % str(score)
         self.label_score.setLabel(score_string)
 
     def rateShot(self, shot_id, own_rating):
         self.Quiz.rateShot(shot_id, own_rating)
-        # fixme: user rating view has to be updated
+        rating = self.shot['voting']
+        rating['own_rating'] = own_rating
+        self._showShotRating(rating)
 
     def guessTitle(self, shot_id):
         # clear solved_status
@@ -273,15 +278,15 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.label_solution.setLabel(message % guess)
             # try to check the guess. If it fails abort checking
             try:
-                answer = self.Quiz.guessShot(guess, shot_id)
+                solution = self.Quiz.guessShot(guess, shot_id)
             except Exception, error:
                 self.errorMessage(self.getString(self.SID_ERROR_GUESS),
                                   str(error))
                 self.setWTMProperty('solved_status', 'inactive')
                 return
             # call answerRight or answerWrong
-            if answer['is_right'] == True:
-                self.answerRight(answer['title_year'],
+            if solution['is_right'] == True:
+                self.answerRight(solution['title_year'],
                                  self.shot['gives_point'])
             else:
                 self.answerWrong(guess)
@@ -293,7 +298,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.setWTMProperty('solved_status', 'correct')
         self.image_solution.setColorDiffuse('FF00FF00')
         # if this shout gives points, do so
-        if gives_point:
+        if gives_point == True:
             self.score += 1
             self._showUserScore(self.score)
         # if user wants auto_random, do so
@@ -311,7 +316,7 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def login(self):
         self.score = 0
-        # if login disabled skip, if not login and get user score
+        # if login disabled skip, else login and get user score
         if self.getSetting('login') == 'false':
             label = self.getString(self.SID_NOT_LOGGED_IN)
             self.label_loginstate.setLabel(label)
