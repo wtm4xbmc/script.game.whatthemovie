@@ -13,6 +13,11 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_BUTTON_GUESS = 3000
     CID_BUTTON_RANDOM = 3001
     CID_BUTTON_BACK = 3002
+    CID_BUTTON_FIRST = 3004
+    CID_BUTTON_PREV = 3005
+    CID_BUTTON_JUMP = 3006
+    CID_BUTTON_NEXT = 3007
+    CID_BUTTON_LAST = 3008
     CID_IMAGE_GIF = 1002
     CID_IMAGE_SOLUTION = 1006
     CID_IMAGE_MAIN = 1000
@@ -144,6 +149,16 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.getRandomShot()
         elif controlId == self.CID_BUTTON_BACK:
             self.getShot('last')
+        elif controlId == self.CID_BUTTON_FIRST:
+            self.getShot(self.shot['nav']['first_id'])
+        elif controlId == self.CID_BUTTON_PREV:
+            self.getShot(self.shot['nav']['prev_id'])
+        elif controlId == self.CID_BUTTON_JUMP:
+            self.askShotID()
+        elif controlId == self.CID_BUTTON_NEXT:
+            self.getShot(self.shot['nav']['next_id'])
+        elif controlId == self.CID_BUTTON_LAST:
+            self.getShot(self.shot['nav']['last_id'])
 
     def closeDialog(self):
         self.setWTMProperty('main_image', '')

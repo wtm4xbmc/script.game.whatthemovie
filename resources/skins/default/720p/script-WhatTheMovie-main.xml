@@ -1,4 +1,4 @@
-<window id="1000">
+﻿<window id="1000">
     <defaultcontrol always="false">3000</defaultcontrol>
     <controls>
         <control type="image">
@@ -173,6 +173,103 @@
             <font>font12</font>
             <textcolor>FF777777</textcolor>
             <visible>true</visible>
+        </control>
+        <control type="group">
+            <description>Navigation Group</description>
+            <posx>480</posx>
+            <posy>120</posy>
+            <width>200</width>
+            <height>20</height>
+            <control type="button" id="3004">
+                <description>First Shot Button</description>
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>30</width>
+                <height>20</height>
+                <texturefocus>button_active.png</texturefocus>
+                <texturenofocus>button.png</texturenofocus>
+                <align>center</align>
+                <aligny>center</aligny>
+                <onleft>3008</onleft>
+                <onright>3005</onright>
+                <onup>3003</onup>
+                <ondown>3000</ondown>
+                <font>font12</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <label>↞</label>
+            </control>
+            <control type="button" id="3005">
+                <description>Prev Shot Button</description>
+                <posx>34</posx>
+                <posy>0</posy>
+                <width>30</width>
+                <height>20</height>
+                <texturefocus>button_active.png</texturefocus>
+                <texturenofocus>button.png</texturenofocus>
+                <align>center</align>
+                <aligny>center</aligny>
+                <onleft>3004</onleft>
+                <onright>3006</onright>
+                <onup>3003</onup>
+                <ondown>3000</ondown>
+                <font>font12</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <label>←</label>
+            </control>
+            <control type="button" id="3006">
+                <description>Jump Shot Button</description>
+                <posx>68</posx>
+                <posy>0</posy>
+                <width>30</width>
+                <height>20</height>
+                <texturefocus>button_active.png</texturefocus>
+                <texturenofocus>button.png</texturenofocus>
+                <align>center</align>
+                <aligny>center</aligny>
+                <onleft>3005</onleft>
+                <onright>3007</onright>
+                <onup>3003</onup>
+                <ondown>3000</ondown>
+                <font>font12</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <label>↪</label>
+            </control>
+            <control type="button" id="3007">
+                <description>Next Shot Button</description>
+                <posx>102</posx>
+                <posy>0</posy>
+                <width>30</width>
+                <height>20</height>
+                <texturefocus>button_active.png</texturefocus>
+                <texturenofocus>button.png</texturenofocus>
+                <align>center</align>
+                <aligny>center</aligny>
+                <onleft>3006</onleft>
+                <onright>3008</onright>
+                <onup>3003</onup>
+                <ondown>3000</ondown>
+                <font>font12</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <label>→</label>
+            </control>
+            <control type="button" id="3008">
+                <description>Last Shot Button</description>
+                <posx>136</posx>
+                <posy>0</posy>
+                <width>30</width>
+                <height>20</height>
+                <texturefocus>button_active.png</texturefocus>
+                <texturenofocus>button.png</texturenofocus>
+                <align>center</align>
+                <aligny>center</aligny>
+                <onleft>3007</onleft>
+                <onright>3004</onright>
+                <onup>3003</onup>
+                <ondown>3000</ondown>
+                <font>font12</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <label>↠</label>
+            </control>
         </control>
 <!--
     can be used for visualizing property values during testing:
