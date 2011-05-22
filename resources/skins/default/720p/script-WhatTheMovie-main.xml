@@ -398,7 +398,6 @@
                 <height>400</height>
                 <fadetime>500</fadetime>
                 <texture>$INFO[Window(10000).Property(wtm.main_image)]</texture>
-                <animation effect="zoom" end="177,177" center="auto" time="500" tween="circle" easing="inout" condition="Control.HasFocus(3003)">Conditional</animation>
                 <aspectratio>keep</aspectratio>
             </control>
             <control type="image" id="1006">
@@ -455,6 +454,30 @@
                 <visible>StringCompare(Window(10000).Property(wtm.busy),loading)</visible>
                 <animation effect="fade" time="200">VisibleChange</animation>
             </control>
+        </control>
+        <control type="image">
+            <description>Black Background which is shown when the Picture to guess is zoomed</description>
+            <posx>0</posx>
+            <posy>0</posy>
+            <width>1280</width>
+            <height>720</height>
+            <fadetime>500</fadetime>
+            <texture>black.png</texture>
+            <animation effect="fade" time="500">VisibleChange</animation>
+            <visible>Control.HasFocus(3003)</visible>
+        </control>        
+        <control type="image">
+            <description>The Picture to guess for zooming</description>
+            <posx>280</posx>
+            <posy>160</posy>
+            <width>720</width>
+            <height>400</height>
+            <fadetime>500</fadetime>
+            <texture>$INFO[Window(10000).Property(wtm.main_image)]</texture>
+            <animation effect="zoom" end="177,177" center="auto" time="500" tween="circle" easing="inout" condition="Control.HasFocus(3003)">Conditional</animation>
+            <aspectratio>keep</aspectratio>
+            <animation effect="fade" time="5" delay="500">Hidden</animation>
+            <visible>Control.HasFocus(3003)</visible>
         </control>
     </controls>
 </window>
