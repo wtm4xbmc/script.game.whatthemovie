@@ -217,6 +217,61 @@
             <shadowcolor>FF000000</shadowcolor>
             <visible>true</visible>
         </control>
+        <control type="label" id="1012">
+            <description>Shot type label</description>
+            <posx>540</posx>
+            <posy>60</posy>
+            <width>200</width>
+            <align>center</align>
+            <font>font12</font>
+            <textcolor>FF777777</textcolor>
+            <visible>true</visible>
+        </control>
+        <!--
+            can be used for visualizing property values during testing:
+            <control type="label" id="1014">
+                <description>solved status</description>
+                <posx>740</posx>
+                <posy>60</posy>
+                <width>200</width>
+                <label>$INFO[Window(10000).Property(wtm.solved_status)]</label>
+                <align>center</align>
+                <font>font12</font>
+                <textcolor>FF777777</textcolor>
+                <visible>true</visible>
+            </control>
+        -->
+        <control type="group">
+            <description>Group for the rating stars images</description>
+            <posx>502</posx>
+            <posy>580</posy>
+            <width>276</width>
+            <height>26</height>
+            <control type="image">
+                <description>Inactive stars background</description>
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>276</width>
+                <height>26</height>
+                <texture>grey.png</texture>
+            </control>
+            <control type="image" id="1015">
+                <description>Active stars background</description>
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>3</width>
+                <height>26</height>
+                <texture>white.png</texture>
+            </control>
+            <control type="image">
+                <description>Rating stars mask</description>
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>276</width>
+                <height>26</height>
+                <texture>rating_stars_mask.png</texture>
+            </control>
+        </control>
         <control type="label" id="1014">
             <description>Rating Label - can be replaced by a better solution</description>
             <posx>1260</posx>
@@ -228,30 +283,6 @@
             <shadowcolor>FF000000</shadowcolor>
             <visible>true</visible>
         </control>
-        <control type="label" id="1012">
-            <description>Shot type label</description>
-            <posx>540</posx>
-            <posy>60</posy>
-            <width>200</width>
-            <align>center</align>
-            <font>font12</font>
-            <textcolor>FF777777</textcolor>
-            <visible>true</visible>
-        </control>
-<!--
-    can be used for visualizing property values during testing:
-        <control type="label" id="1014">
-            <description>solved status</description>
-            <posx>740</posx>
-            <posy>60</posy>
-            <width>200</width>
-            <label>$INFO[Window(10000).Property(wtm.solved_status)]</label>
-            <align>center</align>
-            <font>font12</font>
-            <textcolor>FF777777</textcolor>
-            <visible>true</visible>
-        </control>
--->
         <control type="group">
             <description>Input language flag group</description>
             <posx>540</posx>
@@ -431,7 +462,7 @@
             <texture>black.png</texture>
             <animation effect="fade" time="500">VisibleChange</animation>
             <visible>Control.HasFocus(3003)</visible>
-        </control>        
+        </control>
         <control type="image">
             <description>The Picture to guess for zooming</description>
             <posx>280</posx>

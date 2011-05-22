@@ -1,5 +1,6 @@
 import sys
 import os
+import math
 import datetime
 import traceback
 import xbmcgui
@@ -9,6 +10,10 @@ import whatthemovie
 
 class GUI(xbmcgui.WindowXMLDialog):
     # Constants
+    RATING_STAR_WIDTH = 18
+    RATING_STAR_DISTANCE = 10
+    RATING_STAR_POSX = 3
+
     # CONTROL_IDs
     CID_BUTTON_GUESS = 3000
     CID_BUTTON_RANDOM = 3001
@@ -21,6 +26,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_IMAGE_GIF = 1002
     CID_IMAGE_SOLUTION = 1006
     CID_IMAGE_MAIN = 1000
+    CID_IMAGE_STARS = 1015
     CID_LABEL_LOGINSTATE = 1001
     CID_LABEL_SCORE = 1003
     CID_LABEL_POSTED_BY = 1004
@@ -104,6 +110,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.image_main = self.getControl(self.CID_IMAGE_MAIN)
         self.image_gif = self.getControl(self.CID_IMAGE_GIF)
         self.image_solution = self.getControl(self.CID_IMAGE_SOLUTION)
+        self.image_stars = self.getControl(self.CID_IMAGE_STARS)
         self.list_flags = self.getControl(self.CID_LIST_FLAGS)
 
         # set control visibility depending on xbmc-addon settings
@@ -244,6 +251,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     def _showShotRating(self, rating):
         if rating['overall_rating'] != u'hidden':
             overall_rating = rating['overall_rating']
+            self._setRatingStarsImageWidth(float(overall_rating))
         else:
             overall_rating = self.getString(self.SID_RATING_HIDDEN)
         if rating['own_rating'] is not None:
@@ -256,6 +264,13 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_rating.setLabel(rating_string % (overall_rating,
                                                     votes,
                                                     own_rating))
+
+    def _setRatingStarsImageWidth(self, rating):
+        rating_intervals = math.floor(rating)
+        rating_stars_width = (self.RATING_STAR_WIDTH * rating)
+        rating_gaps_width = (self.RATING_STAR_DISTANCE * rating_intervals)
+        rating_width = self.RATING_STAR_POSX + rating_stars_width + rating_gaps_width
+        self.image_stars.setWidth(int(math.floor(rating_width + 0.5)))
 
     def _showShotFlags(self, language_list):
         visible_flags = list()
