@@ -62,7 +62,7 @@ class WhatTheMovie:
                 pass
         if is_login:
             if options and len(options) > 0:
-                    self.setOptions(options)
+                self.setOptions(options)
         return is_login
 
     def setOptions(self, options_dict):

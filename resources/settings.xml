@@ -14,7 +14,7 @@
         <setting id="include_solved" type="bool" label="3211" enable="eq(-6,true)" default="false" />
         <!-- Navi Options --->
         <setting type="lsep" label="3229" />
-        <setting id="only_unsolved_nav" type="bool" label="3230" default="true" />
+        <setting id="only_unsolved_nav" type="bool" label="3230" enable="eq(-8,true)"default="true" />
     </category>
     <!-- Look/Feel --->
     <category label="3212">

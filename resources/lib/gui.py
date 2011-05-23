@@ -158,14 +158,19 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.getShot('last')
         elif controlId == self.CID_BUTTON_FIRST:
             self.getShot('first')
-        elif controlId == self.CID_BUTTON_PREV:
-            self.getShot('prev')
-        elif controlId == self.CID_BUTTON_NEXT:
-            self.getShot('next')
         elif controlId == self.CID_BUTTON_LAST:
             self.getShot('last')
         elif controlId == self.CID_BUTTON_JUMP:
             self.askShotID()
+        elif controlId in (self.CID_BUTTON_PREV, self.CID_BUTTON_NEXT):
+            if self.getSetting('only_unsolved_nav') == 'true':
+                unsolved_toggle = '_unsolved'
+            else:
+                unsolved_toggle = ''
+            if controlId == self.CID_BUTTON_PREV:
+                self.getShot('prev' + unsolved_toggle)
+            elif controlId == self.CID_BUTTON_NEXT:
+                self.getShot('next' + unsolved_toggle)
 
     def closeDialog(self):
         self.setWTMProperty('main_image', '')
