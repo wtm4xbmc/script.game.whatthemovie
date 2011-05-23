@@ -202,21 +202,25 @@ class WhatTheMovie:
         if shot_type == 2 and already_solved == False:
             gives_point = True
         # bookmarked
-        bookmarked = False
-        bookmark_link = tree.find('li', attrs={'id': 'watchbutton'}).a
-        try:
-            if bookmark_link['class'] == 'active':
-                bookmarked = True
-        except KeyError:
-            pass
+        if tree.find('li', attrs={'id': 'watchbutton'}):
+            bookmark_link = tree.find('li', attrs={'id': 'watchbutton'}).a
+            try:
+                if bookmark_link['class'] == 'active':
+                    bookmarked = True
+            except KeyError:
+                bookmarked = False
+        else:
+            bookmarked = None  # Not logged in
         # favourite
-        favourite = False
-        favourite_link = tree.find('li', attrs={'class': 'love'}).a
-        try:
-            if favourite_link['class'] == 'active':
-                favourite = True
-        except KeyError:
-            pass
+        if tree.find('li', attrs={'class': 'love'}):
+            favourite_link = tree.find('li', attrs={'class': 'love'}).a
+            try:
+                if favourite_link['class'] == 'active':
+                    favourite = True
+            except KeyError:
+                favourite = False
+        else:
+            favourite = None  # Not logged in
         # create return dict
         self.shot['shot_id'] = shot_id
         self.shot['image_url'] = image_url
