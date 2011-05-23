@@ -335,11 +335,15 @@ class GUI(xbmcgui.WindowXMLDialog):
         if gives_point == True:
             self.score += 1
             self._showUserScore(self.score)
-        # if user wants auto_random, do so
-        if self.getSetting('auto_random') == 'true':
-            time_to_sleep = int(self.getSetting('auto_random_sleep')) * 1000
+        # if user wants auto_jump, do so
+        if self.getSetting('auto_jump_enabled') == 'true':
+            time_to_sleep = int(self.getSetting('auto_jump_sleep')) * 1000
             xbmc.sleep(time_to_sleep)
-            self.getShot('random')
+            if self.getSetting('auto_jump_to') == '0':
+                jump_to = 'random'
+            elif self.getSetting('auto_jump_to') == '1':
+                jump_to = 'next'
+            self.getShot(jump_to)
 
     def answerWrong(self, guess):
         # enter wrong status

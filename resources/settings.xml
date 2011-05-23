@@ -28,8 +28,9 @@
         <setting id="visible_shot_rating" type="bool" label="3231" default="true" />
         <!-- Behaviour --->
         <setting label="3218" type="lsep" />
-        <setting id="auto_random" type="bool" label="3219" default="true" />
-        <setting id="auto_random_sleep" type="enum" label="3220" default="2" values="0|1|2|3|4|5" enable="eq(-1,true)" />
+        <setting id="auto_jump_enabled" type="bool" label="3219" default="true" />
+        <setting id="auto_jump_to" type="enum" label="3232" lvalues="3233|3234" enable="eq(-1,true)"  default="0"/>
+        <setting id="auto_jump_sleep" type="enum" label="3220" default="2" values="0|1|2|3|4|5" enable="eq(-2,true)" />
     </category>
     <!-- Flags --->
     <category label="3222">

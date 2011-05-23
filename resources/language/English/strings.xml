@@ -61,7 +61,7 @@ Misc     = 3300-3349
     <string id="3216">Show "Shot ID"</string>
     <string id="3217">Show "Shot Date"</string>
     <string id="3218">Behaviour</string>
-    <string id="3219">Auto jump to next after guess was right</string>
+    <string id="3219">Auto jump after guess was right</string>
     <string id="3220">...after x Seconds</string>
     <string id="3221">Show "Shot Flags"</string>
     <string id="3222">Flags</string>
@@ -74,6 +74,9 @@ Misc     = 3300-3349
     <string id="3229">Navigation Options (need Login)</string>
     <string id="3230">Only unsolved Shots</string>
     <string id="3231">Show "Shot Rating"</string>
+    <string id="3232">Jump to</string>
+    <string id="3233">Random</string>
+    <string id="3234">Next</string>
     <!-- Misc-->
     <string id="3300">%Y-%m-%d</string>
 </strings>
