@@ -23,78 +23,6 @@
             <posy>620</posy>
             <width>720</width>
             <height>36</height>
-            <control type="button" id="3008">
-                <description>Favorite Button</description>
-                <posx>176</posx>
-                <posy>54</posy>
-                <width>26</width>
-                <height>26</height>
-                <texturefocus>button_small_active.png</texturefocus>
-                <texturenofocus>button_small.png</texturenofocus>
-                <align>center</align>
-                <aligny>center</aligny>
-                <onleft>3001</onleft>
-                <onright>3004</onright>
-                <onup>3003</onup>
-                <ondown>3004</ondown>
-                <font>font10</font>
-                <focusedcolor>FFFFFFFF</focusedcolor>
-                <label>♥</label>
-            </control>
-            <control type="button" id="3009">
-                <description>Bookmark Button</description>
-                <posx>212</posx>
-                <posy>54</posy>
-                <width>26</width>
-                <height>26</height>
-                <texturefocus>button_small_active.png</texturefocus>
-                <texturenofocus>button_small.png</texturenofocus>
-                <align>center</align>
-                <aligny>center</aligny>
-                <onleft>3001</onleft>
-                <onright>3004</onright>
-                <onup>3003</onup>
-                <ondown>3004</ondown>
-                <font>font10</font>
-                <focusedcolor>FFFFFFFF</focusedcolor>
-                <label>⚑</label>
-            </control>
-            <control type="button" id="3010">
-                <description>Solution Button</description>
-                <posx>482</posx>
-                <posy>54</posy>
-                <width>26</width>
-                <height>26</height>
-                <texturefocus>button_smaller_sol_active.png</texturefocus>
-                <texturenofocus>button_smaller_sol.png</texturenofocus>
-                <align>center</align>
-                <aligny>center</aligny>
-                <onleft>3001</onleft>
-                <onright>3004</onright>
-                <onup>3003</onup>
-                <ondown>3004</ondown>
-                <font>font12</font>
-                <textcolor>FFFFFFFF</textcolor>
-                <label></label>
-            </control>
-            <control type="button" id="3011">
-                <description>Jump to Button</description>
-                <posx>518</posx>
-                <posy>54</posy>
-                <width>26</width>
-                <height>26</height>
-                <texturefocus>button_smaller_id_active.png</texturefocus>
-                <texturenofocus>button_smaller_id.png</texturenofocus>
-                <align>center</align>
-                <aligny>center</aligny>
-                <onleft>3001</onleft>
-                <onright>3004</onright>
-                <onup>3003</onup>
-                <ondown>3004</ondown>
-                <font>font12</font>
-                <textcolor>FFFFFFFF</textcolor>
-                <label></label>
-            </control>
             <control type="button" id="3002">
                 <description>Back Button</description>
                 <posx>0</posx>
@@ -126,7 +54,7 @@
                 <onleft>3002</onleft>
                 <onright>3005</onright>
                 <onup>3003</onup>
-                <ondown>3005</ondown>
+                <ondown>3008</ondown>
                 <font>font12</font>
                 <textcolor>FFFFFFFF</textcolor>
                 <label></label>
@@ -144,7 +72,7 @@
                 <onleft>3004</onleft>
                 <onright>3000</onright>
                 <onup>3003</onup>
-                <ondown>3000</ondown>
+                <ondown>3009</ondown>
                 <font>font12</font>
                 <textcolor>FFFFFFFF</textcolor>
                 <label></label>
@@ -180,7 +108,7 @@
                 <onleft>3000</onleft>
                 <onright>3007</onright>
                 <onup>3003</onup>
-                <ondown>3007</ondown>
+                <ondown>3010</ondown>
                 <font>font12</font>
                 <textcolor>FFFFFFFF</textcolor>
                 <label></label>
@@ -198,7 +126,7 @@
                 <onleft>3006</onleft>
                 <onright>3001</onright>
                 <onup>3003</onup>
-                <ondown>3001</ondown>
+                <ondown>3011</ondown>
                 <font>font12</font>
                 <textcolor>FFFFFFFF</textcolor>
                 <label></label>
@@ -220,6 +148,78 @@
                 <font>font12</font>
                 <textcolor>FFFFFFFF</textcolor>
                 <label>$LOCALIZE[SCRIPT3001]</label>
+            </control>
+            <control type="button" id="3008">
+                <description>Favorite Button</description>
+                <posx>176</posx>
+                <posy>54</posy>
+                <width>26</width>
+                <height>26</height>
+                <texturefocus>button_small_active.png</texturefocus>
+                <texturenofocus>button_small.png</texturenofocus>
+                <align>center</align>
+                <aligny>center</aligny>
+                <onleft>3011</onleft>
+                <onright>3009</onright>
+                <onup>3004</onup>
+                <ondown>3009</ondown>
+                <font>font10</font>
+                <focusedcolor>FFFFFFFF</focusedcolor>
+                <label>♥</label>
+            </control>
+            <control type="button" id="3009">
+                <description>Bookmark Button</description>
+                <posx>212</posx>
+                <posy>54</posy>
+                <width>26</width>
+                <height>26</height>
+                <texturefocus>button_small_active.png</texturefocus>
+                <texturenofocus>button_small.png</texturenofocus>
+                <align>center</align>
+                <aligny>center</aligny>
+                <onleft>3008</onleft>
+                <onright>3010</onright>
+                <onup>3005</onup>
+                <ondown>3010</ondown>
+                <font>font10</font>
+                <focusedcolor>FFFFFFFF</focusedcolor>
+                <label>⚑</label>
+            </control>
+            <control type="button" id="3010">
+                <description>Solution Button</description>
+                <posx>482</posx>
+                <posy>54</posy>
+                <width>26</width>
+                <height>26</height>
+                <texturefocus>button_smaller_sol_active.png</texturefocus>
+                <texturenofocus>button_smaller_sol.png</texturenofocus>
+                <align>center</align>
+                <aligny>center</aligny>
+                <onleft>3009</onleft>
+                <onright>3011</onright>
+                <onup>3006</onup>
+                <ondown>3011</ondown>
+                <font>font12</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <label></label>
+            </control>
+            <control type="button" id="3011">
+                <description>Jump to Button</description>
+                <posx>518</posx>
+                <posy>54</posy>
+                <width>26</width>
+                <height>26</height>
+                <texturefocus>button_smaller_id_active.png</texturefocus>
+                <texturenofocus>button_smaller_id.png</texturenofocus>
+                <align>center</align>
+                <aligny>center</aligny>
+                <onleft>3010</onleft>
+                <onright>3008</onright>
+                <onup>3007</onup>
+                <ondown>3008</ondown>
+                <font>font12</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <label></label>
             </control>
         </control>
         <control type="label" id="1001">
