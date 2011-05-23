@@ -123,7 +123,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         # try to login and get first random shot. If it fails exit
         try:
             self.login()
-            self.getRandomShot()
+            self.getShot('random')
         except Exception, error:
             self.errorMessage(self.getString(self.SID_ERROR_LOGIN),
                               str(error))
@@ -153,26 +153,23 @@ class GUI(xbmcgui.WindowXMLDialog):
         if controlId == self.CID_BUTTON_GUESS:
             self.guessTitle(self.shot['shot_id'])
         elif controlId == self.CID_BUTTON_RANDOM:
-            self.getRandomShot()
+            self.getShot('random')
         elif controlId == self.CID_BUTTON_BACK:
             self.getShot('last')
         elif controlId == self.CID_BUTTON_FIRST:
-            self.getShot(self.shot['nav']['first_id'])
+            self.getShot('first')
         elif controlId == self.CID_BUTTON_PREV:
-            self.getShot(self.shot['nav']['prev_id'])
+            self.getShot('prev')
+        elif controlId == self.CID_BUTTON_NEXT:
+            self.getShot('next')
+        elif controlId == self.CID_BUTTON_LAST:
+            self.getShot('last')
         elif controlId == self.CID_BUTTON_JUMP:
             self.askShotID()
-        elif controlId == self.CID_BUTTON_NEXT:
-            self.getShot(self.shot['nav']['next_id'])
-        elif controlId == self.CID_BUTTON_LAST:
-            self.getShot(self.shot['nav']['last_id'])
 
     def closeDialog(self):
         self.setWTMProperty('main_image', '')
         self.close()
-
-    def getRandomShot(self):
-        self.getShot()
 
     def getShot(self, shot_id=None):
         # set busy_gif
@@ -181,14 +178,8 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.setWTMProperty('solved_status', 'inactive')
         # scrape shot and download picture
         try:
-            if shot_id:
-                if shot_id.isdigit():
-                    shot = self.Quiz.getShot(shot_id)
-                elif shot_id == 'last':
-                    shot = self.Quiz.getLastShot()
-            else:
-                shot = self.Quiz.getRandomShot()
-            self.shot = shot
+            self.shot = self.Quiz.getShot(shot_id)
+            shot = self.shot
             image_path = self.downloadPic(shot['image_url'],
                                           shot['shot_id'])
         except Exception, error:
@@ -340,7 +331,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         if self.getSetting('auto_random') == 'true':
             time_to_sleep = int(self.getSetting('auto_random_sleep')) * 1000
             xbmc.sleep(time_to_sleep)
-            self.getRandomShot()
+            self.getShot('random')
 
     def answerWrong(self, guess):
         # enter wrong status

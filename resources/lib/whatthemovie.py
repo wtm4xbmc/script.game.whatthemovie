@@ -85,17 +85,18 @@ class WhatTheMovie:
         req.add_header('X-Requested-With', 'XMLHttpRequest')
         self.browser.open(req)
 
-    def getRandomShot(self):
-        return self.getShot('random')
-
-    def getLastShot(self):
-        if len(self.last_shots) > 0:
-            self.shot = self.last_shots.pop()
+    def getShot(self, shot_id):
+        if shot_id == 'last':
+            if len(self.last_shots) > 0:
+                self.shot = self.last_shots.pop()
+        else:
+            if self.shot:  # if there is already a shot - put it in list
+                self.last_shots.append(self.shot)
+            if shot_id.isdigit() or shot_id == 'random' or shot_id in self.shot['nav'].keys():
+                self.shot = self.scrapeShot(shot_id)
         return self.shot
 
-    def getShot(self, shot_id):
-        if self.shot:  # if there is already a shot - put it in list
-            self.last_shots.append(self.shot)
+    def scrapeShot(self, shot_id):
         self.shot = dict()
         shot_url = '%s/shot/%s' % (self.MAIN_URL, shot_id)
         self.browser.open(shot_url)
@@ -106,8 +107,8 @@ class WhatTheMovie:
         # prev/next
         nav = dict()
         section = tree.find('ul', attrs={'id': 'nav_shots'}).findAll('li')
-        nav_types = ((0, 'first_id'), (1, 'prev_id'), (2, 'prev_unsolved_id'),
-                     (4, 'next_unsolved_id'), (5, 'next_id'), (6, 'last_id'))
+        nav_types = ((0, 'first'), (1, 'prev'), (2, 'prev_unsolved'),
+                     (4, 'next_unsolved'), (5, 'next'), (6, 'last'))
         for i, nav_type in nav_types:
             if section[i].a:
                 nav[nav_type] = section[i].a['href'][6:]
