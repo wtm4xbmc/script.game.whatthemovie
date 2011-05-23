@@ -241,7 +241,7 @@
                 <visible>true</visible>
             </control>
         -->
-        <control type="group">
+        <control type="group" id="1016">
             <description>Group for the rating stars images</description>
             <posx>502</posx>
             <posy>580</posy>

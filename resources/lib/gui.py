@@ -37,6 +37,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_LABEL_SHOT_TYPE = 1012
     CID_LABEL_RATING = 1014
     CID_LIST_FLAGS = 1013
+    CID_GROUP_RATING = 1016
 
     # STRING_IDs
     #  Messages
@@ -112,6 +113,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.image_solution = self.getControl(self.CID_IMAGE_SOLUTION)
         self.image_stars = self.getControl(self.CID_IMAGE_STARS)
         self.list_flags = self.getControl(self.CID_LIST_FLAGS)
+        self.group_rating = self.getControl(self.CID_GROUP_RATING)
 
         # set control visibility depending on xbmc-addon settings
         self.hideLabels()
@@ -428,6 +430,9 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.label_shot_date.setVisible(False)
         if self.getSetting('visible_shot_flags') == 'false':
             self.list_flags.setVisible(False)
+        if self.getSetting('visible_shot_rating') == 'false':
+            self.label_rating.setVisible(False)
+            self.group_rating.setVisible(False)
 
     def errorMessage(self, heading, error):
         print 'ERROR: %s: %s ' % (heading, str(error))
