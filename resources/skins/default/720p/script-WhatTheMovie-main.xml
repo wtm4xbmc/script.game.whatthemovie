@@ -1,4 +1,4 @@
-﻿<window id="1000">
+<window id="1000">
     <defaultcontrol always="false">3000</defaultcontrol>
     <controls>
         <control type="image">
@@ -23,6 +23,78 @@
             <posy>620</posy>
             <width>720</width>
             <height>36</height>
+            <control type="button">
+                <description>Bookmark Button</description>
+                <posx>212</posx>
+                <posy>54</posy>
+                <width>26</width>
+                <height>26</height>
+                <texturefocus>button_smaller_book_active.png</texturefocus>
+                <texturenofocus>button_smaller_book.png</texturenofocus>
+                <align>center</align>
+                <aligny>center</aligny>
+                <onleft>3001</onleft>
+                <onright>3004</onright>
+                <onup>3003</onup>
+                <ondown>3004</ondown>
+                <font>font12</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <label></label>
+            </control>
+            <control type="button">
+                <description>Favorite Button</description>
+                <posx>176</posx>
+                <posy>54</posy>
+                <width>26</width>
+                <height>26</height>
+                <texturefocus>button_smaller_fav_active.png</texturefocus>
+                <texturenofocus>button_smaller_fav.png</texturenofocus>
+                <align>center</align>
+                <aligny>center</aligny>
+                <onleft>3001</onleft>
+                <onright>3004</onright>
+                <onup>3003</onup>
+                <ondown>3004</ondown>
+                <font>font12</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <label></label>
+            </control>
+            <control type="button">
+                <description>Solution Button</description>
+                <posx>482</posx>
+                <posy>54</posy>
+                <width>26</width>
+                <height>26</height>
+                <texturefocus>button_smaller_sol_active.png</texturefocus>
+                <texturenofocus>button_smaller_sol.png</texturenofocus>
+                <align>center</align>
+                <aligny>center</aligny>
+                <onleft>3001</onleft>
+                <onright>3004</onright>
+                <onup>3003</onup>
+                <ondown>3004</ondown>
+                <font>font12</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <label></label>
+            </control>
+            <control type="button">
+                <description>Jump to Button</description>
+                <posx>518</posx>
+                <posy>54</posy>
+                <width>26</width>
+                <height>26</height>
+                <texturefocus>button_smaller_id_active.png</texturefocus>
+                <texturenofocus>button_smaller_id.png</texturenofocus>
+                <align>center</align>
+                <aligny>center</aligny>
+                <onleft>3001</onleft>
+                <onright>3004</onright>
+                <onup>3003</onup>
+                <ondown>3004</ondown>
+                <font>font12</font>
+                <textcolor>FFFFFFFF</textcolor>
+                <label></label>
+            </control>
             <control type="button" id="3002">
                 <description>Back Button</description>
                 <posx>0</posx>
@@ -187,7 +259,7 @@
         <control type="label" id="1008">
             <description>Shot ID label</description>
             <posx>280</posx>
-            <posy>580</posy>
+            <posy>672</posy>
             <width>200</width>
             <align>left</align>
             <font>font12</font>
@@ -198,7 +270,7 @@
         <control type="label" id="1011">
             <description>Shot date label</description>
             <posx>1000</posx>
-            <posy>580</posy>
+            <posy>672</posy>
             <width>300</width>
             <align>right</align>
             <font>font12</font>
