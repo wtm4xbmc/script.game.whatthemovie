@@ -92,7 +92,9 @@ class WhatTheMovie:
         else:
             if self.shot:  # if there is already a shot - put it in list
                 self.last_shots.append(self.shot)
-            if shot_id.isdigit() or shot_id == 'random' or shot_id in self.shot['nav'].keys():
+            if (shot_id.isdigit() or
+                shot_id == 'random' or
+                shot_id in self.shot['nav'].keys()):
                 self.shot = self.scrapeShot(shot_id)
         return self.shot
 

@@ -220,9 +220,9 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def _showShotSolvedStatus(self, solved_status):
         if solved_status['status']:
-                self.label_solved.setLabel(self.getString(self.SID_SOLVED)
-                                           % (solved_status['count'],
-                                              solved_status['first_by']))
+            self.label_solved.setLabel(self.getString(self.SID_SOLVED)
+                                       % (solved_status['count'],
+                                          solved_status['first_by']))
         else:
             self.label_solved.setLabel(self.getString(self.SID_UNSOLVED))
 
@@ -260,7 +260,8 @@ class GUI(xbmcgui.WindowXMLDialog):
         rating_intervals = math.floor(rating)
         rating_stars_width = (self.RATING_STAR_WIDTH * rating)
         rating_gaps_width = (self.RATING_STAR_DISTANCE * rating_intervals)
-        rating_width = self.RATING_STAR_POSX + rating_stars_width + rating_gaps_width
+        rating_width = (self.RATING_STAR_POSX + rating_stars_width +
+                        rating_gaps_width)
         self.image_stars.setWidth(int(math.floor(rating_width + 0.5)))
 
     def _showShotFlags(self, language_list):
