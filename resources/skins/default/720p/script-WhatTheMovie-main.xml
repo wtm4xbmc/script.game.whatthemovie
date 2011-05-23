@@ -23,43 +23,43 @@
             <posy>620</posy>
             <width>720</width>
             <height>36</height>
-            <control type="button">
-                <description>Bookmark Button</description>
-                <posx>212</posx>
-                <posy>54</posy>
-                <width>26</width>
-                <height>26</height>
-                <texturefocus>button_smaller_book_active.png</texturefocus>
-                <texturenofocus>button_smaller_book.png</texturenofocus>
-                <align>center</align>
-                <aligny>center</aligny>
-                <onleft>3001</onleft>
-                <onright>3004</onright>
-                <onup>3003</onup>
-                <ondown>3004</ondown>
-                <font>font12</font>
-                <textcolor>FFFFFFFF</textcolor>
-                <label></label>
-            </control>
-            <control type="button">
+            <control type="button" id="3008">
                 <description>Favorite Button</description>
                 <posx>176</posx>
                 <posy>54</posy>
                 <width>26</width>
                 <height>26</height>
-                <texturefocus>button_smaller_fav_active.png</texturefocus>
-                <texturenofocus>button_smaller_fav.png</texturenofocus>
+                <texturefocus>button_small_active.png</texturefocus>
+                <texturenofocus>button_small.png</texturenofocus>
                 <align>center</align>
                 <aligny>center</aligny>
                 <onleft>3001</onleft>
                 <onright>3004</onright>
                 <onup>3003</onup>
                 <ondown>3004</ondown>
-                <font>font12</font>
-                <textcolor>FFFFFFFF</textcolor>
-                <label></label>
+                <font>font10</font>
+                <focusedcolor>FFFFFFFF</focusedcolor>
+                <label>♥</label>
             </control>
-            <control type="button">
+            <control type="button" id="3009">
+                <description>Bookmark Button</description>
+                <posx>212</posx>
+                <posy>54</posy>
+                <width>26</width>
+                <height>26</height>
+                <texturefocus>button_small_active.png</texturefocus>
+                <texturenofocus>button_small.png</texturenofocus>
+                <align>center</align>
+                <aligny>center</aligny>
+                <onleft>3001</onleft>
+                <onright>3004</onright>
+                <onup>3003</onup>
+                <ondown>3004</ondown>
+                <font>font10</font>
+                <focusedcolor>FFFFFFFF</focusedcolor>
+                <label>⚑</label>
+            </control>
+            <control type="button" id="3010">
                 <description>Solution Button</description>
                 <posx>482</posx>
                 <posy>54</posy>
@@ -77,7 +77,7 @@
                 <textcolor>FFFFFFFF</textcolor>
                 <label></label>
             </control>
-            <control type="button">
+            <control type="button" id="3011">
                 <description>Jump to Button</description>
                 <posx>518</posx>
                 <posy>54</posy>

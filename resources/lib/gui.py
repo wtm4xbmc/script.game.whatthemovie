@@ -1,4 +1,4 @@
-import sys
+﻿import sys
 import os
 import math
 import datetime
@@ -20,9 +20,12 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_BUTTON_BACK = 3002
     CID_BUTTON_FIRST = 3004
     CID_BUTTON_PREV = 3005
-    CID_BUTTON_JUMP = 3008
     CID_BUTTON_NEXT = 3006
     CID_BUTTON_LAST = 3007
+    CID_BUTTON_FAV = 3008
+    CID_BUTTON_BOOKMARK = 3009
+    CID_BUTTON_SOLUTION = 3010
+    CID_BUTTON_JUMP = 3011
     CID_IMAGE_GIF = 1002
     CID_IMAGE_SOLUTION = 1006
     CID_IMAGE_MAIN = 1000
@@ -162,6 +165,12 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.getShot('first')
         elif controlId == self.CID_BUTTON_LAST:
             self.getShot('last')
+        elif controlId == self.CID_BUTTON_FAV:
+            self.favouriteShot(self.shot['shot_id'])
+        elif controlId == self.CID_BUTTON_BOOKMARK:
+            self.bookmarkShot(self.shot['shot_id'])
+        elif controlId == self.CID_BUTTON_SOLUTION:
+            pass  # fixme
         elif controlId == self.CID_BUTTON_JUMP:
             self.askShotID()
         elif controlId in (self.CID_BUTTON_PREV, self.CID_BUTTON_NEXT):
@@ -203,6 +212,8 @@ class GUI(xbmcgui.WindowXMLDialog):
         language_list = shot['lang_list']['main'] + shot['lang_list']['hidden']
         self._showShotFlags(language_list)
         self._showShotRating(shot['voting'])
+        self._showShotButtonState('favourite', shot['favourite'])
+        self._showShotButtonState('bookmarked', shot['bookmarked'])
         # unset busy_gif
         self.setWTMProperty('busy', '')
 
@@ -286,15 +297,63 @@ class GUI(xbmcgui.WindowXMLDialog):
     def _showShotImage(self, image_path):
         self.setWTMProperty('main_image', image_path)
 
+    def _showShotButtonState(self, prop, state):
+        if prop == 'favourite':
+            element = self.getControl(self.CID_BUTTON_FAV)
+        elif prop == 'bookmarked':
+            element = self.getControl(self.CID_BUTTON_BOOKMARK)
+        label = element.getLabel()
+        if state is None:
+            element.setEnabled(False)
+            element.setLabel(label=label, textColor='0x33FFFFFF')
+        elif state == False:
+            element.setEnabled(True)
+            element.setLabel(label=label, textColor='0x77FFFFFF')
+        elif state == True:
+            element.setEnabled(True)
+            element.setLabel(label=label, textColor='0x7700FF00')
+
     def _showUserScore(self, score):
         score_string = self.getString(self.SID_YOUR_SCORE) % str(score)
         self.label_score.setLabel(score_string)
 
     def rateShot(self, shot_id, own_rating):
-        self.Quiz.rateShot(shot_id, own_rating)
-        rating = self.shot['voting']
-        rating['own_rating'] = own_rating
-        self._showShotRating(rating)
+        try:
+            self.Quiz.rateShot(shot_id, own_rating) # fixme needs error msg
+            rating = self.shot['voting']
+            rating['own_rating'] = own_rating
+            self._showShotRating(rating)
+        except Exception, error:
+            self.errorMessage(self.getString(self.SID_ERROR_SHOT),
+                              str(error))
+
+    def favouriteShot(self, shot_id):
+        state = self.shot['favourite']
+        if state == True:
+            newstate = False
+        else:
+            newstate = True
+        try:
+            self.Quiz.favouriteShot(shot_id, newstate)
+            self.shot['favourite'] = newstate
+            self._showShotButtonState('favourite', newstate)
+        except Exception, error:
+            self.errorMessage(self.getString(self.SID_ERROR_SHOT),
+                              str(error))
+
+    def bookmarkShot(self, shot_id):
+        state = self.shot['bookmarked']
+        if state == True:
+            newstate = False
+        else:
+            newstate = True
+        try:
+            self.Quiz.bookmarkShot(shot_id, newstate)
+            self.shot['bookmarked'] = newstate
+            self._showShotButtonState('bookmarked', newstate)
+        except Exception, error:
+            self.errorMessage(self.getString(self.SID_ERROR_SHOT),
+                              str(error))
 
     def guessTitle(self, shot_id):
         # clear solved_status
