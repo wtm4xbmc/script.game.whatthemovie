@@ -71,6 +71,8 @@ Misc     = 3300-3349
     <string id="3226">Flag 4</string>
     <string id="3227">Flag 5</string>
     <string id="3228">Choose the Flags you want to see</string>
+    <string id="3229">Navigation Options</string>
+    <string id="3230">Only unsolved Shots</string>
     <!-- Misc-->
     <string id="3300">%Y-%m-%d</string>
 </strings>
