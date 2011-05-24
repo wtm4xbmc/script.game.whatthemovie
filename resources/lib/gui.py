@@ -305,13 +305,13 @@ class GUI(xbmcgui.WindowXMLDialog):
         label = element.getLabel()
         if state is None:
             element.setEnabled(False)
-            element.setLabel(label=label, textColor='0x33FFFFFF')
+            element.setLabel(label=label, textColor='FF333333')
         elif state == False:
             element.setEnabled(True)
-            element.setLabel(label=label, textColor='0x77FFFFFF')
+            element.setLabel(label=label, textColor='FF777777')
         elif state == True:
             element.setEnabled(True)
-            element.setLabel(label=label, textColor='0x7700FF00')
+            element.setLabel(label=label, textColor='FF007700')
 
     def _showUserScore(self, score):
         score_string = self.getString(self.SID_YOUR_SCORE) % str(score)
