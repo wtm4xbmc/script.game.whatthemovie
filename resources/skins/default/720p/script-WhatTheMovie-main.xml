@@ -168,6 +168,7 @@
                 <ondown>3009</ondown>
                 <font>font10</font>
                 <focusedcolor>FFFFFFFF</focusedcolor>
+                <textcolor>FF777777</textcolor>
                 <label>♥</label>
             </control>
             <control type="button" id="3009">
@@ -186,6 +187,7 @@
                 <ondown>3010</ondown>
                 <font>font10</font>
                 <focusedcolor>FFFFFFFF</focusedcolor>
+                <textcolor>FF777777</textcolor>
                 <label>⚑</label>
             </control>
             <control type="button" id="3010">
