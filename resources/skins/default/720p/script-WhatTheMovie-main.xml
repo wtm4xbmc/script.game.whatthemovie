@@ -38,7 +38,8 @@
                 <onup>3003</onup>
                 <ondown>3004</ondown>
                 <font>font12</font>
-                <textcolor>FFFFFFFF</textcolor>
+                <focusedcolor>FFFFFFFF</focusedcolor>
+                <textcolor>FF777777</textcolor>
                 <label>$LOCALIZE[SCRIPT3002]</label>
             </control>
             <control type="button" id="3004">
@@ -92,7 +93,8 @@
                 <onup>3003</onup>
                 <ondown>3006</ondown>
                 <font>font12</font>
-                <textcolor>FFFFFFFF</textcolor>
+                <focusedcolor>FFFFFFFF</focusedcolor>
+                <textcolor>FF777777</textcolor>
                 <label>$LOCALIZE[SCRIPT3000]</label>
             </control>
             <control type="button" id="3006">
@@ -146,7 +148,8 @@
                 <onup>3003</onup>
                 <ondown>3002</ondown>
                 <font>font12</font>
-                <textcolor>FFFFFFFF</textcolor>
+                <focusedcolor>FFFFFFFF</focusedcolor>
+                <textcolor>FF777777</textcolor>
                 <label>$LOCALIZE[SCRIPT3001]</label>
             </control>
             <control type="button" id="3008">
