@@ -152,14 +152,20 @@
                 <textcolor>FF777777</textcolor>
                 <label>$LOCALIZE[SCRIPT3001]</label>
             </control>
-            <control type="button" id="3008">
+            <control type="radiobutton" id="3008">
                 <description>Favorite Button</description>
                 <posx>176</posx>
                 <posy>54</posy>
                 <width>26</width>
                 <height>26</height>
-                <texturefocus>button_small_active.png</texturefocus>
-                <texturenofocus>button_small.png</texturenofocus>
+                <texturenofocus>button_smaller.png</texturenofocus>
+                <texturefocus>button_smaller_active.png</texturefocus>
+                <textureradiooff>fav.png</textureradiooff>
+                <textureradioon>fav_active.png</textureradioon>
+                <radioposx>7</radioposx>
+                <radioposy>7</radioposy>
+                <radiowidth>12</radiowidth>
+                <radioheight>11</radioheight>
                 <align>center</align>
                 <aligny>center</aligny>
                 <onleft>3011</onleft>
@@ -167,18 +173,22 @@
                 <onup>3004</onup>
                 <ondown>3009</ondown>
                 <font>font10</font>
-                <focusedcolor>FFFFFFFF</focusedcolor>
-                <textcolor>FF777777</textcolor>
-                <label>♥</label>
+                <label></label>
             </control>
-            <control type="button" id="3009">
+            <control type="radiobutton" id="3009">
                 <description>Bookmark Button</description>
                 <posx>212</posx>
                 <posy>54</posy>
                 <width>26</width>
                 <height>26</height>
-                <texturefocus>button_small_active.png</texturefocus>
-                <texturenofocus>button_small.png</texturenofocus>
+                <texturenofocus>button_smaller.png</texturenofocus>
+                <texturefocus>button_smaller_active.png</texturefocus>                
+                <textureradiooff>book.png</textureradiooff>
+                <textureradioon>book_active.png</textureradioon>
+                <radioposx>7</radioposx>
+                <radioposy>7</radioposy>
+                <radiowidth>12</radiowidth>
+                <radioheight>12</radioheight>
                 <align>center</align>
                 <aligny>center</aligny>
                 <onleft>3008</onleft>
@@ -186,9 +196,7 @@
                 <onup>3005</onup>
                 <ondown>3010</ondown>
                 <font>font10</font>
-                <focusedcolor>FFFFFFFF</focusedcolor>
-                <textcolor>FF777777</textcolor>
-                <label>⚑</label>
+                <label></label>
             </control>
             <control type="button" id="3010">
                 <description>Solution Button</description>

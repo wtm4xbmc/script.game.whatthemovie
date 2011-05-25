@@ -302,16 +302,15 @@ class GUI(xbmcgui.WindowXMLDialog):
             element = self.getControl(self.CID_BUTTON_FAV)
         elif prop == 'bookmarked':
             element = self.getControl(self.CID_BUTTON_BOOKMARK)
-        label = element.getLabel()
         if state is None:
             element.setEnabled(False)
-            element.setLabel(label=label, textColor='FF333333')
+            element.setSelected(False)
         elif state == False:
             element.setEnabled(True)
-            element.setLabel(label=label, textColor='FF777777')
+            element.setSelected(False)
         elif state == True:
             element.setEnabled(True)
-            element.setLabel(label=label, textColor='FF007700')
+            element.setSelected(True)
 
     def _showUserScore(self, score):
         score_string = self.getString(self.SID_YOUR_SCORE) % str(score)
