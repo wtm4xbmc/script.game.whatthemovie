@@ -223,6 +223,10 @@ class WhatTheMovie:
                 favourite = False
         else:
             favourite = None  # Not logged in
+        # Snapshot of the Day
+        sotd = False
+        if tree.find('div', attrs={'class': 'sotd_banner'}):
+            sotd = True
         # create return dict
         self.shot['shot_id'] = shot_id
         self.shot['image_url'] = image_url
@@ -238,6 +242,7 @@ class WhatTheMovie:
         self.shot['nav'] = nav
         self.shot['bookmarked'] = bookmarked
         self.shot['favourite'] = favourite
+        self.shot['sotd'] = sotd
         print self.shot
         return self.shot
 
