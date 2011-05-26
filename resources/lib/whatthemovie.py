@@ -84,7 +84,9 @@ class WhatTheMovie:
                        'application/x-www-form-urlencoded; charset=UTF-8')
         req.add_header('X-Requested-With', 'XMLHttpRequest')
         self.browser.open(req)
-        return self.browser.response().read()
+        response = self.browser.response().read()
+        response_c = response.replace('&amp;', '&').decode('unicode-escape')
+        return response_c
 
     def getShot(self, shot_id):
         if shot_id == 'last':
@@ -264,10 +266,8 @@ class WhatTheMovie:
         if not shot_id:
             shot_id = self.shot['shot_id']
         post_url = '%s/shot/%s/guess' % (self.MAIN_URL, shot_id)
-        post_data = urlencode({'guess': title_guess.encode('utf8')})
-        self.browser.open(post_url, post_data)
-        response = self.browser.response().read()
-        response_c = response.replace('&amp;', '&').decode('unicode-escape')
+        post_dict = {'guess': title_guess.encode('utf8')}
+        response_c = self._sendAjaxReq(post_url, post_dict)
         # ['right'|'wrong']
         if response_c[6:11] == 'right':
             answer['is_right'] = True
