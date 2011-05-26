@@ -209,8 +209,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self._showShotSolvedStatus(shot['solved'])
         self._showShotID(shot['shot_id'])
         self._showShotDate(shot['date'])
-        language_list = shot['lang_list']['main'] + shot['lang_list']['hidden']
-        self._showShotFlags(language_list)
+        self._showShotFlags(shot['lang_list']['all'])
         self._showShotRating(shot['voting'])
         self._showShotButtonState('favourite', shot['favourite'])
         self._showShotButtonState('bookmarked', shot['bookmarked'])

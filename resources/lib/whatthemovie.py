@@ -135,6 +135,7 @@ class WhatTheMovie:
         for lang in langs_hidden:
             if lang.img:
                 lang_list['hidden'].append(lang.img['src'][-6:-4])
+        lang_list['all'] = lang_list['main'] + lang_list['hidden']
         # date
         date = None
         date_info = tree.find('ul',
