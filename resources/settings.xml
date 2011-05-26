@@ -26,6 +26,7 @@
         <setting id="visible_shot_date" type="bool" label="3217" default="true" />
         <setting id="visible_shot_flags" type="bool" label="3221" default="true" />
         <setting id="visible_shot_rating" type="bool" label="3231" default="true" />
+        <setting id="visible_tool_buttons" type="bool" label="3235" default="true" />
         <!-- Behaviour --->
         <setting label="3218" type="lsep" />
         <setting id="auto_jump_enabled" type="bool" label="3219" default="true" />

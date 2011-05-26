@@ -495,6 +495,11 @@ class GUI(xbmcgui.WindowXMLDialog):
         if self.getSetting('visible_shot_rating') == 'false':
             self.label_rating.setVisible(False)
             self.group_rating.setVisible(False)
+        if self.getSetting('visible_tool_buttons') == 'false':
+            controls = (self.CID_BUTTON_FAV, self.CID_BUTTON_BOOKMARK, 
+                        self.CID_BUTTON_SOLUTION, self.CID_BUTTON_JUMP)
+            for control in controls:
+                self.getControl(control).setVisible(False)
 
     def errorMessage(self, heading, error):
         print 'ERROR: %s: %s ' % (heading, str(error))
