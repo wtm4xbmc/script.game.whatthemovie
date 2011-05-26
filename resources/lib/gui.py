@@ -86,8 +86,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     ADDON_ID = sys.modules['__main__'].__id__
     ADDON_VERSION = sys.modules['__main__'].__version__
 
-    def __init__(self, *args, **kwargs):
-        xbmcgui.WindowXMLDialog.__init__(self, *args, **kwargs)
+    def __init__(self, xmlFilename, scriptPath, defaultSkin, defaultRes):
         self.window_home = xbmcgui.Window(10000)
         self.setWTMProperty('solved_status', 'inactive')
         self.setWTMProperty('busy', 'loading')
