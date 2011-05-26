@@ -84,6 +84,7 @@ class WhatTheMovie:
                        'application/x-www-form-urlencoded; charset=UTF-8')
         req.add_header('X-Requested-With', 'XMLHttpRequest')
         self.browser.open(req)
+        return self.browser.response().read()
 
     def getShot(self, shot_id):
         if shot_id == 'last':
@@ -227,6 +228,13 @@ class WhatTheMovie:
         sotd = False
         if tree.find('div', attrs={'class': 'sotd_banner'}):
             sotd = True
+        # Solvable
+        solution_link = tree.find('li', attrs={'id': 'solutionbutton'}).a
+        try:
+            if solution_link['class'] == 'inactive':
+                solvable = False
+        except KeyError:
+            solvable = True
         # create return dict
         self.shot['shot_id'] = shot_id
         self.shot['image_url'] = image_url
@@ -243,6 +251,7 @@ class WhatTheMovie:
         self.shot['bookmarked'] = bookmarked
         self.shot['favourite'] = favourite
         self.shot['sotd'] = sotd
+        self.shot['solvable'] = solvable
         print self.shot
         return self.shot
 
@@ -289,6 +298,13 @@ class WhatTheMovie:
         else:
             url = '%s/shot/%s/unfav' % (self.MAIN_URL, shot_id)
         self._sendAjaxReq(url)
+
+    def solveShot(self, shot_id):
+        url = '%s/shot/%s/showsolution' % (self.MAIN_URL, shot_id)
+        ajax_answer = self._sendAjaxReq(url)
+        r = '<strong>(?P<solution>.+)\.\.\.</strong>'
+        solved_title = search(r, ajax_answer).group('solution')
+        return solved_title
 
     def getScore(self, username):
         score = 0

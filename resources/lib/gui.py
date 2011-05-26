@@ -170,7 +170,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         elif controlId == self.CID_BUTTON_BOOKMARK:
             self.bookmarkShot(self.shot['shot_id'])
         elif controlId == self.CID_BUTTON_SOLUTION:
-            pass  # fixme
+            self.solveShot(self.shot['shot_id'])
         elif controlId == self.CID_BUTTON_JUMP:
             self.askShotID()
         elif controlId in (self.CID_BUTTON_PREV, self.CID_BUTTON_NEXT):
@@ -214,6 +214,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self._showShotRating(shot['voting'])
         self._showShotButtonState('favourite', shot['favourite'])
         self._showShotButtonState('bookmarked', shot['bookmarked'])
+        self._showSolvableState(shot['solvable'])
         # unset busy_gif
         self.setWTMProperty('busy', '')
 
@@ -312,6 +313,15 @@ class GUI(xbmcgui.WindowXMLDialog):
             element.setEnabled(True)
             element.setSelected(True)
 
+    def _showSolvableState(self, state):
+        element = self.getControl(self.CID_BUTTON_SOLUTION)
+        if state == True:
+            element.setEnabled(True)
+            element.setSelected(True)
+        else:
+            element.setEnabled(False)
+            element.setSelected(False)
+
     def _showUserScore(self, score):
         score_string = self.getString(self.SID_YOUR_SCORE) % str(score)
         self.label_score.setLabel(score_string)
@@ -350,6 +360,16 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.Quiz.bookmarkShot(shot_id, newstate)
             self.shot['bookmarked'] = newstate
             self._showShotButtonState('bookmarked', newstate)
+        except Exception, error:
+            self.errorMessage(self.getString(self.SID_ERROR_SHOT),
+                              str(error))
+
+    def solveShot(self, shot_id):
+        try:
+            solved_title = self.Quiz.solveShot(shot_id)
+            self.shot['already_solved'] = True
+            print solved_title
+            # fixme: show solved_title
         except Exception, error:
             self.errorMessage(self.getString(self.SID_ERROR_SHOT),
                               str(error))
