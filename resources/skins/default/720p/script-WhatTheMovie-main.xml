@@ -1,4 +1,4 @@
-<window id="1000">
+﻿<window id="1000">
     <defaultcontrol always="false">3000</defaultcontrol>
     <controls>
         <control type="image">
@@ -312,9 +312,8 @@
             <textcolor>FF777777</textcolor>
             <visible>true</visible>
         </control>
-        <!--
-            can be used for visualizing property values during testing:
-            <control type="label" id="1014">
+	<!-- can be used for visualizing property values during testing:
+            <control type="label">
                 <description>solved status</description>
                 <posx>740</posx>
                 <posy>60</posy>
@@ -325,7 +324,7 @@
                 <textcolor>FF777777</textcolor>
                 <visible>true</visible>
             </control>
-        -->
+	-->
         <control type="group" id="1016">
             <description>Group for the rating stars images</description>
             <posx>502</posx>

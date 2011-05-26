@@ -73,6 +73,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_RATING_HIDDEN = 3118
     SID_RATING_UNRATED = 3119
     SID_REJECTED_SHOT = 3120
+    SID_ALREADY_SOLVED = 3121
     #  Misc
     SID_DATE_FORMAT = 3300
 
@@ -206,6 +207,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self._showShotType(shot['shot_type'])
         self._showShotPostedBy(shot['posted_by'])
         self._showShotSolvedStatus(shot['solved'])
+        self._showShotAlreadSolved(shot['already_solved'])
         self._showShotID(shot['shot_id'])
         self._showShotDate(shot['date'])
         language_list = shot['lang_list']['main'] + shot['lang_list']['hidden']
@@ -242,6 +244,12 @@ class GUI(xbmcgui.WindowXMLDialog):
                                           solved_status['first_by']))
         else:
             self.label_solved.setLabel(self.getString(self.SID_UNSOLVED))
+
+    def _showShotAlreadSolved(self, alread_solved):
+        if alread_solved:
+            self.image_solution.setColorDiffuse('FFFFFFFF')
+            self.label_solution.setLabel(self.getString(self.SID_ALREADY_SOLVED))
+            self.setWTMProperty('solved_status', 'solved')
 
     def _showShotID(self, shot_id):
         self.label_shot_id.setLabel(self.getString(self.SID_SHOT_ID)
