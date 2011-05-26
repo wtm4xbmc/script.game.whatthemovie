@@ -328,9 +328,8 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def rateShot(self, shot_id, own_rating):
         try:
-            self.Quiz.rateShot(shot_id, own_rating) # fixme needs error msg
+            self.Quiz.rateShot(shot_id, own_rating)
             rating = self.shot['voting']
-            rating['own_rating'] = own_rating
             self._showShotRating(rating)
         except Exception, error:
             self.errorMessage(self.getString(self.SID_ERROR_SHOT),
@@ -344,7 +343,6 @@ class GUI(xbmcgui.WindowXMLDialog):
             newstate = True
         try:
             self.Quiz.favouriteShot(shot_id, newstate)
-            self.shot['favourite'] = newstate
             self._showShotButtonState('favourite', newstate)
         except Exception, error:
             self.errorMessage(self.getString(self.SID_ERROR_SHOT),
@@ -358,7 +356,6 @@ class GUI(xbmcgui.WindowXMLDialog):
             newstate = True
         try:
             self.Quiz.bookmarkShot(shot_id, newstate)
-            self.shot['bookmarked'] = newstate
             self._showShotButtonState('bookmarked', newstate)
         except Exception, error:
             self.errorMessage(self.getString(self.SID_ERROR_SHOT),
@@ -367,7 +364,6 @@ class GUI(xbmcgui.WindowXMLDialog):
     def solveShot(self, shot_id):
         try:
             solved_title = self.Quiz.solveShot(shot_id)
-            self.shot['already_solved'] = True
             print solved_title
             # fixme: show solved_title
         except Exception, error:

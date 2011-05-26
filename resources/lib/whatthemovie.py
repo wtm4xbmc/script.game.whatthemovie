@@ -285,25 +285,31 @@ class WhatTheMovie:
         if self.shot['shot_id'] == shot_id:
             self.shot['voting']['own_rating'] = str(user_rate)
 
-    def bookmarkShot(self, shot_id, state=True):
-        if state == True:
+    def bookmarkShot(self, shot_id, new_state):
+        if new_state == True:
             url = '%s/shot/%s/watch' % (self.MAIN_URL, shot_id)
         else:
             url = '%s/shot/%s/unwatch' % (self.MAIN_URL, shot_id)
         self._sendAjaxReq(url)
+        if self.shot['shot_id'] == shot_id:
+            self.shot['bookmarked'] = new_state
 
-    def favouriteShot(self, shot_id, state=True):
-        if state == True:
+    def favouriteShot(self, shot_id, new_state):
+        if new_state == True:
             url = '%s/shot/%s/fav' % (self.MAIN_URL, shot_id)
         else:
             url = '%s/shot/%s/unfav' % (self.MAIN_URL, shot_id)
         self._sendAjaxReq(url)
+        if self.shot['shot_id'] == shot_id:
+            self.shot['favourite'] = new_state
 
     def solveShot(self, shot_id):
         url = '%s/shot/%s/showsolution' % (self.MAIN_URL, shot_id)
         ajax_answer = self._sendAjaxReq(url)
         r = '<strong>(?P<solution>.+)\.\.\.</strong>'
         solved_title = search(r, ajax_answer).group('solution')
+        if self.shot['shot_id'] == shot_id:
+            self.shot['already_solved'] = True
         return solved_title
 
     def getScore(self, username):
