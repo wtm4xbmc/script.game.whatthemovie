@@ -443,6 +443,7 @@
                 <width>720</width>
                 <height>400</height>
                 <visible allowhiddenfocus="true">false</visible>
+                <onclick>Setfocus(3001)</onclick>
                 <onright>3001</onright>
                 <onleft>3002</onleft>
                 <onup>3000</onup>
