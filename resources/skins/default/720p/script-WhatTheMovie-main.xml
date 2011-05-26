@@ -198,22 +198,27 @@
                 <font>font10</font>
                 <label></label>
             </control>
-            <control type="button" id="3010">
+            <control type="radiobutton" id="3010">
                 <description>Solution Button</description>
                 <posx>482</posx>
                 <posy>54</posy>
                 <width>26</width>
                 <height>26</height>
-                <texturefocus>button_smaller_sol_active.png</texturefocus>
-                <texturenofocus>button_smaller_sol.png</texturenofocus>
+                <texturenofocus>button_smaller.png</texturenofocus>
+                <texturefocus>button_smaller_active.png</texturefocus>                
+                <textureradiooff>sol.png</textureradiooff>
+                <textureradioon>sol_active.png</textureradioon>
+                <radioposx>6</radioposx>
+                <radioposy>6</radioposy>
+                <radiowidth>15</radiowidth>
+                <radioheight>15</radioheight>
                 <align>center</align>
                 <aligny>center</aligny>
                 <onleft>3009</onleft>
                 <onright>3011</onright>
                 <onup>3006</onup>
                 <ondown>3011</ondown>
-                <font>font12</font>
-                <textcolor>FFFFFFFF</textcolor>
+                <font>font10</font>
                 <label></label>
             </control>
             <control type="button" id="3011">

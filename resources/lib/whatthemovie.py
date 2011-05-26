@@ -84,6 +84,9 @@ class WhatTheMovie:
                        'application/x-www-form-urlencoded; charset=UTF-8')
         req.add_header('X-Requested-With', 'XMLHttpRequest')
         self.browser.open(req)
+        response = self.browser.response().read()
+        response_c = response.replace('&amp;', '&').decode('unicode-escape')
+        return response_c
 
     def getShot(self, shot_id):
         if shot_id == 'last':
@@ -132,6 +135,7 @@ class WhatTheMovie:
         for lang in langs_hidden:
             if lang.img:
                 lang_list['hidden'].append(lang.img['src'][-6:-4])
+        lang_list['all'] = lang_list['main'] + lang_list['hidden']
         # date
         date = None
         date_info = tree.find('ul',
@@ -223,6 +227,17 @@ class WhatTheMovie:
                 favourite = False
         else:
             favourite = None  # Not logged in
+        # Snapshot of the Day
+        sotd = False
+        if tree.find('div', attrs={'class': 'sotd_banner'}):
+            sotd = True
+        # Solvable
+        solution_link = tree.find('li', attrs={'id': 'solutionbutton'}).a
+        try:
+            if solution_link['class'] == 'inactive':
+                solvable = False
+        except KeyError:
+            solvable = True
         # create return dict
         self.shot['shot_id'] = shot_id
         self.shot['image_url'] = image_url
@@ -238,6 +253,8 @@ class WhatTheMovie:
         self.shot['nav'] = nav
         self.shot['bookmarked'] = bookmarked
         self.shot['favourite'] = favourite
+        self.shot['sotd'] = sotd
+        self.shot['solvable'] = solvable
         print self.shot
         return self.shot
 
@@ -250,10 +267,8 @@ class WhatTheMovie:
         if not shot_id:
             shot_id = self.shot['shot_id']
         post_url = '%s/shot/%s/guess' % (self.MAIN_URL, shot_id)
-        post_data = urlencode({'guess': title_guess.encode('utf8')})
-        self.browser.open(post_url, post_data)
-        response = self.browser.response().read()
-        response_c = response.replace('&amp;', '&').decode('unicode-escape')
+        post_dict = {'guess': title_guess.encode('utf8')}
+        response_c = self._sendAjaxReq(post_url, post_dict)
         # ['right'|'wrong']
         if response_c[6:11] == 'right':
             answer['is_right'] = True
@@ -271,19 +286,32 @@ class WhatTheMovie:
         if self.shot['shot_id'] == shot_id:
             self.shot['voting']['own_rating'] = str(user_rate)
 
-    def bookmarkShot(self, shot_id, state=True):
-        if state == True:
+    def bookmarkShot(self, shot_id, new_state):
+        if new_state == True:
             url = '%s/shot/%s/watch' % (self.MAIN_URL, shot_id)
         else:
             url = '%s/shot/%s/unwatch' % (self.MAIN_URL, shot_id)
         self._sendAjaxReq(url)
+        if self.shot['shot_id'] == shot_id:
+            self.shot['bookmarked'] = new_state
 
-    def favouriteShot(self, shot_id, state=True):
-        if state == True:
+    def favouriteShot(self, shot_id, new_state):
+        if new_state == True:
             url = '%s/shot/%s/fav' % (self.MAIN_URL, shot_id)
         else:
             url = '%s/shot/%s/unfav' % (self.MAIN_URL, shot_id)
         self._sendAjaxReq(url)
+        if self.shot['shot_id'] == shot_id:
+            self.shot['favourite'] = new_state
+
+    def solveShot(self, shot_id):
+        url = '%s/shot/%s/showsolution' % (self.MAIN_URL, shot_id)
+        ajax_answer = self._sendAjaxReq(url)
+        r = '<strong>(?P<solution>.+)\.\.\.</strong>'
+        solved_title = search(r, ajax_answer).group('solution')
+        if self.shot['shot_id'] == shot_id:
+            self.shot['already_solved'] = True
+        return solved_title
 
     def getScore(self, username):
         score = 0

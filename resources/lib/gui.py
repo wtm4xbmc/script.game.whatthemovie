@@ -170,7 +170,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         elif controlId == self.CID_BUTTON_BOOKMARK:
             self.bookmarkShot(self.shot['shot_id'])
         elif controlId == self.CID_BUTTON_SOLUTION:
-            pass  # fixme
+            self.solveShot(self.shot['shot_id'])
         elif controlId == self.CID_BUTTON_JUMP:
             self.askShotID()
         elif controlId in (self.CID_BUTTON_PREV, self.CID_BUTTON_NEXT):
@@ -210,11 +210,11 @@ class GUI(xbmcgui.WindowXMLDialog):
         self._showShotAlreadSolved(shot['already_solved'])
         self._showShotID(shot['shot_id'])
         self._showShotDate(shot['date'])
-        language_list = shot['lang_list']['main'] + shot['lang_list']['hidden']
-        self._showShotFlags(language_list)
+        self._showShotFlags(shot['lang_list']['all'])
         self._showShotRating(shot['voting'])
         self._showShotButtonState('favourite', shot['favourite'])
         self._showShotButtonState('bookmarked', shot['bookmarked'])
+        self._showSolvableState(shot['solvable'])
         # unset busy_gif
         self.setWTMProperty('busy', '')
 
@@ -319,15 +319,23 @@ class GUI(xbmcgui.WindowXMLDialog):
             element.setEnabled(True)
             element.setSelected(True)
 
+    def _showSolvableState(self, state):
+        element = self.getControl(self.CID_BUTTON_SOLUTION)
+        if state == True:
+            element.setEnabled(True)
+            element.setSelected(True)
+        else:
+            element.setEnabled(False)
+            element.setSelected(False)
+
     def _showUserScore(self, score):
         score_string = self.getString(self.SID_YOUR_SCORE) % str(score)
         self.label_score.setLabel(score_string)
 
     def rateShot(self, shot_id, own_rating):
         try:
-            self.Quiz.rateShot(shot_id, own_rating) # fixme needs error msg
+            self.Quiz.rateShot(shot_id, own_rating)
             rating = self.shot['voting']
-            rating['own_rating'] = own_rating
             self._showShotRating(rating)
         except Exception, error:
             self.errorMessage(self.getString(self.SID_ERROR_SHOT),
@@ -341,7 +349,6 @@ class GUI(xbmcgui.WindowXMLDialog):
             newstate = True
         try:
             self.Quiz.favouriteShot(shot_id, newstate)
-            self.shot['favourite'] = newstate
             self._showShotButtonState('favourite', newstate)
         except Exception, error:
             self.errorMessage(self.getString(self.SID_ERROR_SHOT),
@@ -355,8 +362,16 @@ class GUI(xbmcgui.WindowXMLDialog):
             newstate = True
         try:
             self.Quiz.bookmarkShot(shot_id, newstate)
-            self.shot['bookmarked'] = newstate
             self._showShotButtonState('bookmarked', newstate)
+        except Exception, error:
+            self.errorMessage(self.getString(self.SID_ERROR_SHOT),
+                              str(error))
+
+    def solveShot(self, shot_id):
+        try:
+            solved_title = self.Quiz.solveShot(shot_id)
+            print solved_title
+            # fixme: show solved_title
         except Exception, error:
             self.errorMessage(self.getString(self.SID_ERROR_SHOT),
                               str(error))
@@ -502,6 +517,11 @@ class GUI(xbmcgui.WindowXMLDialog):
         if self.getSetting('visible_shot_rating') == 'false':
             self.label_rating.setVisible(False)
             self.group_rating.setVisible(False)
+        if self.getSetting('visible_tool_buttons') == 'false':
+            controls = (self.CID_BUTTON_FAV, self.CID_BUTTON_BOOKMARK, 
+                        self.CID_BUTTON_SOLUTION, self.CID_BUTTON_JUMP)
+            for control in controls:
+                self.getControl(control).setVisible(False)
 
     def errorMessage(self, heading, error):
         print 'ERROR: %s: %s ' % (heading, str(error))
