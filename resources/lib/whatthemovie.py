@@ -261,11 +261,9 @@ class WhatTheMovie:
     def downloadFile(self, url, local_path):
         self.browser.retrieve(url, local_path, )
 
-    def guessShot(self, title_guess, shot_id=None):
+    def guessShot(self, title_guess, shot_id):
         answer = dict()
         answer['is_right'] = False
-        if not shot_id:
-            shot_id = self.shot['shot_id']
         post_url = '%s/shot/%s/guess' % (self.MAIN_URL, shot_id)
         post_dict = {'guess': title_guess.encode('utf8')}
         response_c = self._sendAjaxReq(post_url, post_dict)
@@ -273,6 +271,8 @@ class WhatTheMovie:
         if response_c[6:11] == 'right':
             answer['is_right'] = True
             answer['title_year'] = response_c.split('"')[3]
+            if self.shot['shot_id'] == shot_id:
+                self.shot['already_solved'] = True
         return answer
 
     def rateShot(self, shot_id, user_rate, rerated='false'):
