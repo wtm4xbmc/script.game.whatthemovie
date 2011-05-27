@@ -1,6 +1,5 @@
 ﻿import sys
 import os
-import math
 import datetime
 import traceback
 import xbmcgui
@@ -282,12 +281,12 @@ class GUI(xbmcgui.WindowXMLDialog):
                                                     own_rating))
 
     def _setRatingStarsImageWidth(self, rating):
-        rating_intervals = math.floor(rating)
+        rating_intervals = int(rating)
         rating_stars_width = (self.RATING_STAR_WIDTH * rating)
         rating_gaps_width = (self.RATING_STAR_DISTANCE * rating_intervals)
         rating_width = (self.RATING_STAR_POSX + rating_stars_width +
                         rating_gaps_width)
-        self.image_stars.setWidth(int(math.floor(rating_width + 0.5)))
+        self.image_stars.setWidth(int(rating_width + 0.5))
 
     def _showShotFlags(self, language_list):
         visible_flags = list()
