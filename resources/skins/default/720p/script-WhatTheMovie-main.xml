@@ -345,7 +345,15 @@
                 <texture>grey.png</texture>
             </control>
             <control type="image" id="1015">
-                <description>Active stars background</description>
+                <description>Active stars background for bigger rating</description>
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>3</width>
+                <height>26</height>
+                <texture>white.png</texture>
+            </control>
+            <control type="image" id="1017">
+                <description>Active stars background for smaller rating</description>
                 <posx>0</posx>
                 <posy>0</posy>
                 <width>3</width>
