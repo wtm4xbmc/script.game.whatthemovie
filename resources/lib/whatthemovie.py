@@ -232,12 +232,14 @@ class WhatTheMovie:
         if tree.find('div', attrs={'class': 'sotd_banner'}):
             sotd = True
         # Solvable
-        solution_link = tree.find('li', attrs={'id': 'solutionbutton'}).a
-        try:
-            if solution_link['class'] == 'inactive':
-                solvable = False
-        except KeyError:
-            solvable = True
+        solvable = False
+        section = tree.find('li', attrs={'id': 'solutionbutton'})
+        if section is not None:
+            try:
+                if section.a['class'] == 'inactive':
+                    solvable = False
+            except KeyError:
+                solvable = True
         # create return dict
         self.shot['shot_id'] = shot_id
         self.shot['image_url'] = image_url

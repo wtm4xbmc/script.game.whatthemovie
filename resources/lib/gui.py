@@ -1,6 +1,5 @@
 ﻿import sys
 import os
-import math
 import datetime
 import traceback
 import xbmcgui
@@ -29,7 +28,8 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_IMAGE_GIF = 1002
     CID_IMAGE_SOLUTION = 1006
     CID_IMAGE_MAIN = 1000
-    CID_IMAGE_STARS = 1015
+    CID_IMAGE_HIGHER_RATING = 1015
+    CID_IMAGE_LOWER_RATING = 1017
     CID_LABEL_LOGINSTATE = 1001
     CID_LABEL_SCORE = 1003
     CID_LABEL_POSTED_BY = 1004
@@ -114,7 +114,8 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.image_main = self.getControl(self.CID_IMAGE_MAIN)
         self.image_gif = self.getControl(self.CID_IMAGE_GIF)
         self.image_solution = self.getControl(self.CID_IMAGE_SOLUTION)
-        self.image_stars = self.getControl(self.CID_IMAGE_STARS)
+        self.image_higher_rating = self.getControl(self.CID_IMAGE_HIGHER_RATING)
+        self.image_lower_rating = self.getControl(self.CID_IMAGE_LOWER_RATING)
         self.list_flags = self.getControl(self.CID_LIST_FLAGS)
         self.group_rating = self.getControl(self.CID_GROUP_RATING)
 
@@ -207,7 +208,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self._showShotType(shot['shot_type'])
         self._showShotPostedBy(shot['posted_by'])
         self._showShotSolvedStatus(shot['solved'])
-        self._showShotAlreadSolved(shot['already_solved'])
+        self._showShotAlreadySolved(shot['already_solved'])
         self._showShotID(shot['shot_id'])
         self._showShotDate(shot['date'])
         self._showShotFlags(shot['lang_list']['all'])
@@ -245,7 +246,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         else:
             self.label_solved.setLabel(self.getString(self.SID_UNSOLVED))
 
-    def _showShotAlreadSolved(self, alread_solved):
+    def _showShotAlreadySolved(self, alread_solved):
         if alread_solved:
             self.image_solution.setColorDiffuse('FFFFFFFF')
             self.label_solution.setLabel(self.getString(self.SID_ALREADY_SOLVED))
@@ -267,13 +268,17 @@ class GUI(xbmcgui.WindowXMLDialog):
     def _showShotRating(self, rating):
         if rating['overall_rating'] != u'hidden':
             overall_rating = rating['overall_rating']
-            self._setRatingStarsImageWidth(float(overall_rating))
+            overall_rating_width = self._calculateRatingImageWidth(float(overall_rating))
         else:
             overall_rating = self.getString(self.SID_RATING_HIDDEN)
+            overall_rating_width = self._calculateRatingImageWidth(0.0)
         if rating['own_rating'] is not None:
             own_rating = rating['own_rating']
+            own_rating_width = self._calculateRatingImageWidth(float(own_rating))
         else:
             own_rating = self.getString(self.SID_RATING_UNRATED)
+            own_rating_width = self._calculateRatingImageWidth(0.0)
+        self._setRatingWidths(overall_rating_width, own_rating_width)
         votes = rating['votes']
         rating_string = '[CR]'.join((self.getString(self.SID_OVERALL_RATING),
                                      self.getString(self.SID_OWN_RATING)))
@@ -281,13 +286,29 @@ class GUI(xbmcgui.WindowXMLDialog):
                                                     votes,
                                                     own_rating))
 
-    def _setRatingStarsImageWidth(self, rating):
-        rating_intervals = math.floor(rating)
+    def _calculateRatingImageWidth(self, rating):
+        rating_intervals = int(rating)
         rating_stars_width = (self.RATING_STAR_WIDTH * rating)
         rating_gaps_width = (self.RATING_STAR_DISTANCE * rating_intervals)
         rating_width = (self.RATING_STAR_POSX + rating_stars_width +
                         rating_gaps_width)
-        self.image_stars.setWidth(int(math.floor(rating_width + 0.5)))
+        return int(rating_width + 0.5)
+
+    def _setRatingWidths(self, overall, own):
+        if overall >= own:
+            self.image_higher_rating.setWidth(overall)
+            self.image_higher_rating.setColorDiffuse('FFFFFFFF')
+            self.image_lower_rating.setWidth(own)
+            self.image_lower_rating.setColorDiffuse('FF00FF80')
+        else:
+            self.image_higher_rating.setWidth(own)
+            self.image_higher_rating.setColorDiffuse('FF00FF80')
+            self.image_lower_rating.setWidth(overall)
+            self.image_lower_rating.setColorDiffuse('FFFFFFFF')
+
+    def _setLowerRating(self, rating_width):
+        self.image_lower_rating.setWidth(rating_width)
+        self.image_lower_rating.setColorDiffuse('FF00FF80')
 
     def _showShotFlags(self, language_list):
         visible_flags = list()
