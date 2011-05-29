@@ -13,7 +13,7 @@ Misc     = 3300-3349
     <string id="3002">Back</string>
     <!-- Messages-->
     <string id="3050">Could not Login</string>
-    <string id="3051">Password wrong or username unknown[CR]User [B]%s[/B]</string>
+    <string id="3051">Password wrong or username unknown: [B]%s[/B][CR]Please change credentials or disable Login</string>
     <string id="3052">Enter Shot ID</string>
     <string id="3053">Type the movie title</string>
     <string id="3054">Login site Unreachable</string>

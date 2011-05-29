@@ -94,9 +94,9 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def onInit(self):
         # get XBMC Addon instance and methods
-        Addon = sys.modules['__main__'].Addon
-        self.getString = Addon.getLocalizedString
-        self.getSetting = Addon.getSetting
+        self.Addon = sys.modules['__main__'].Addon
+        self.getString = self.Addon.getLocalizedString
+        self.getSetting = self.Addon.getSetting
 
         # get controls
         self.button_guess = self.getControl(self.CID_BUTTON_GUESS)
@@ -456,34 +456,37 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def login(self):
         self.score = 0
-        # if login disabled skip, else login and get user score
-        if self.getSetting('login') == 'false':
-            label = self.getString(self.SID_NOT_LOGGED_IN)
-            self.label_loginstate.setLabel(label)
-        else:
+        label = self.getString(self.SID_NOT_LOGGED_IN)
+        # if login is enabeld start loop until success is true or user disables login
+        if self.getSetting('login') == 'true':
+            success = False
             cookie_dir = 'special://profile/addon_data/%s' % self.ADDON_ID
             self.checkCreatePath(cookie_dir)
             cookie_file = xbmc.translatePath('%s/cookie.txt' % cookie_dir)
-            user = self.getSetting('username')
-            password = self.getSetting('password')
-            options = self.getOptions()
-            # do the login
-            success = self.Quiz.login(user, password, cookie_file, options)
-            if not success:
-                # login failed
-                dialog = xbmcgui.Dialog()
-                dialog.ok(self.getString(self.SID_LOGIN_FAILED_HEADING),
-                          self.getString(self.SID_LOGIN_FAILED) % user)
-                label = self.getString(self.SID_NOT_LOGGED_IN)
-            else:
-                # login successfully
-                label = self.getString(self.SID_LOGGED_IN_AS) % user
-                self.score = int(self.Quiz.getScore(user))
-            self.label_loginstate.setLabel(label)
-        # show the score
+            # try to login until success
+            while not success:
+                if self.getSetting('login') == 'false':
+                    # user gives up to login and disabled login in settings opened by loop
+                    break
+                user = self.getSetting('username')
+                password = self.getSetting('password')
+                options = self.getRandomOptions()
+                # try to login
+                success = self.Quiz.login(user, password, cookie_file, options)
+                if not success:
+                    # login failed
+                    dialog = xbmcgui.Dialog()
+                    dialog.ok(self.getString(self.SID_LOGIN_FAILED_HEADING),
+                              self.getString(self.SID_LOGIN_FAILED) % user)
+                    self.Addon.openSettings()
+                else:
+                    # login successfully
+                    label = self.getString(self.SID_LOGGED_IN_AS) % user
+                    self.score = int(self.Quiz.getScore(user))
+        self.label_loginstate.setLabel(label)
         self._showUserScore(self.score)
 
-    def getOptions(self):
+    def getRandomOptions(self):
         options = dict()
         if self.getSetting('difficulty') == '2':  # 'all'
             options['difficulty'] = 'all'
