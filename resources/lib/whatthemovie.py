@@ -1,12 +1,9 @@
-# WhatTheMovie Python Class
-# Copyright (C) Tristan 'sphere' Fischer 2011
-
-from mechanize import Browser, LWPCookieJar, Request
+import mechanize
+import time
+import datetime
+import re
 from urllib import urlencode
 from BeautifulSoup import BeautifulSoup
-from time import strptime, mktime
-from datetime import datetime, timedelta
-from re import compile, search
 
 
 class WhatTheMovie:
@@ -15,8 +12,8 @@ class WhatTheMovie:
 
     def __init__(self, user_agent):
         # Get browser stuff
-        self.cookies = LWPCookieJar()
-        self.browser = Browser()
+        self.cookies = mechanize.LWPCookieJar()
+        self.browser = mechanize.Browser()
         self.browser.set_cookiejar(self.cookies)
         self.browser.addheaders = [('user-agent', user_agent)]
         # Set empty returns
@@ -60,9 +57,8 @@ class WhatTheMovie:
             else:
                 # could not log in
                 pass
-        if is_login:
-            if options and len(options) > 0:
-                self.setOptions(options)
+        if is_login and options:
+            self.setOptions(options)
         return is_login
 
     def setOptions(self, options_dict):
@@ -78,7 +74,7 @@ class WhatTheMovie:
             post_data = urlencode(data_dict)
         else:
             post_data = ' '
-        req = Request(url, post_data)
+        req = mechanize.Request(url, post_data)
         req.add_header('Accept', 'text/javascript, */*')
         req.add_header('Content-Type',
                        'application/x-www-form-urlencoded; charset=UTF-8')
@@ -90,7 +86,7 @@ class WhatTheMovie:
 
     def getShot(self, shot_id):
         if shot_id == 'last':
-            if len(self.last_shots) > 0:
+            if self.last_shots:
                 self.shot = self.last_shots.pop()
         else:
             if self.shot:  # if there is already a shot - put it in list
@@ -141,11 +137,11 @@ class WhatTheMovie:
         date_info = tree.find('ul',
                               attrs={'class': 'nav_date'}).findAll('li')
         if len(date_info) >= 4:
-            struct_date = strptime('%s %s %s' % (date_info[1].a.string,
+            date_s = time.strptime('%s %s %s' % (date_info[1].a.string,
                                                  date_info[2].a.string,
                                                  date_info[3].a.string[:-2]),
                                    '%Y %B %d')
-            date = datetime.fromtimestamp(mktime(struct_date))
+            date = datetime.datetime.fromtimestamp(time.mktime(date_s))
         # posted by
         sections = tree.find('ul',
                              attrs={'class': 'nav_shotinfo'}).findAll('li')
@@ -166,24 +162,24 @@ class WhatTheMovie:
         try:
             solved['first_by'] = sections[2].a.string
         except:
-            solved['first_by'] = 'nobody'
+            solved['first_by'] = None
         # already solved
         already_solved = False
         js_list = tree.findAll('script',
                                attrs={'type': 'text/javascript'},
-                               text=compile('guess_problem'))
-        if len(js_list) > 0:
+                               text=re.compile('guess_problem'))
+        if js_list:
             already_solved = True
         # voting
         voting = dict()
         section = tree.find('script',
                             attrs={'type': 'text/javascript'},
-                            text=compile('tt_shot_rating_stars'))
-        r = '<strong>(?P<overall_rating>[0-9.]+|hidden)</strong> '
-        r += '\((?P<votes>[0-9]+) votes\)'
-        r += '(<br>Your rating: <strong>(?P<own_rating>[0-9.]+)</strong>)?'
+                            text=re.compile('tt_shot_rating_stars'))
+        r = ('<strong>(?P<overall_rating>[0-9.]+|hidden)</strong> '
+             '\((?P<votes>[0-9]+) votes\)'
+             '(<br>Your rating: <strong>(?P<own_rating>[0-9.]+)</strong>)?')
         if section:
-            voting = search(r, section).groupdict()
+            voting = re.search(r, section).groupdict()
         # tags
         tags = list()
         tags_list = tree.find('ul', attrs={'id':
@@ -205,7 +201,7 @@ class WhatTheMovie:
             shot_type = 4
         # gives_point
         gives_point = False
-        if shot_type == 2 and already_solved == False:
+        if shot_type == 2 and not already_solved:
             gives_point = True
         # bookmarked
         if tree.find('li', attrs={'id': 'watchbutton'}):
@@ -310,7 +306,7 @@ class WhatTheMovie:
         url = '%s/shot/%s/showsolution' % (self.MAIN_URL, shot_id)
         ajax_answer = self._sendAjaxReq(url)
         r = '<strong>(?P<solution>.+)\.\.\.</strong>'
-        solved_title = search(r, ajax_answer).group('solution')
+        solved_title = re.search(r, ajax_answer).group('solution')
         if self.shot['shot_id'] == shot_id:
             self.shot['already_solved'] = True
         return solved_title

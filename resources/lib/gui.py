@@ -28,8 +28,8 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_IMAGE_GIF = 1002
     CID_IMAGE_SOLUTION = 1006
     CID_IMAGE_MAIN = 1000
-    CID_IMAGE_HIGHER_RATING = 1015
-    CID_IMAGE_LOWER_RATING = 1017
+    CID_IMAGE_H_RATING = 1015
+    CID_IMAGE_L_RATING = 1017
     CID_LABEL_LOGINSTATE = 1001
     CID_LABEL_SCORE = 1003
     CID_LABEL_POSTED_BY = 1004
@@ -114,8 +114,8 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.image_main = self.getControl(self.CID_IMAGE_MAIN)
         self.image_gif = self.getControl(self.CID_IMAGE_GIF)
         self.image_solution = self.getControl(self.CID_IMAGE_SOLUTION)
-        self.image_higher_rating = self.getControl(self.CID_IMAGE_HIGHER_RATING)
-        self.image_lower_rating = self.getControl(self.CID_IMAGE_LOWER_RATING)
+        self.image_h_rating = self.getControl(self.CID_IMAGE_H_RATING)
+        self.image_l_rating = self.getControl(self.CID_IMAGE_L_RATING)
         self.list_flags = self.getControl(self.CID_LIST_FLAGS)
         self.group_rating = self.getControl(self.CID_GROUP_RATING)
 
@@ -149,7 +149,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     def askShotID(self):
         Dialog = xbmcgui.Dialog()
         shot_id = Dialog.numeric(0, self.getString(self.SID_ENTER_ID))
-        if shot_id and shot_id is not '':
+        if shot_id:
             self.getShot(shot_id)
 
     def onFocus(self, controlId):
@@ -246,10 +246,11 @@ class GUI(xbmcgui.WindowXMLDialog):
         else:
             self.label_solved.setLabel(self.getString(self.SID_UNSOLVED))
 
-    def _showShotAlreadySolved(self, alread_solved):
-        if alread_solved:
+    def _showShotAlreadySolved(self, already_solved):
+        if already_solved:
             self.image_solution.setColorDiffuse('FFFFFFFF')
-            self.label_solution.setLabel(self.getString(self.SID_ALREADY_SOLVED))
+            label = self.getString(self.SID_ALREADY_SOLVED)
+            self.label_solution.setLabel(label)
             self.setWTMProperty('solved_status', 'solved')
 
     def _showShotID(self, shot_id):
@@ -257,7 +258,7 @@ class GUI(xbmcgui.WindowXMLDialog):
                                     % shot_id)
 
     def _showShotDate(self, date):
-        if date is not None:
+        if date:
             date_format = str(self.getString(self.SID_DATE_FORMAT))
             date_string = date.strftime(date_format)
         else:
@@ -267,17 +268,17 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def _showShotRating(self, rating):
         if rating['overall_rating'] != u'hidden':
-            overall_rating = rating['overall_rating']
-            overall_rating_width = self._calculateRatingImageWidth(float(overall_rating))
+            overall_rating = float(rating['overall_rating'])
+            overall_rating_width = self._calcRatingImageWidth(overall_rating)
         else:
             overall_rating = self.getString(self.SID_RATING_HIDDEN)
-            overall_rating_width = self._calculateRatingImageWidth(0.0)
-        if rating['own_rating'] is not None:
+            overall_rating_width = self._calcRatingImageWidth(0.0)
+        if rating['own_rating']:
             own_rating = rating['own_rating']
-            own_rating_width = self._calculateRatingImageWidth(float(own_rating))
+            own_rating_width = self._calcRatingImageWidth(float(own_rating))
         else:
             own_rating = self.getString(self.SID_RATING_UNRATED)
-            own_rating_width = self._calculateRatingImageWidth(0.0)
+            own_rating_width = self._calcRatingImageWidth(0.0)
         self._setRatingWidths(overall_rating_width, own_rating_width)
         votes = rating['votes']
         rating_string = '[CR]'.join((self.getString(self.SID_OVERALL_RATING),
@@ -286,7 +287,7 @@ class GUI(xbmcgui.WindowXMLDialog):
                                                     votes,
                                                     own_rating))
 
-    def _calculateRatingImageWidth(self, rating):
+    def _calcRatingImageWidth(self, rating):
         rating_intervals = int(rating)
         rating_stars_width = (self.RATING_STAR_WIDTH * rating)
         rating_gaps_width = (self.RATING_STAR_DISTANCE * rating_intervals)
@@ -296,19 +297,19 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def _setRatingWidths(self, overall, own):
         if overall >= own:
-            self.image_higher_rating.setWidth(overall)
-            self.image_higher_rating.setColorDiffuse('FFFFFFFF')
-            self.image_lower_rating.setWidth(own)
-            self.image_lower_rating.setColorDiffuse('FF00FF80')
+            self.image_h_rating.setWidth(overall)
+            self.image_h_rating.setColorDiffuse('FFFFFFFF')
+            self.image_l_rating.setWidth(own)
+            self.image_l_rating.setColorDiffuse('FF00FF80')
         else:
-            self.image_higher_rating.setWidth(own)
-            self.image_higher_rating.setColorDiffuse('FF00FF80')
-            self.image_lower_rating.setWidth(overall)
-            self.image_lower_rating.setColorDiffuse('FFFFFFFF')
+            self.image_h_rating.setWidth(own)
+            self.image_h_rating.setColorDiffuse('FF00FF80')
+            self.image_l_rating.setWidth(overall)
+            self.image_l_rating.setColorDiffuse('FFFFFFFF')
 
     def _setLowerRating(self, rating_width):
-        self.image_lower_rating.setWidth(rating_width)
-        self.image_lower_rating.setColorDiffuse('FF00FF80')
+        self.image_l_rating.setWidth(rating_width)
+        self.image_l_rating.setColorDiffuse('FF00FF80')
 
     def _showShotFlags(self, language_list):
         visible_flags = list()
@@ -404,7 +405,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         heading = self.getString(self.SID_KEYBOARD_HEADING)
         keyboard = xbmc.Keyboard('', heading)
         keyboard.doModal()
-        if keyboard.isConfirmed() and keyboard.getText() is not '':
+        if keyboard.isConfirmed() and keyboard.getText():
             guess = keyboard.getText().decode('utf8')
             # enter checking status
             self.image_solution.setColorDiffuse('FFFFFF00')
@@ -420,7 +421,7 @@ class GUI(xbmcgui.WindowXMLDialog):
                 self.setWTMProperty('solved_status', 'inactive')
                 return
             # call answerRight or answerWrong
-            if solution['is_right'] == True:
+            if solution['is_right']:
                 self.answerRight(solution['title_year'],
                                  self.shot['gives_point'])
             else:
@@ -433,7 +434,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.setWTMProperty('solved_status', 'correct')
         self.image_solution.setColorDiffuse('FF00FF00')
         # if this shout gives points, do so
-        if gives_point == True:
+        if gives_point:
             self.score += 1
             self._showUserScore(self.score)
         # if user wants auto_jump, do so
@@ -468,7 +469,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             options = self.getOptions()
             # do the login
             success = self.Quiz.login(user, password, cookie_file, options)
-            if success == False:
+            if not success:
                 # login failed
                 dialog = xbmcgui.Dialog()
                 dialog.ok(self.getString(self.SID_LOGIN_FAILED_HEADING),
@@ -539,7 +540,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.label_rating.setVisible(False)
             self.group_rating.setVisible(False)
         if self.getSetting('visible_tool_buttons') == 'false':
-            controls = (self.CID_BUTTON_FAV, self.CID_BUTTON_BOOKMARK, 
+            controls = (self.CID_BUTTON_FAV, self.CID_BUTTON_BOOKMARK,
                         self.CID_BUTTON_SOLUTION, self.CID_BUTTON_JUMP)
             for control in controls:
                 self.getControl(control).setVisible(False)
