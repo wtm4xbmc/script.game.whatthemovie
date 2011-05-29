@@ -20,46 +20,44 @@ class WhatTheMovie:
         self.shot = dict()
         self.last_shots = list()
 
-    def _checkLogin(self, url=None):
-        is_login = False
-        if url is not None:
-            self.browser.open(url)
-        try:
-            html = self.browser.response().read()
-        except:
-            self.browser.open(self.MAIN_URL)
-            html = self.browser.response().read()
-        tree = BeautifulSoup(html)
-        if tree.find('a', href='http://whatthemovie.com/user/logout'):
-            is_login = True
-        return is_login
-
-    def login(self, user, password, cookie_path, options=None):
-        is_login = False
-        login_url = '%s/user/login/' % self.MAIN_URL
+    def login(self, user, password, cookie_path):
+        logged_in = False
         try:
             self.cookies.revert(cookie_path)
-            # cookie found
-        except:
-            # no cookie found
-            pass
-        is_login = self._checkLogin(login_url)
-        if not is_login:
-            # need to login
-            self.browser.select_form(nr=0)
-            self.browser['name'] = user
-            self.browser['upassword'] = password
-            self.browser.submit()
-            is_login = self._checkLogin(login_url)
-            if is_login:
-                # logged in via auth
+            cookie_found = True
+        except IOError:
+            cookie_found = False
+        if cookie_found:
+            logged_in_user = self._getUsername(retrieve=True)
+            if logged_in_user == user:
+                logged_in = 'cookie'
+        if not logged_in:
+            login_url = '%s/user/login' % self.MAIN_URL
+            data_dict = dict()
+            data_dict['name'] = user
+            data_dict['upassword'] = password
+            data = urlencode(data_dict)
+            req = mechanize.Request(login_url, data)
+            self.browser.open(req)
+            logged_in_user = self._getUsername()
+            if logged_in_user:
+                logged_in = 'auth'
                 self.cookies.save(cookie_path)
-            else:
-                # could not log in
-                pass
-        if is_login and options:
-            self.setOptions(options)
-        return is_login
+        return logged_in
+
+    def _getUsername(self, retrieve=False):
+        # only retrieve if there is no previous retrieve which we can use
+        if retrieve:
+            self.browser.open(self.MAIN_URL)
+        html = self.browser.response().read()
+        tree = BeautifulSoup(html)
+        section = tree.find('li', attrs={'class': 'secondary_nav',
+                                         'style': 'margin-left: 0'})
+        if section:
+            username = section.a.span.string
+        else:
+            username = None
+        return username
 
     def setOptions(self, options_dict):
         option_url = '%s/shot/setrandomoptions' % self.MAIN_URL

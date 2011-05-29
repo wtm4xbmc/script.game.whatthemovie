@@ -457,7 +457,8 @@ class GUI(xbmcgui.WindowXMLDialog):
     def login(self):
         self.score = 0
         label = self.getString(self.SID_NOT_LOGGED_IN)
-        # if login is enabeld start loop until success is true or user disables login
+        # if login is enabeld start loop until
+        # success is true or user disables login
         if self.getSetting('login') == 'true':
             success = False
             cookie_dir = 'special://profile/addon_data/%s' % self.ADDON_ID
@@ -466,13 +467,13 @@ class GUI(xbmcgui.WindowXMLDialog):
             # try to login until success
             while not success:
                 if self.getSetting('login') == 'false':
-                    # user gives up to login and disabled login in settings opened by loop
+                    # user gives up to login and disabled
+                    # login in settings opened by loop
                     break
                 user = self.getSetting('username')
                 password = self.getSetting('password')
-                options = self.getRandomOptions()
                 # try to login
-                success = self.Quiz.login(user, password, cookie_file, options)
+                success = self.Quiz.login(user, password, cookie_file)
                 if not success:
                     # login failed
                     dialog = xbmcgui.Dialog()
@@ -483,6 +484,7 @@ class GUI(xbmcgui.WindowXMLDialog):
                     # login successfully
                     label = self.getString(self.SID_LOGGED_IN_AS) % user
                     self.score = int(self.Quiz.getScore(user))
+                    # options = self.getRandomOptions()  # fixme(sphere)
         self.label_loginstate.setLabel(label)
         self._showUserScore(self.score)
 
