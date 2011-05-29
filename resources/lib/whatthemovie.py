@@ -59,13 +59,9 @@ class WhatTheMovie:
             username = None
         return username
 
-    def setOptions(self, options_dict):
+    def setRandomOptions(self, settings):
         option_url = '%s/shot/setrandomoptions' % self.MAIN_URL
-        if options_dict['include_archive'] == '0':
-            options_dict.pop('include_archive')
-        if options_dict['include_solved'] == '0':
-            options_dict.pop('include_solved')
-        self._sendAjaxReq(option_url, options_dict)
+        self._sendAjaxReq(option_url, settings)
 
     def _sendAjaxReq(self, url, data_dict=None):
         if data_dict:

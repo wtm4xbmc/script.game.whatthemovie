@@ -97,6 +97,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.Addon = sys.modules['__main__'].Addon
         self.getString = self.Addon.getLocalizedString
         self.getSetting = self.Addon.getSetting
+        self.setSetting = self.Addon.setSetting
 
         # get controls
         self.button_guess = self.getControl(self.CID_BUTTON_GUESS)
@@ -484,27 +485,29 @@ class GUI(xbmcgui.WindowXMLDialog):
                     # login successfully
                     label = self.getString(self.SID_LOGGED_IN_AS) % user
                     self.score = int(self.Quiz.getScore(user))
-                    # options = self.getRandomOptions()  # fixme(sphere)
+                    self.setRandomOptions()
         self.label_loginstate.setLabel(label)
         self._showUserScore(self.score)
 
-    def getRandomOptions(self):
-        options = dict()
-        if self.getSetting('difficulty') == '2':  # 'all'
-            options['difficulty'] = 'all'
-        elif self.getSetting('difficulty') == '1':  # 'medium'
-            options['difficulty'] = 'medium'
-        elif self.getSetting('difficulty') == '0':  # 'easy'
-            options['difficulty'] = 'easy'
-        if self.getSetting('include_archive') == 'true':
-            options['include_archive'] = '1'
-        else:
-            options['include_archive'] = '0'
-        if self.getSetting('include_solved') == 'true':
-            options['include_solved'] = '1'
-        else:
-            options['include_solved'] = '0'
-        return options
+    def setRandomOptions(self):
+        options_list = list()
+        for option in ('difficulty', 'include_archive', 'include_solved'):
+            options_list.append(self.getSetting(option))
+        current_options = '-'.join(options_list)
+        if self.getSetting('already_sent_options') != current_options:
+            options = dict()
+            if self.getSetting('difficulty') == '2':
+                options['difficulty'] = 'all'
+            elif self.getSetting('difficulty') == '1':
+                options['difficulty'] = 'medium'
+            elif self.getSetting('difficulty') == '0':
+                options['difficulty'] = 'easy'
+            if self.getSetting('include_archive') == 'true':
+                options['include_archive'] = '1'
+            if self.getSetting('include_solved') == 'true':
+                options['include_solved'] = '1'
+            self.Quiz.setRandomOptions(options)
+            self.setSetting('already_sent_options', current_options)
 
     def downloadPic(self, image_url, shot_id):
         subst_image_url = 'http://static.whatthemovie.com/images/substitute'
