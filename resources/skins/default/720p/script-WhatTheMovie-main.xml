@@ -450,19 +450,6 @@
                 <posy>155</posy>
                 <width>720</width>
                 <height>36</height>
-                <control type="button" id="3003">
-                    <description>Fake Button to zoom the Picture to Guess</description>
-                    <posx>15</posx>
-                    <posy>5</posy>
-                    <width>720</width>
-                    <height>400</height>
-                    <visible allowhiddenfocus="true">false</visible>
-                    <onclick>Setfocus(3001)</onclick>
-                    <onright>3001</onright>
-                    <onleft>3002</onleft>
-                    <onup>3000</onup>
-                    <ondown>3000</ondown>
-                </control>
                 <control type="image">
                     <description>Shadow left snapshot image</description>
                     <posx>0</posx>
@@ -564,6 +551,19 @@
                 <animation effect="fade" time="5" delay="500">Hidden</animation>
                 <visible>Control.HasFocus(3003)</visible>
             </control>
+        </control>
+        <control type="button" id="3003">
+            <description>Fake Button to zoom the Picture to Guess</description>
+            <posx>280</posx>
+            <posy>160</posy>
+            <width>720</width>
+            <height>400</height>
+            <visible allowhiddenfocus="true">false</visible>
+            <onclick>Setfocus(3001)</onclick>
+            <onright>3001</onright>
+            <onleft>3002</onleft>
+            <onup>3000</onup>
+            <ondown>3000</ondown>
         </control>
     </controls>
 </window>
