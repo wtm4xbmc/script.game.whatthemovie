@@ -2,6 +2,7 @@
     <defaultcontrol always="false">3000</defaultcontrol>
     <controls>
         <control type="group">
+            <description>Group for zooming effect</description>
             <animation effect="zoom" end="178,178" center="auto" time="500" tween="cubic" easing="inout" condition="Control.HasFocus(3003)">Conditional</animation>
             <control type="image">
                 <description>Background</description>
@@ -40,8 +41,8 @@
                     <onup>3003</onup>
                     <ondown>3004</ondown>
                     <font>font12</font>
-                    <focusedcolor>FFFFFFFF</focusedcolor>
-                    <textcolor>FF777777</textcolor>
+                    <focusedcolor>white</focusedcolor>
+                    <textcolor>grey</textcolor>
                     <label>$LOCALIZE[SCRIPT3002]</label>
                 </control>
                 <control type="button" id="3004">
@@ -52,15 +53,10 @@
                     <height>36</height>
                     <texturefocus>button_first_active.png</texturefocus>
                     <texturenofocus>button_first.png</texturenofocus>
-                    <align>center</align>
-                    <aligny>center</aligny>
                     <onleft>3002</onleft>
                     <onright>3005</onright>
                     <onup>3003</onup>
                     <ondown>3008</ondown>
-                    <font>font12</font>
-                    <textcolor>FFFFFFFF</textcolor>
-                    <label></label>
                 </control>
                 <control type="button" id="3005">
                     <description>Previous Button</description>
@@ -76,9 +72,6 @@
                     <onright>3000</onright>
                     <onup>3003</onup>
                     <ondown>3009</ondown>
-                    <font>font12</font>
-                    <textcolor>FFFFFFFF</textcolor>
-                    <label></label>
                 </control>
                 <control type="button" id="3000">
                     <description>Guess Button</description>
@@ -95,8 +88,8 @@
                     <onup>3003</onup>
                     <ondown>3006</ondown>
                     <font>font12</font>
-                    <focusedcolor>FFFFFFFF</focusedcolor>
-                    <textcolor>FF777777</textcolor>
+                    <focusedcolor>white</focusedcolor>
+                    <textcolor>grey</textcolor>
                     <label>$LOCALIZE[SCRIPT3000]</label>
                 </control>
                 <control type="button" id="3006">
@@ -113,9 +106,6 @@
                     <onright>3007</onright>
                     <onup>3003</onup>
                     <ondown>3010</ondown>
-                    <font>font12</font>
-                    <textcolor>FFFFFFFF</textcolor>
-                    <label></label>
                 </control>
                 <control type="button" id="3007">
                     <description>Last Button</description>
@@ -131,9 +121,6 @@
                     <onright>3001</onright>
                     <onup>3003</onup>
                     <ondown>3011</ondown>
-                    <font>font12</font>
-                    <textcolor>FFFFFFFF</textcolor>
-                    <label></label>
                 </control>
                 <control type="button" id="3001">
                     <description>Random next Button</description>
@@ -150,8 +137,8 @@
                     <onup>3003</onup>
                     <ondown>3002</ondown>
                     <font>font12</font>
-                    <focusedcolor>FFFFFFFF</focusedcolor>
-                    <textcolor>FF777777</textcolor>
+                    <focusedcolor>white</focusedcolor>
+                    <textcolor>grey</textcolor>
                     <label>$LOCALIZE[SCRIPT3001]</label>
                 </control>
                 <control type="radiobutton" id="3008">
@@ -168,13 +155,10 @@
                     <radioposy>7</radioposy>
                     <radiowidth>12</radiowidth>
                     <radioheight>11</radioheight>
-                    <align>center</align>
-                    <aligny>center</aligny>
                     <onleft>3011</onleft>
                     <onright>3009</onright>
                     <onup>3004</onup>
                     <ondown>3009</ondown>
-                    <font>font10</font>
                     <label></label>
                 </control>
                 <control type="radiobutton" id="3009">
@@ -191,13 +175,10 @@
                     <radioposy>7</radioposy>
                     <radiowidth>12</radiowidth>
                     <radioheight>12</radioheight>
-                    <align>center</align>
-                    <aligny>center</aligny>
                     <onleft>3008</onleft>
                     <onright>3010</onright>
                     <onup>3005</onup>
                     <ondown>3010</ondown>
-                    <font>font10</font>
                     <label></label>
                 </control>
                 <control type="radiobutton" id="3010">
@@ -214,13 +195,10 @@
                     <radioposy>6</radioposy>
                     <radiowidth>15</radiowidth>
                     <radioheight>15</radioheight>
-                    <align>center</align>
-                    <aligny>center</aligny>
                     <onleft>3009</onleft>
                     <onright>3011</onright>
                     <onup>3006</onup>
                     <ondown>3011</ondown>
-                    <font>font10</font>
                     <label></label>
                 </control>
                 <control type="button" id="3011">
@@ -231,15 +209,10 @@
                     <height>26</height>
                     <texturefocus>button_smaller_id_active.png</texturefocus>
                     <texturenofocus>button_smaller_id.png</texturenofocus>
-                    <align>center</align>
-                    <aligny>center</aligny>
                     <onleft>3010</onleft>
                     <onright>3008</onright>
                     <onup>3007</onup>
                     <ondown>3008</ondown>
-                    <font>font12</font>
-                    <textcolor>FFFFFFFF</textcolor>
-                    <label></label>
                 </control>
             </control>
             <control type="label" id="1001">
@@ -249,8 +222,8 @@
                 <width>300</width>
                 <align>left</align>
                 <font>font12</font>
-                <textcolor>FFFFFFFF</textcolor>
-                <shadowcolor>FF000000</shadowcolor>
+                <textcolor>white</textcolor>
+                <shadowcolor>black</shadowcolor>
                 <visible>true</visible>
             </control>
             <control type="label" id="1004">
@@ -260,8 +233,8 @@
                 <width>250</width>
                 <align>left</align>
                 <font>font12</font>
-                <textcolor>FFFFFFFF</textcolor>
-                <shadowcolor>FF000000</shadowcolor>
+                <textcolor>white</textcolor>
+                <shadowcolor>black</shadowcolor>
                 <visible>true</visible>
             </control>
             <control type="label" id="1005">
@@ -272,8 +245,8 @@
                 <align>right</align>
                 <font>font12</font>
                 <scroll>true</scroll>
-                <textcolor>FFFFFFFF</textcolor>
-                <shadowcolor>FF000000</shadowcolor>
+                <textcolor>white</textcolor>
+                <shadowcolor>black</shadowcolor>
                 <visible>true</visible>
             </control>
             <control type="label" id="1008">
@@ -283,8 +256,8 @@
                 <width>200</width>
                 <align>left</align>
                 <font>font12</font>
-                <textcolor>FFFFFFFF</textcolor>
-                <shadowcolor>FF000000</shadowcolor>
+                <textcolor>white</textcolor>
+                <shadowcolor>black</shadowcolor>
                 <visible>true</visible>
             </control>
             <control type="label" id="1011">
@@ -294,8 +267,8 @@
                 <width>300</width>
                 <align>right</align>
                 <font>font12</font>
-                <textcolor>FFFFFFFF</textcolor>
-                <shadowcolor>FF000000</shadowcolor>
+                <textcolor>white</textcolor>
+                <shadowcolor>black</shadowcolor>
                 <visible>true</visible>
             </control>
             <control type="label" id="1003">
@@ -305,8 +278,8 @@
                 <width>200</width>
                 <align>right</align>
                 <font>font12</font>
-                <textcolor>FFFFFFFF</textcolor>
-                <shadowcolor>FF000000</shadowcolor>
+                <textcolor>white</textcolor>
+                <shadowcolor>black</shadowcolor>
                 <visible>true</visible>
             </control>
             <control type="label" id="1012">
@@ -316,7 +289,7 @@
                 <width>200</width>
                 <align>center</align>
                 <font>font12</font>
-                <textcolor>FF777777</textcolor>
+                <textcolor>grey</textcolor>
                 <visible>true</visible>
             </control>
             <!-- can be used for visualizing property values during testing:
@@ -328,7 +301,7 @@
                  <label>$INFO[Window(10000).Property(wtm.solved_status)]</label>
                  <align>center</align>
                  <font>font12</font>
-                 <textcolor>FF777777</textcolor>
+                 <textcolor>grey</textcolor>
                  <visible>true</visible>
                  </control>
             -->
@@ -378,8 +351,8 @@
                 <width>400</width>
                 <align>right</align>
                 <font>font12</font>
-                <textcolor>FFFFFFFF</textcolor>
-                <shadowcolor>FF000000</shadowcolor>
+                <textcolor>white</textcolor>
+                <shadowcolor>black</shadowcolor>
                 <visible>true</visible>
             </control>
             <control type="group">
@@ -388,7 +361,6 @@
                 <posy>670</posy>
                 <width>200</width>
                 <height>32</height>
-                <align>center</align>
                 <control type="list" id="1013">
                     <description>Input language flags</description>
                     <posx>0</posx>
@@ -408,6 +380,7 @@
                             <width>32</width>
                             <height>32</height>
                             <texture>$INFO[ListItem.Icon]</texture>
+                            <colordiffuse>no_transparency</colordiffuse>
                             <visible>!ListItem.property(unavailable)</visible>
                         </control>
                         <control type="image">
@@ -417,7 +390,7 @@
                             <width>32</width>
                             <height>32</height>
                             <texture>$INFO[ListItem.Icon]</texture>
-                            <colordiffuse>11FFFFFF</colordiffuse>
+                            <colordiffuse>much_transparency</colordiffuse>
                             <visible>ListItem.property(unavailable)</visible>
                         </control>
                     </itemlayout>
@@ -429,6 +402,7 @@
                             <width>32</width>
                             <height>32</height>
                             <texture>$INFO[ListItem.Icon]</texture>
+                            <colordiffuse>no_transparency</colordiffuse>
                             <visible>!ListItem.property(unavailable)</visible>
                         </control>
                         <control type="image">
@@ -438,7 +412,7 @@
                             <width>32</width>
                             <height>32</height>
                             <texture>$INFO[ListItem.Icon]</texture>
-                            <colordiffuse>11FFFFFF</colordiffuse>
+                            <colordiffuse>much_transparency</colordiffuse>
                             <visible>ListItem.property(unavailable)</visible>
                         </control>
                     </focusedlayout>
@@ -485,7 +459,7 @@
                     <aspectratio>keep</aspectratio>
                 </control>
                 <control type="image" id="1006">
-                    <description>Solution background image</description>
+                    <description>Solution background image - will be tinted by gui</description>
                     <posx>15</posx>
                     <posy>375</posy>
                     <width>720</width>
@@ -504,7 +478,7 @@
                     <aligny>center</aligny>
                     <font>font12</font>
                     <scroll>true</scroll>
-                    <textcolor>FF000000</textcolor>
+                    <textcolor>black</textcolor>
                     <visible>!StringCompare(Window(10000).Property(wtm.solved_status),inactive) + !StringCompare(Window(10000).Property(wtm.solved_status),) + !StringCompare(Window(10000).Property(wtm.solved_status),loading)</visible>
                     <animation effect="fade" time="200">VisibleChange</animation>
                 </control>

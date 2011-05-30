@@ -1,0 +1,15 @@
+<colors>
+    <!-- colors -->
+    <color name="white">FFFFFFFF</color>
+    <color name="grey">FF777777</color>
+    <color name="black">FF000000</color>
+    <color name="yellow">FFFFFF00</color>
+    <color name="green">FF00FF00</color>
+    <color name="red">FFFF0000</color>
+    <!-- transparency -->
+    <color name="much_transparency">11FFFFFF</color>
+    <color name="no_transparency">FFFFFFFF</color>
+    <!-- tints -->
+    <color name="cyan_tint">FF00FF80</color>
+    <color name="no_tint">FFFFFFFF</color>
+</colors>
