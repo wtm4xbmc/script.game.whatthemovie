@@ -465,7 +465,8 @@
                     <width>116</width>
                     <height>115</height>
                     <texture>sotd.png</texture>
-                    <visible>!StringCompare(Window(10000).Property(wtm.sotd),)</visible>
+                    <visible>!StringCompare(Window(10000).Property(wtm.sotd),) + !Control.HasFocus(3003)</visible>
+                    <animation effect="fade" time="200">VisibleChange</animation>
                 </control>
                 <control type="image" id="1006">
                     <description>Solution background image - will be tinted by gui</description>
@@ -488,7 +489,7 @@
                     <font>font12</font>
                     <scroll>true</scroll>
                     <textcolor>black</textcolor>
-                    <visible>!StringCompare(Window(10000).Property(wtm.solved_status),inactive) + !StringCompare(Window(10000).Property(wtm.solved_status),) + !StringCompare(Window(10000).Property(wtm.solved_status),loading)</visible>
+                    <visible>!StringCompare(Window(10000).Property(wtm.solved_status),inactive) + !StringCompare(Window(10000).Property(wtm.solved_status),) + !StringCompare(Window(10000).Property(wtm.solved_status),loading) + !Control.HasFocus(3003)</visible>
                     <animation effect="fade" time="200">VisibleChange</animation>
                 </control>
                 <control type="image" id="1009">
@@ -498,7 +499,7 @@
                     <width>140</width>
                     <height>140</height>
                     <texture>guess_correct.png</texture>
-                    <visible>StringCompare(Window(10000).Property(wtm.solved_status),correct)</visible>
+                    <visible>StringCompare(Window(10000).Property(wtm.solved_status),correct) + !Control.HasFocus(3003)</visible>
                     <animation effect="fade" time="200">VisibleChange</animation>
                 </control>
                 <control type="image" id="1010">
@@ -508,7 +509,7 @@
                     <width>140</width>
                     <height>140</height>
                     <texture>guess_wrong.png</texture>
-                    <visible>StringCompare(Window(10000).Property(wtm.solved_status),wrong)</visible>
+                    <visible>StringCompare(Window(10000).Property(wtm.solved_status),wrong) + !Control.HasFocus(3003)</visible>
                     <animation effect="fade" time="200">VisibleChange</animation>
                 </control>
                 <control type="image" id="1002">
