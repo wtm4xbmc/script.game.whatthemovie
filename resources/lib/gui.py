@@ -217,6 +217,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self._showShotButtonState('favourite', shot['favourite'])
         self._showShotButtonState('bookmarked', shot['bookmarked'])
         self._showSolvableState(shot['solvable'])
+        self._showShotOfTheDay(shot['sotd'])
         # unset busy_gif
         self.setWTMProperty('busy', '')
 
@@ -346,6 +347,12 @@ class GUI(xbmcgui.WindowXMLDialog):
         else:
             element.setEnabled(False)
             element.setSelected(False)
+
+    def _showShotOfTheDay(self, state):
+        if state:
+            self.setWTMProperty('sotd', 'True')
+        else:
+            self.setWTMProperty('sotd', '')
 
     def _showUserScore(self, score):
         score_string = self.getString(self.SID_YOUR_SCORE) % str(score)

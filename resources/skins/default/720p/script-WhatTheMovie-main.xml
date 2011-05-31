@@ -3,7 +3,7 @@
     <controls>
         <control type="group">
             <description>Group for zooming effect</description>
-            <animation effect="zoom" end="178,178" center="auto" time="500" tween="cubic" easing="inout" condition="Control.HasFocus(3003)">Conditional</animation>
+            <animation effect="zoom" end="178,180" center="auto" time="500" tween="cubic" easing="inout" condition="Control.HasFocus(3003)">Conditional</animation>
             <control type="image">
                 <description>Background</description>
                 <posx>0</posx>
@@ -192,7 +192,7 @@
                     <textureradiooff>sol.png</textureradiooff>
                     <textureradioon>sol_active.png</textureradioon>
                     <radioposx>6</radioposx>
-                    <radioposy>6</radioposy>
+                    <radioposy>5</radioposy>
                     <radiowidth>15</radiowidth>
                     <radioheight>15</radioheight>
                     <onleft>3009</onleft>
@@ -458,6 +458,15 @@
                     <fadetime>500</fadetime>
                     <texture>$INFO[Window(10000).Property(wtm.main_image)]</texture>
                     <aspectratio>keep</aspectratio>
+                </control>
+                <control type="image">
+                    <description>Shot of the day overlay image</description>
+                    <posx>625</posx>
+                    <posy>-1</posy>
+                    <width>116</width>
+                    <height>115</height>
+                    <texture>sotd.png</texture>
+                    <visible>!StringCompare(Window(10000).Property(wtm.sotd),)</visible>
                 </control>
                 <control type="image" id="1006">
                     <description>Solution background image - will be tinted by gui</description>
