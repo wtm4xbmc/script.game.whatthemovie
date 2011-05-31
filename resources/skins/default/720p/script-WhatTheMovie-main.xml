@@ -1,4 +1,4 @@
-<window id="1000">
+﻿<window id="1000">
     <defaultcontrol always="false">3000</defaultcontrol>
     <controls>
         <control type="group">
@@ -307,28 +307,20 @@
             -->
             <control type="group" id="1016">
                 <description>Group for the rating stars images</description>
-                <posx>502</posx>
+                <posx>501</posx>
                 <posy>580</posy>
-                <width>276</width>
+                <width>278</width>
                 <height>26</height>
                 <control type="image">
                     <description>Inactive stars background</description>
                     <posx>0</posx>
                     <posy>0</posy>
-                    <width>276</width>
+                    <width>278</width>
                     <height>26</height>
                     <texture>grey.png</texture>
                 </control>
                 <control type="image" id="1015">
-                    <description>Active stars background for bigger rating</description>
-                    <posx>0</posx>
-                    <posy>0</posy>
-                    <width>3</width>
-                    <height>26</height>
-                    <texture>white.png</texture>
-                </control>
-                <control type="image" id="1017">
-                    <description>Active stars background for smaller rating</description>
+                    <description>Overall rating stars</description>
                     <posx>0</posx>
                     <posy>0</posy>
                     <width>3</width>
@@ -339,9 +331,18 @@
                     <description>Rating stars mask</description>
                     <posx>0</posx>
                     <posy>0</posy>
-                    <width>276</width>
+                    <width>278</width>
                     <height>26</height>
                     <texture>rating_stars_mask.png</texture>
+                </control>
+                <control type="image" id="1017">
+                    <description>Own Rating stars glow</description>
+                    <posx>0</posx>
+                    <posy>0</posy>
+                    <width>1</width>
+                    <height>26</height>
+                    <texture>own_rating_stars.png</texture>
+                    <aspectratio align="left">scale</aspectratio>
                 </control>
             </control>
             <control type="label" id="1014">
