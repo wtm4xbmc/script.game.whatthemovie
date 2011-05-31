@@ -1,4 +1,4 @@
-﻿import sys
+import sys
 import os
 import datetime
 import traceback
@@ -28,8 +28,8 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_IMAGE_GIF = 1002
     CID_IMAGE_SOLUTION = 1006
     CID_IMAGE_MAIN = 1000
-    CID_IMAGE_H_RATING = 1015
-    CID_IMAGE_L_RATING = 1017
+    CID_IMAGE_AVG_RATING = 1015
+    CID_IMAGE_OWN_RATING = 1017
     CID_LABEL_LOGINSTATE = 1001
     CID_LABEL_SCORE = 1003
     CID_LABEL_POSTED_BY = 1004
@@ -115,8 +115,8 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.image_main = self.getControl(self.CID_IMAGE_MAIN)
         self.image_gif = self.getControl(self.CID_IMAGE_GIF)
         self.image_solution = self.getControl(self.CID_IMAGE_SOLUTION)
-        self.image_h_rating = self.getControl(self.CID_IMAGE_H_RATING)
-        self.image_l_rating = self.getControl(self.CID_IMAGE_L_RATING)
+        self.image_avg_rating = self.getControl(self.CID_IMAGE_AVG_RATING)
+        self.image_own_rating = self.getControl(self.CID_IMAGE_OWN_RATING)
         self.list_flags = self.getControl(self.CID_LIST_FLAGS)
         self.group_rating = self.getControl(self.CID_GROUP_RATING)
 
@@ -290,27 +290,23 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def _calcRatingImageWidth(self, rating):
         rating_intervals = int(rating)
-        rating_stars_width = (self.RATING_STAR_WIDTH * rating)
-        rating_gaps_width = (self.RATING_STAR_DISTANCE * rating_intervals)
-        rating_width = (self.RATING_STAR_POSX + rating_stars_width +
-                        rating_gaps_width)
+        if rating_intervals > 0:
+            rating_intervals -= 1
+        print 'intervals: %d' % rating_intervals
+        rating_stars_width = self.RATING_STAR_WIDTH * rating
+        rating_gaps_width = self.RATING_STAR_DISTANCE * rating_intervals
+        rating_width = rating_stars_width + rating_gaps_width
         return int(rating_width + 0.5)
 
     def _setRatingWidths(self, overall, own):
-        if overall >= own:
-            self.image_h_rating.setWidth(overall)
-            self.image_h_rating.setColorDiffuse('FFFFFFFF')
-            self.image_l_rating.setWidth(own)
-            self.image_l_rating.setColorDiffuse('FF00FF80')
+        if overall == 0:
+            overall += 1
+        self.image_avg_rating.setWidth(overall + self.RATING_STAR_POSX)
+        if own == 0:
+            own += 1
         else:
-            self.image_h_rating.setWidth(own)
-            self.image_h_rating.setColorDiffuse('FF00FF80')
-            self.image_l_rating.setWidth(overall)
-            self.image_l_rating.setColorDiffuse('FFFFFFFF')
-
-    def _setLowerRating(self, rating_width):
-        self.image_l_rating.setWidth(rating_width)
-        self.image_l_rating.setColorDiffuse('FF00FF80')
+            own += self.RATING_STAR_POSX * 2 + 1
+        self.image_own_rating.setWidth(own)
 
     def _showShotFlags(self, language_list):
         visible_flags = list()
