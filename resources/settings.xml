@@ -18,6 +18,11 @@
     </category>
     <!-- Look/Feel --->
     <category label="3212">
+        <!-- Behaviour --->
+        <setting label="3218" type="lsep" />
+        <setting id="auto_jump_enabled" type="bool" label="3219" default="true" />
+        <setting id="auto_jump_to" type="enum" label="3232" lvalues="3233|3234" enable="eq(-1,true)"  default="0"/>
+        <setting id="auto_jump_sleep" type="enum" label="3220" default="2" values="0|1|2|3|4|5" enable="eq(-2,true)" />
         <!-- Look --->
         <setting label="3213" type="lsep" />
         <setting id="visible_posted_by" type="bool" label="3214" default="true" />
@@ -27,11 +32,6 @@
         <setting id="visible_shot_flags" type="bool" label="3221" default="true" />
         <setting id="visible_shot_rating" type="bool" label="3231" default="true" />
         <setting id="visible_tool_buttons" type="bool" label="3235" default="true" />
-        <!-- Behaviour --->
-        <setting label="3218" type="lsep" />
-        <setting id="auto_jump_enabled" type="bool" label="3219" default="true" />
-        <setting id="auto_jump_to" type="enum" label="3232" lvalues="3233|3234" enable="eq(-1,true)"  default="0"/>
-        <setting id="auto_jump_sleep" type="enum" label="3220" default="2" values="0|1|2|3|4|5" enable="eq(-2,true)" />
     </category>
     <!-- Flags --->
     <category label="3222">

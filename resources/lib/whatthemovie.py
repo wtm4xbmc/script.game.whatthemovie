@@ -6,7 +6,7 @@ from urllib import urlencode
 from BeautifulSoup import BeautifulSoup
 
 
-class WhatTheMovie:
+class WhatTheMovie(object):
 
     MAIN_URL = 'http://whatthemovie.com'
 
