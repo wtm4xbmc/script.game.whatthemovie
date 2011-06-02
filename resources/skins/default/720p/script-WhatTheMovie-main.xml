@@ -381,7 +381,7 @@
                             <width>32</width>
                             <height>32</height>
                             <texture>$INFO[ListItem.Icon]</texture>
-                            <colordiffuse>no_transparency</colordiffuse>
+                            <colordiffuse>FFFFFFFF</colordiffuse>
                             <visible>!ListItem.property(unavailable)</visible>
                         </control>
                         <control type="image">
@@ -391,7 +391,7 @@
                             <width>32</width>
                             <height>32</height>
                             <texture>$INFO[ListItem.Icon]</texture>
-                            <colordiffuse>much_transparency</colordiffuse>
+                            <colordiffuse>22FFFFFF</colordiffuse>
                             <visible>ListItem.property(unavailable)</visible>
                         </control>
                     </itemlayout>
@@ -403,7 +403,7 @@
                             <width>32</width>
                             <height>32</height>
                             <texture>$INFO[ListItem.Icon]</texture>
-                            <colordiffuse>no_transparency</colordiffuse>
+                            <colordiffuse>FFFFFFFF</colordiffuse>
                             <visible>!ListItem.property(unavailable)</visible>
                         </control>
                         <control type="image">
@@ -413,7 +413,7 @@
                             <width>32</width>
                             <height>32</height>
                             <texture>$INFO[ListItem.Icon]</texture>
-                            <colordiffuse>much_transparency</colordiffuse>
+                            <colordiffuse>22FFFFFF</colordiffuse>
                             <visible>ListItem.property(unavailable)</visible>
                         </control>
                     </focusedlayout>
