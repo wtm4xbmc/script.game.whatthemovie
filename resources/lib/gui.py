@@ -366,13 +366,14 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_score.setLabel(score_string)
 
     def rateShot(self, shot_id, own_rating):
-        try:
-            self.Quiz.rateShot(shot_id, own_rating)
-            rating = self.shot['voting']
-            self._showShotRating(rating)
-        except Exception, error:
-            self.errorMessage(self.getString(self.SID_ERROR_SHOT),
-                              str(error))
+        if self.logged_in:
+            try:
+                self.Quiz.rateShot(shot_id, own_rating)
+                rating = self.shot['voting']
+                self._showShotRating(rating)
+            except Exception, error:
+                self.errorMessage(self.getString(self.SID_ERROR_SHOT),
+                                  str(error))
 
     def favouriteShot(self, shot_id):
         state = self.shot['favourite']
@@ -460,16 +461,16 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def login(self):
         self.score = 0
+        self.logged_in = False
         label = self.getString(self.SID_NOT_LOGGED_IN)
         # if login is enabeld start loop until
-        # success is true or user disables login
+        # self.logged_in is true or user disables login
         if self.getSetting('login') == 'true':
-            success = False
             cookie_dir = 'special://profile/addon_data/%s' % self.ADDON_ID
             self.checkCreatePath(cookie_dir)
             cookie_file = xbmc.translatePath('%s/cookie.txt' % cookie_dir)
-            # try to login until success
-            while not success:
+            # try to login until self.logged_in becomes True
+            while not self.logged_in:
                 if self.getSetting('login') == 'false':
                     # user gives up to login and disabled
                     # login in settings opened by loop
@@ -477,8 +478,8 @@ class GUI(xbmcgui.WindowXMLDialog):
                 user = self.getSetting('username')
                 password = self.getSetting('password')
                 # try to login
-                success = self.Quiz.login(user, password, cookie_file)
-                if not success:
+                self.logged_in = self.Quiz.login(user, password, cookie_file)
+                if not self.logged_in:
                     # login failed
                     dialog = xbmcgui.Dialog()
                     dialog.ok(self.getString(self.SID_LOGIN_FAILED_HEADING),
