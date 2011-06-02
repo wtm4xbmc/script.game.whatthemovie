@@ -74,6 +74,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_RATING_UNRATED = 3119
     SID_REJECTED_SHOT = 3120
     SID_ALREADY_SOLVED = 3121
+    SID_SOLVED_SOLUTION = 3122
     #  Misc
     SID_DATE_FORMAT = 3300
 
@@ -255,6 +256,12 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.label_solution.setLabel(label)
             self.setWTMProperty('solved_status', 'solved')
 
+    def _showShotSolution(self, solution):
+        self.image_solution.setColorDiffuse('FFFFFFFF')
+        label = self.getString(self.SID_SOLVED_SOLUTION) % solution
+        self.label_solution.setLabel(label)
+        self.setWTMProperty('solved_status', 'solved')
+
     def _showShotID(self, shot_id):
         self.label_shot_id.setLabel(self.getString(self.SID_SHOT_ID)
                                     % shot_id)
@@ -390,8 +397,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     def solveShot(self, shot_id):
         try:
             solved_title = self.Quiz.solveShot(shot_id)
-            print solved_title
-            # fixme: show solved_title
+            self._showShotSolution(solved_title)
         except Exception, error:
             self.errorMessage(self.getString(self.SID_ERROR_SHOT),
                               str(error))

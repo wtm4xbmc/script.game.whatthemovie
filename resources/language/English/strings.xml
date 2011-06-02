@@ -42,6 +42,7 @@ Misc     = 3300-3349
     <string id="3119">Unrated</string>
     <string id="3120">Rejected Snapshots</string>
     <string id="3121">You already solved this snapshot</string>
+    <string id="3122">The correct solution was: [B]%s[/B]</string>
     <!-- Settings-->
     <string id="3200">General</string>
     <string id="3201">Login</string>
