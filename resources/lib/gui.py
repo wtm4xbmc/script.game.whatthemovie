@@ -309,7 +309,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             own += self.RATING_STAR_POSX * 2 + 1
         self.image_own_rating.setWidth(own)
 
-    def _showShotFlags(self, language_list):
+    def _showShotFlags(self, available_languages):
         visible_flags = list()
         for i in (1, 2, 3, 4, 5):
             visible_flags.append(self.getSetting('flag%s' % i))
@@ -317,7 +317,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         for flag in visible_flags:
             flag_img = 'flags/%s.png' % flag
             flag_item = xbmcgui.ListItem(iconImage=flag_img)
-            if flag not in language_list:
+            if flag not in available_languages:
                 flag_item.setProperty('unavailable', 'True')
             self.list_flags.addItem(flag_item)
 
@@ -341,7 +341,7 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def _showSolvableState(self, state):
         element = self.getControl(self.CID_BUTTON_SOLUTION)
-        if state == True:
+        if state:
             element.setEnabled(True)
             element.setSelected(True)
         else:
@@ -369,10 +369,7 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def favouriteShot(self, shot_id):
         state = self.shot['favourite']
-        if state == True:
-            newstate = False
-        else:
-            newstate = True
+        newstate = not state
         try:
             self.Quiz.favouriteShot(shot_id, newstate)
             self._showShotButtonState('favourite', newstate)
@@ -382,10 +379,7 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def bookmarkShot(self, shot_id):
         state = self.shot['bookmarked']
-        if state == True:
-            newstate = False
-        else:
-            newstate = True
+        newstate = not state
         try:
             self.Quiz.bookmarkShot(shot_id, newstate)
             self._showShotButtonState('bookmarked', newstate)
