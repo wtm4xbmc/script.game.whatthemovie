@@ -449,7 +449,10 @@ class GUI(xbmcgui.WindowXMLDialog):
             if self.getSetting('auto_jump_to') == '0':
                 jump_to = 'random'
             elif self.getSetting('auto_jump_to') == '1':
-                jump_to = 'next'
+                if self.getSetting('only_unsolved_nav') == 'true':
+                    jump_to = 'next_unsolved'
+                else:
+                    jump_to = 'next'
             self.getShot(jump_to)
 
     def answerWrong(self, guess):
