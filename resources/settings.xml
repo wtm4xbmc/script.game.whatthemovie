@@ -32,6 +32,7 @@
         <setting id="visible_shot_flags" type="bool" label="3221" default="true" />
         <setting id="visible_shot_rating" type="bool" label="3231" default="true" />
         <setting id="visible_tool_buttons" type="bool" label="3235" default="true" />
+        <setting id="visible_navigation_buttons" type="bool" label="3236" default="true" />
     </category>
     <!-- Flags --->
     <category label="3222">

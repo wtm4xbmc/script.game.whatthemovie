@@ -80,6 +80,7 @@ Misc     = 3300-3349
     <string id="3233">Random</string>
     <string id="3234">Next</string>
     <string id="3235">Show "Tool buttons"</string>
+    <string id="3236">Show "Navigation buttons"</string>
     <!-- Misc-->
     <string id="3300">%Y-%m-%d</string>
 </strings>

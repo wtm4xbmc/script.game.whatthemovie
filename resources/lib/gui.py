@@ -559,6 +559,11 @@ class GUI(xbmcgui.WindowXMLDialog):
                         self.CID_BUTTON_SOLUTION, self.CID_BUTTON_JUMP)
             for control in controls:
                 self.getControl(control).setVisible(False)
+        if self.getSetting('visible_navigation_buttons') == 'false':
+            controls = (self.CID_BUTTON_FIRST, self.CID_BUTTON_PREV,
+                        self.CID_BUTTON_NEXT, self.CID_BUTTON_LAST)
+            for control in controls:
+                self.getControl(control).setVisible(False)
 
     def errorMessage(self, heading, error):
         print 'ERROR: %s: %s ' % (heading, str(error))
