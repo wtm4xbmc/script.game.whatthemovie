@@ -298,22 +298,16 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def _calcRatingImageWidth(self, rating):
         rating_intervals = int(rating)
-        if rating_intervals > 0:
-            rating_intervals -= 1
         print 'intervals: %d' % rating_intervals
         rating_stars_width = self.RATING_STAR_WIDTH * rating
         rating_gaps_width = self.RATING_STAR_DISTANCE * rating_intervals
         rating_width = rating_stars_width + rating_gaps_width
-        return int(rating_width + 0.5)
+        return int(rating_width)
 
     def _setRatingWidths(self, overall, own):
-        if overall == 0:
-            overall += 1
+        if not own:
+            own = 1
         self.image_avg_rating.setWidth(overall + self.RATING_STAR_POSX)
-        if own == 0:
-            own += 1
-        else:
-            own += self.RATING_STAR_POSX * 2 + 1
         self.image_own_rating.setWidth(own)
 
     def _showShotFlags(self, available_languages):
