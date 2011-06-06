@@ -10,6 +10,39 @@ class WhatTheMovie(object):
 
     MAIN_URL = 'http://whatthemovie.com'
 
+    OFFLINE_DEBUG = False
+    OFFLINE_SHOT = {'shot_id': u'156827',
+                    'bookmarked': False,
+                    'favourite': False,
+                    'gives_point': True,
+                    'already_solved': False,
+                    'tags': [u'tag1'],
+                    'posted_by': u'Hagentinho',
+                    'sotd': False,
+                    'lang_list': {'hidden': [u'dk', u'et', u'fi', u'gr'],
+                                  'main': [u'de', u'fr', u'en', u'es', u'pt'],
+                                  'all': [u'dk', u'et', u'fi', u'gr',
+                                          u'de', u'fr', u'en', u'es', u'pt']},
+                    'solved': {'status': True,
+                               'count': 1280,
+                               'first_by': u'Mimimi'},
+                    'image_url': (u'http://static.whatthemovie.com/'
+                                  u'system/images/stills/normal/73/'
+                                  u'7e4a854279aaf150d0fe0841f459c4.jpg'),
+                    'shot_type': 2,
+                    'date': datetime.datetime(2011, 5, 14, 0, 0),
+                    'nav': {'last': u'160987', 'prev_unsolved': u'157009',
+                            'next': u'156819', 'next_unsolved': u'156819',
+                            'prev': u'157009', 'first': u'1'},
+                    'voting': {'votes': u'93', 
+                               'own_rating': None,
+                               'overall_rating': u'7.90'},
+                    'solvable': False}
+    OFFLINE_ANSWER = {'title': 'Fluch der Karibik',
+                      'is_right': True,
+                      'title_year': (u'Pirates of the Caribbean: '
+                                     u'At World\'s End (2007)')}
+
     def __init__(self, user_agent):
         # Get browser stuff
         self.cookies = mechanize.LWPCookieJar()
@@ -22,6 +55,8 @@ class WhatTheMovie(object):
 
     def login(self, user, password, cookie_path):
         logged_in = False
+        if self.OFFLINE_DEBUG:
+            return 'auth'
         try:
             self.cookies.revert(cookie_path)
             cookie_found = True
@@ -60,6 +95,8 @@ class WhatTheMovie(object):
         return username
 
     def setRandomOptions(self, settings):
+        if self.OFFLINE_DEBUG:
+            return
         option_url = '%s/shot/setrandomoptions' % self.MAIN_URL
         self._sendAjaxReq(option_url, settings)
 
@@ -79,12 +116,15 @@ class WhatTheMovie(object):
         return response_c
 
     def getShot(self, shot_id):
+        if self.OFFLINE_DEBUG:
+            return self.OFFLINE_SHOT
         if shot_id == 'last':
             if self.last_shots:
                 self.shot = self.last_shots.pop()
         else:
             if self.shot:  # if there is already a shot - put it in list
                 self.last_shots.append(self.shot)
+                print self.last_shots
             if (shot_id.isdigit() or
                 shot_id == 'random' or
                 shot_id in self.shot['nav'].keys()):
@@ -254,6 +294,11 @@ class WhatTheMovie(object):
         self.browser.retrieve(url, local_path, )
 
     def guessShot(self, title_guess, shot_id):
+        if self.OFFLINE_DEBUG:
+            if title_guess.lower() == self.OFFLINE_ANSWER['title'].lower():
+                return self.OFFLINE_ANSWER
+            else:
+                return {'is_right': False}
         answer = dict()
         answer['is_right'] = False
         post_url = '%s/shot/%s/guess' % (self.MAIN_URL, shot_id)
@@ -268,6 +313,9 @@ class WhatTheMovie(object):
         return answer
 
     def rateShot(self, shot_id, user_rate, rerated='false'):
+        if self.OFFLINE_DEBUG:
+            self.OFFLINE_SHOT['voting']['own_rating'] = str(user_rate)
+            return
         url = '%s/shot/%s/rate.js' % (self.MAIN_URL, shot_id)
         user_rate_5 = float(user_rate) / 2
         rating_dict = dict()
@@ -279,6 +327,9 @@ class WhatTheMovie(object):
             self.shot['voting']['own_rating'] = str(user_rate)
 
     def bookmarkShot(self, shot_id, new_state):
+        if self.OFFLINE_DEBUG:
+            self.OFFLINE_SHOT['bookmarked'] = new_state
+            return
         if new_state == True:
             url = '%s/shot/%s/watch' % (self.MAIN_URL, shot_id)
         else:
@@ -288,6 +339,9 @@ class WhatTheMovie(object):
             self.shot['bookmarked'] = new_state
 
     def favouriteShot(self, shot_id, new_state):
+        if self.OFFLINE_DEBUG:
+            self.OFFLINE_SHOT['favourite'] = new_state
+            return
         if new_state == True:
             url = '%s/shot/%s/fav' % (self.MAIN_URL, shot_id)
         else:
@@ -297,6 +351,8 @@ class WhatTheMovie(object):
             self.shot['favourite'] = new_state
 
     def solveShot(self, shot_id):
+        if self.OFFLINE_DEBUG:
+            return self.OFFLINE_ANSWER['title']
         url = '%s/shot/%s/showsolution' % (self.MAIN_URL, shot_id)
         ajax_answer = self._sendAjaxReq(url)
         r = '<strong>(?P<solution>.+)\.\.\.</strong>'
@@ -306,6 +362,8 @@ class WhatTheMovie(object):
         return solved_title
 
     def getScore(self, username):
+        if self.OFFLINE_DEBUG:
+            return 0
         score = 0
         profile_url = '%s/user/%s/' % (self.MAIN_URL, username)
         self.browser.open(profile_url)

@@ -3,7 +3,7 @@
     <controls>
         <control type="group">
             <description>Group for zooming effect</description>
-            <animation effect="zoom" end="178,180" center="auto" time="500" tween="cubic" easing="inout" condition="Control.HasFocus(3003)">Conditional</animation>
+            <animation effect="zoom" end="178,180" center="auto" time="500" tween="cubic" easing="inout" condition="Control.HasFocus(3003) + !StringCompare(Window(10000).Property(wtm.main_image),)">Conditional</animation>
             <control type="image">
                 <description>Background</description>
                 <posx>0</posx>

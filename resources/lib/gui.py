@@ -449,7 +449,10 @@ class GUI(xbmcgui.WindowXMLDialog):
             if self.getSetting('auto_jump_to') == '0':
                 jump_to = 'random'
             elif self.getSetting('auto_jump_to') == '1':
-                jump_to = 'next'
+                if self.getSetting('only_unsolved_nav') == 'true':
+                    jump_to = 'next_unsolved'
+                else:
+                    jump_to = 'next'
             self.getShot(jump_to)
 
     def answerWrong(self, guess):
@@ -554,6 +557,11 @@ class GUI(xbmcgui.WindowXMLDialog):
         if self.getSetting('visible_tool_buttons') == 'false':
             controls = (self.CID_BUTTON_FAV, self.CID_BUTTON_BOOKMARK,
                         self.CID_BUTTON_SOLUTION, self.CID_BUTTON_JUMP)
+            for control in controls:
+                self.getControl(control).setVisible(False)
+        if self.getSetting('visible_navigation_buttons') == 'false':
+            controls = (self.CID_BUTTON_FIRST, self.CID_BUTTON_PREV,
+                        self.CID_BUTTON_NEXT, self.CID_BUTTON_LAST)
             for control in controls:
                 self.getControl(control).setVisible(False)
 
