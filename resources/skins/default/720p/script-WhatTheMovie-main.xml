@@ -1,4 +1,4 @@
-﻿<window id="1000">
+<window id="1000">
     <defaultcontrol always="false">3000</defaultcontrol>
     <controls>
         <control type="group">
@@ -26,41 +26,22 @@
                 <posy>620</posy>
                 <width>720</width>
                 <height>36</height>
-                <control type="button" id="3002">
-                    <description>Back Button</description>
-                    <posx>0</posx>
-                    <posy>0</posy>
-                    <width>120</width>
-                    <height>36</height>
-                    <texturefocus>button_active.png</texturefocus>
-                    <texturenofocus>button.png</texturenofocus>
-                    <align>center</align>
-                    <aligny>center</aligny>
-                    <onleft>3001</onleft>
-                    <onright>3004</onright>
-                    <onup>3003</onup>
-                    <ondown>3004</ondown>
-                    <font>font12</font>
-                    <focusedcolor>white</focusedcolor>
-                    <textcolor>grey</textcolor>
-                    <label>$LOCALIZE[SCRIPT3002]</label>
-                </control>
                 <control type="button" id="3004">
                     <description>First Button</description>
-                    <posx>130</posx>
+                    <posx>0</posx>
                     <posy>0</posy>
                     <width>36</width>
                     <height>36</height>
                     <texturefocus>button_first_active.png</texturefocus>
                     <texturenofocus>button_first.png</texturenofocus>
-                    <onleft>3002</onleft>
+                    <onleft>3007</onleft>
                     <onright>3005</onright>
-                    <onup>3003</onup>
+                    <onup>3004</onup>
                     <ondown>3008</ondown>
                 </control>
                 <control type="button" id="3005">
                     <description>Previous Button</description>
-                    <posx>176</posx>
+                    <posx>46</posx>
                     <posy>0</posy>
                     <width>36</width>
                     <height>36</height>
@@ -69,9 +50,28 @@
                     <align>center</align>
                     <aligny>center</aligny>
                     <onleft>3004</onleft>
+                    <onright>3002</onright>
+                    <onup>3003</onup>
+                    <ondown>3008</ondown>
+                </control>
+                <control type="button" id="3002">
+                    <description>Back Button</description>
+                    <posx>92</posx>
+                    <posy>0</posy>
+                    <width>120</width>
+                    <height>36</height>
+                    <texturefocus>button_active.png</texturefocus>
+                    <texturenofocus>button.png</texturenofocus>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <onleft>3005</onleft>
                     <onright>3000</onright>
                     <onup>3003</onup>
-                    <ondown>3009</ondown>
+                    <ondown>3008</ondown>
+                    <font>font12</font>
+                    <focusedcolor>white</focusedcolor>
+                    <textcolor>grey</textcolor>
+                    <label>$LOCALIZE[SCRIPT3002]</label>
                 </control>
                 <control type="button" id="3000">
                     <description>Guess Button</description>
@@ -83,18 +83,37 @@
                     <texturenofocus>button_guess.png</texturenofocus>
                     <align>center</align>
                     <aligny>center</aligny>
-                    <onright>3006</onright>
-                    <onleft>3005</onleft>
+                    <onright>3001</onright>
+                    <onleft>3002</onleft>
                     <onup>3003</onup>
-                    <ondown>3006</ondown>
+                    <ondown>3009</ondown>
                     <font>font12</font>
                     <focusedcolor>white</focusedcolor>
                     <textcolor>grey</textcolor>
                     <label>$LOCALIZE[SCRIPT3000]</label>
                 </control>
+                <control type="button" id="3001">
+                    <description>Random Button</description>
+                    <posx>508</posx>
+                    <posy>0</posy>
+                    <width>120</width>
+                    <height>36</height>
+                    <texturefocus>button_active.png</texturefocus>
+                    <texturenofocus>button.png</texturenofocus>
+                    <align>center</align>
+                    <aligny>center</aligny>
+                    <onleft>3000</onleft>
+                    <onright>3006</onright>
+                    <onup>3003</onup>
+                    <ondown>3010</ondown>
+                    <font>font12</font>
+                    <focusedcolor>white</focusedcolor>
+                    <textcolor>grey</textcolor>
+                    <label>$LOCALIZE[SCRIPT3001]</label>
+                </control>
                 <control type="button" id="3006">
                     <description>Next Button</description>
-                    <posx>508</posx>
+                    <posx>638</posx>
                     <posy>0</posy>
                     <width>36</width>
                     <height>36</height>
@@ -102,14 +121,14 @@
                     <texturenofocus>button_next.png</texturenofocus>
                     <align>center</align>
                     <aligny>center</aligny>
-                    <onleft>3000</onleft>
+                    <onleft>3001</onleft>
                     <onright>3007</onright>
                     <onup>3003</onup>
-                    <ondown>3010</ondown>
+                    <ondown>3011</ondown>
                 </control>
                 <control type="button" id="3007">
                     <description>Last Button</description>
-                    <posx>554</posx>
+                    <posx>684</posx>
                     <posy>0</posy>
                     <width>36</width>
                     <height>36</height>
@@ -118,28 +137,9 @@
                     <align>center</align>
                     <aligny>center</aligny>
                     <onleft>3006</onleft>
-                    <onright>3001</onright>
+                    <onright>3004</onright>
                     <onup>3003</onup>
                     <ondown>3011</ondown>
-                </control>
-                <control type="button" id="3001">
-                    <description>Random next Button</description>
-                    <posx>600</posx>
-                    <posy>0</posy>
-                    <width>120</width>
-                    <height>36</height>
-                    <texturefocus>button_active.png</texturefocus>
-                    <texturenofocus>button.png</texturenofocus>
-                    <align>center</align>
-                    <aligny>center</aligny>
-                    <onleft>3007</onleft>
-                    <onright>3002</onright>
-                    <onup>3003</onup>
-                    <ondown>3002</ondown>
-                    <font>font12</font>
-                    <focusedcolor>white</focusedcolor>
-                    <textcolor>grey</textcolor>
-                    <label>$LOCALIZE[SCRIPT3001]</label>
                 </control>
                 <control type="radiobutton" id="3008">
                     <description>Favorite Button</description>
@@ -157,7 +157,7 @@
                     <radioheight>11</radioheight>
                     <onleft>3011</onleft>
                     <onright>3009</onright>
-                    <onup>3004</onup>
+                    <onup>3002</onup>
                     <ondown>3009</ondown>
                     <label></label>
                 </control>
@@ -211,7 +211,7 @@
                     <texturenofocus>button_smaller_id.png</texturenofocus>
                     <onleft>3010</onleft>
                     <onright>3008</onright>
-                    <onup>3007</onup>
+                    <onup>3001</onup>
                     <ondown>3008</ondown>
                 </control>
             </control>
