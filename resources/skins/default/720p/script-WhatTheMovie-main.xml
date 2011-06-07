@@ -1,4 +1,4 @@
-<window id="1000">
+﻿<window id="1000">
     <defaultcontrol always="false">3000</defaultcontrol>
     <controls>
         <control type="group">
@@ -307,16 +307,16 @@
             -->
             <control type="group" id="1016">
                 <description>Group for the rating stars images</description>
-                <posx>501</posx>
+                <posx>500</posx>
                 <posy>580</posy>
-                <width>278</width>
+                <width>280</width>
                 <height>26</height>
                 <visible>true</visible>
                 <control type="progress" id="1015">
                     <description>Overall rating</description>
                     <posx>0</posx>
                     <posy>0</posy>
-                    <width>278</width>
+                    <width>280</width>
                     <height>26</height>
                     <visible>true</visible>
                     <reveal>true</reveal>
@@ -327,7 +327,7 @@
                     <description>Own rating</description>
                     <posx>0</posx>
                     <posy>0</posy>
-                    <width>278</width>
+                    <width>280</width>
                     <height>26</height>
                     <visible>true</visible>
                     <reveal>true</reveal>
@@ -338,7 +338,7 @@
                     <description>Slider for setting of own rating</description>
                     <posx>0</posx>
                     <posy>0</posy>
-                    <width>278</width>
+                    <width>280</width>
                     <height>26</height>
                     <visible>true</visible>
                 </control>
