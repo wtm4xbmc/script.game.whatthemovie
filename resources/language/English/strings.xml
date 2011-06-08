@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" standalone='yes'?>
 <!-- String IDs
 Buttons  = 3000-3049 (same IDs like in skin.xml)
 Messages = 3050-3099
@@ -7,11 +7,11 @@ Settings = 3200-3299
 Misc     = 3300-3349
 -->
 <strings>
-    <!-- Buttons-->
+    <!-- Buttons -->
     <string id="3000">Guess!</string>
     <string id="3001">Random</string>
     <string id="3002">Back</string>
-    <!-- Messages-->
+    <!-- Messages -->
     <string id="3050">Could not log in</string>
     <string id="3051">Password wrong or username unknown: [B]%s[/B][CR]Please change credentials or disable login</string>
     <string id="3052">Enter Shot ID</string>
@@ -19,7 +19,7 @@ Misc     = 3300-3349
     <string id="3054">Login site unreachable</string>
     <string id="3055">Could not get the Shot</string>
     <string id="3066">Could not check the guess</string>
-    <!-- Labels-->
+    <!-- Labels -->
     <string id="3100">Checking: [B]%s[/B]</string>
     <string id="3101">Correct. Original title is: [B]%s[/B]</string>
     <string id="3102">Wrong: [B]%s[/B]</string>
@@ -43,7 +43,7 @@ Misc     = 3300-3349
     <string id="3120">Rejected SnapShots</string>
     <string id="3121">You already solved this snapShot</string>
     <string id="3122">The correct solution was: [B]%s[/B]</string>
-    <!-- Settings-->
+    <!-- Settings -->
     <string id="3200">General</string>
     <string id="3201">Login</string>
     <string id="3202">Use whatthemovie.com account</string>

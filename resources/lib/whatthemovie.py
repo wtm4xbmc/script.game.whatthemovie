@@ -34,7 +34,7 @@ class WhatTheMovie(object):
                     'nav': {'last': u'160987', 'prev_unsolved': u'157009',
                             'next': u'156819', 'next_unsolved': u'156819',
                             'prev': u'157009', 'first': u'1'},
-                    'voting': {'votes': u'93', 
+                    'voting': {'votes': u'93',
                                'own_rating': None,
                                'overall_rating': u'7.90'},
                     'solvable': False}

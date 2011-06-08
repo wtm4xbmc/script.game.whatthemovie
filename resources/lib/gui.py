@@ -438,7 +438,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_solution.setLabel(message % title_year)
         self.setWTMProperty('solved_status', 'correct')
         self.image_solution.setColorDiffuse('FF00FF00')
-        # if this shout gives points, do so
+        # if this shot gives points, do so
         if gives_point:
             self.score += 1
             self._showUserScore(self.score)
