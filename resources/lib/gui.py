@@ -76,8 +76,6 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_REJECTED_SHOT = 3120
     SID_ALREADY_SOLVED = 3121
     SID_SOLVED_SOLUTION = 3122
-    #  Misc
-    SID_DATE_FORMAT = 3300
 
     # ACTION_IDs
     AID_EXIT_BACK = [9, 10, 13]
@@ -274,7 +272,7 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def _showShotDate(self, date):
         if date:
-            date_format = str(self.getString(self.SID_DATE_FORMAT))
+            date_format = xbmc.getRegion('dateshort')
             date_string = date.strftime(date_format)
         else:
             date_string = self.getString(self.SID_NOT_RELEASED)
