@@ -28,8 +28,6 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_IMAGE_GIF = 1002
     CID_IMAGE_SOLUTION = 1006
     CID_IMAGE_MAIN = 1000
-    CID_IMAGE_AVG_RATING = 1015
-    CID_IMAGE_OWN_RATING = 1017
     CID_LABEL_LOGINSTATE = 1001
     CID_LABEL_SCORE = 1003
     CID_LABEL_POSTED_BY = 1004
@@ -40,6 +38,9 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_LABEL_SHOT_TYPE = 1012
     CID_LABEL_RATING = 1014
     CID_LIST_FLAGS = 1013
+    CID_PROGR_AVG_RATING = 1015
+    CID_SLIDE_OWN_RATING = 1017
+    CID_PROGR_OWN_RATING = 1018
     CID_GROUP_RATING = 1016
 
     # STRING_IDs
@@ -75,8 +76,6 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_REJECTED_SHOT = 3120
     SID_ALREADY_SOLVED = 3121
     SID_SOLVED_SOLUTION = 3122
-    #  Misc
-    SID_DATE_FORMAT = 3300
 
     # ACTION_IDs
     AID_EXIT_BACK = [9, 10, 13]
@@ -87,6 +86,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     # ADDON_CONSTANTS
     ADDON_ID = sys.modules['__main__'].__id__
     ADDON_VERSION = sys.modules['__main__'].__version__
+    ADDON_NAME = sys.modules['__main__'].__addonname__
 
     def __init__(self, xmlFilename, scriptPath, defaultSkin, defaultRes):
         self.window_home = xbmcgui.Window(10000)
@@ -116,10 +116,11 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.image_main = self.getControl(self.CID_IMAGE_MAIN)
         self.image_gif = self.getControl(self.CID_IMAGE_GIF)
         self.image_solution = self.getControl(self.CID_IMAGE_SOLUTION)
-        self.image_avg_rating = self.getControl(self.CID_IMAGE_AVG_RATING)
-        self.image_own_rating = self.getControl(self.CID_IMAGE_OWN_RATING)
         self.list_flags = self.getControl(self.CID_LIST_FLAGS)
         self.group_rating = self.getControl(self.CID_GROUP_RATING)
+        self.progr_avg_rating = self.getControl(self.CID_PROGR_AVG_RATING)
+        self.slide_own_rating = self.getControl(self.CID_SLIDE_OWN_RATING)
+        self.progr_own_rating = self.getControl(self.CID_PROGR_OWN_RATING)
 
         # set control visibility depending on xbmc-addon settings
         self.hideLabels()
@@ -185,6 +186,10 @@ class GUI(xbmcgui.WindowXMLDialog):
                 self.getShot('prev' + unsolved_toggle)
             elif controlId == self.CID_BUTTON_NEXT:
                 self.getShot('next' + unsolved_toggle)
+        elif controlId == self.CID_SLIDE_OWN_RATING:
+            percent = self.slide_own_rating.getPercent()
+            user_rate = int(percent / 10) + 1  # always round up
+            self.rateShot(self.shot['shot_id'], user_rate)
 
     def closeDialog(self):
         self.setWTMProperty('main_image', '')
@@ -201,6 +206,9 @@ class GUI(xbmcgui.WindowXMLDialog):
             shot = self.shot
             image_path = self.downloadPic(shot['image_url'],
                                           shot['shot_id'])
+            xbmc.log('[ADDON][%s] Debug: shot=%s' % (self.ADDON_NAME,
+                                                     self.shot),
+                     level=xbmc.LOGNOTICE)                              
         except Exception, error:
             self.errorMessage(self.getString(self.SID_ERROR_SHOT),
                               str(error))
@@ -268,7 +276,7 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def _showShotDate(self, date):
         if date:
-            date_format = str(self.getString(self.SID_DATE_FORMAT))
+            date_format = xbmc.getRegion('dateshort')
             date_string = date.strftime(date_format)
         else:
             date_string = self.getString(self.SID_NOT_RELEASED)
@@ -278,17 +286,20 @@ class GUI(xbmcgui.WindowXMLDialog):
     def _showShotRating(self, rating):
         if rating['overall_rating'] != u'hidden':
             overall_rating = float(rating['overall_rating'])
-            overall_rating_width = self._calcRatingImageWidth(overall_rating)
+            overall_rating_percent = overall_rating * 10
+            interval_percent = self._calcRatingPercent(overall_rating)
         else:
             overall_rating = self.getString(self.SID_RATING_HIDDEN)
-            overall_rating_width = self._calcRatingImageWidth(0.0)
+            interval_percent = 0
+        self.progr_avg_rating.setPercent(interval_percent)
         if rating['own_rating']:
-            own_rating = rating['own_rating']
-            own_rating_width = self._calcRatingImageWidth(float(own_rating))
+            own_rating = float(rating['own_rating'])
+            own_rating_percent = own_rating * 10
+            self.progr_own_rating.setPercent(own_rating_percent)
         else:
             own_rating = self.getString(self.SID_RATING_UNRATED)
-            own_rating_width = self._calcRatingImageWidth(0.0)
-        self._setRatingWidths(overall_rating_width, own_rating_width)
+            own_rating_percent = 0
+        self.progr_own_rating.setPercent(own_rating_percent)
         votes = rating['votes']
         rating_string = '[CR]'.join((self.getString(self.SID_OVERALL_RATING),
                                      self.getString(self.SID_OWN_RATING)))
@@ -296,25 +307,18 @@ class GUI(xbmcgui.WindowXMLDialog):
                                                     votes,
                                                     own_rating))
 
-    def _calcRatingImageWidth(self, rating):
-        rating_intervals = int(rating)
-        if rating_intervals > 0:
-            rating_intervals -= 1
-        print 'intervals: %d' % rating_intervals
-        rating_stars_width = self.RATING_STAR_WIDTH * rating
-        rating_gaps_width = self.RATING_STAR_DISTANCE * rating_intervals
-        rating_width = rating_stars_width + rating_gaps_width
-        return int(rating_width + 0.5)
-
-    def _setRatingWidths(self, overall, own):
-        if overall == 0:
-            overall += 1
-        self.image_avg_rating.setWidth(overall + self.RATING_STAR_POSX)
-        if own == 0:
-            own += 1
-        else:
-            own += self.RATING_STAR_POSX * 2 + 1
-        self.image_own_rating.setWidth(own)
+    def _calcRatingPercent(self, rating_float):
+        # a star is 1 star_width width
+        # a gap is 1/2 star_widths width
+        # a border is 1/4 star_widths width
+        # 100% = 10s + 9g + 2b = 10s + 9s/2 + 2s/4 = 100/15
+        star_width = 100 / 15
+        full_stars = float(int(rating_float))
+        last_star = rating_float - full_stars
+        percent = (star_width / 4 +   # left border
+                   full_stars * (star_width + star_width / 2) +  # stars + gaps
+                   last_star * star_width)  # last star
+        return int(percent)
 
     def _showShotFlags(self, available_languages):
         visible_flags = list()
@@ -438,7 +442,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_solution.setLabel(message % title_year)
         self.setWTMProperty('solved_status', 'correct')
         self.image_solution.setColorDiffuse('FF00FF00')
-        # if this shout gives points, do so
+        # if this shot gives points, do so
         if gives_point:
             self.score += 1
             self._showUserScore(self.score)
@@ -566,10 +570,15 @@ class GUI(xbmcgui.WindowXMLDialog):
                 self.getControl(control).setVisible(False)
 
     def errorMessage(self, heading, error):
-        print 'ERROR: %s: %s ' % (heading, str(error))
+        xbmc.log('[ADDON][%s] Error: %s %s' % (self.ADDON_NAME, heading, 
+                                              str(error)), 
+                 level=xbmc.LOGERROR)
         exc_type, exc_value, exc_traceback = sys.exc_info()
-        print 'TRACEBACK:' + repr(traceback.format_exception(exc_type,
-                                                             exc_value,
-                                                             exc_traceback))
+        trace = repr(traceback.format_exception(exc_type,
+                     exc_value,
+                     exc_traceback))
+        xbmc.log('[ADDON][%s] Traceback: %s' % (self.ADDON_NAME, 
+                                                exc_traceback), 
+                 level=xbmc.LOGERROR)
         dialog = xbmcgui.Dialog()
-        dialog.ok(heading, error)
+        dialog.ok(heading, str(error))
