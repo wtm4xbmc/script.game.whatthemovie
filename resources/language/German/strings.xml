@@ -81,4 +81,32 @@ Misc     = 3300-3349
     <string id="3234">Nächstem</string>
     <string id="3235">Zeige "Funktions Buttons"</string>
     <string id="3236">Zeige "Navigations Buttons"</string>
+    <string id="3237">Tasten</string>
+    <string id="3238">Wähle Tasten für Funktionen</string>
+    <!-- Keys -->
+    <string id="3239">Keine Taste</string>
+    <string id="3240">Bild Hoch</string>
+    <string id="3241">Bild Runter</string>
+    <string id="3242">Zeige Info</string>
+    <string id="3243">Pause</string>
+    <string id="3244">Stop</string>
+    <string id="3245">next item</string>
+    <string id="3246">prev item</string>
+    <string id="3247">Vorspulen</string>
+    <string id="3248">Zurückspulen </string>
+    <string id="3249">Play</string>
+    <string id="3250">Kontext-Menu</string>
+    <string id="3251">Volume +</string>
+    <string id="3252">Volume -</string>
+    <string id="3253">Scroll up</string>
+    <string id="3254">Scroll down</string>
+    <string id="3255">Pos1</string>
+    <string id="3256">Ende</string>
+    <!-- Functions -->
+    <string id="3260">Nächster</string>
+    <string id="3261">Vorheriger</string>
+    <string id="3262">Springen</string>
+    <string id="3263">Lesezeichen</string>
+    <string id="3264">Favorisieren</string>
+    <string id="3265">Lösen</string>
 </strings>
