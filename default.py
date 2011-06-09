@@ -1,25 +1,28 @@
 import sys
+
+import xbmc
 import xbmcaddon
 
 Addon = xbmcaddon.Addon('script.game.whatthemovie')
 
 # Script constants
-__scriptname__ = Addon.getAddonInfo('name')
+__addonname__ = Addon.getAddonInfo('name')
 __id__ = Addon.getAddonInfo('id')
-__author__ = Addon.getAddonInfo('author')
 __version__ = Addon.getAddonInfo('version')
 __path__ = Addon.getAddonInfo('path')
 
-print '[SCRIPT][%s] version %s initialized!' % (__scriptname__, __version__)
+xbmc.log('[ADDON][%s] version %s started' 
+         % (__addonname__, __version__), level=xbmc.LOGNOTICE)
 
 if (__name__ == '__main__'):
     import resources.lib.gui as gui
-    ui = gui.GUI('script-%s-main.xml' % __scriptname__,
+    ui = gui.GUI('script-%s-main.xml' % __addonname__,
                  __path__,
                  'default',
                  '720p')
     ui.doModal()
-    print '[SCRIPT][%s] version %s exited!' % (__scriptname__, __version__)
+    xbmc.log('[ADDON][%s] version %s exited' 
+             % (__addonname__, __version__), level=xbmc.LOGNOTICE)
     del ui
 
 sys.modules.clear()

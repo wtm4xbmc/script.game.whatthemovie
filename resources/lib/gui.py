@@ -76,8 +76,6 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_REJECTED_SHOT = 3120
     SID_ALREADY_SOLVED = 3121
     SID_SOLVED_SOLUTION = 3122
-    #  Misc
-    SID_DATE_FORMAT = 3300
 
     # ACTION_IDs
     AID_EXIT_BACK = [9, 10, 13]
@@ -88,6 +86,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     # ADDON_CONSTANTS
     ADDON_ID = sys.modules['__main__'].__id__
     ADDON_VERSION = sys.modules['__main__'].__version__
+    ADDON_NAME = sys.modules['__main__'].__addonname__
 
     def __init__(self, xmlFilename, scriptPath, defaultSkin, defaultRes):
         self.window_home = xbmcgui.Window(10000)
@@ -207,6 +206,9 @@ class GUI(xbmcgui.WindowXMLDialog):
             shot = self.shot
             image_path = self.downloadPic(shot['image_url'],
                                           shot['shot_id'])
+            xbmc.log('[ADDON][%s] Debug: shot=%s' % (self.ADDON_NAME,
+                                                     self.shot),
+                     level=xbmc.LOGNOTICE)                              
         except Exception, error:
             self.errorMessage(self.getString(self.SID_ERROR_SHOT),
                               str(error))
@@ -274,7 +276,7 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def _showShotDate(self, date):
         if date:
-            date_format = str(self.getString(self.SID_DATE_FORMAT))
+            date_format = xbmc.getRegion('dateshort')
             date_string = date.strftime(date_format)
         else:
             date_string = self.getString(self.SID_NOT_RELEASED)
@@ -440,7 +442,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_solution.setLabel(message % title_year)
         self.setWTMProperty('solved_status', 'correct')
         self.image_solution.setColorDiffuse('FF00FF00')
-        # if this shout gives points, do so
+        # if this shot gives points, do so
         if gives_point:
             self.score += 1
             self._showUserScore(self.score)
@@ -568,10 +570,15 @@ class GUI(xbmcgui.WindowXMLDialog):
                 self.getControl(control).setVisible(False)
 
     def errorMessage(self, heading, error):
-        print 'ERROR: %s: %s ' % (heading, str(error))
+        xbmc.log('[ADDON][%s] Error: %s %s' % (self.ADDON_NAME, heading, 
+                                              str(error)), 
+                 level=xbmc.LOGERROR)
         exc_type, exc_value, exc_traceback = sys.exc_info()
-        print 'TRACEBACK:' + repr(traceback.format_exception(exc_type,
-                                                             exc_value,
-                                                             exc_traceback))
+        trace = repr(traceback.format_exception(exc_type,
+                     exc_value,
+                     exc_traceback))
+        xbmc.log('[ADDON][%s] Traceback: %s' % (self.ADDON_NAME, 
+                                                exc_traceback), 
+                 level=xbmc.LOGERROR)
         dialog = xbmcgui.Dialog()
-        dialog.ok(heading, error)
+        dialog.ok(heading, str(error))

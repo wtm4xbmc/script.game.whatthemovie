@@ -34,7 +34,7 @@ class WhatTheMovie(object):
                     'nav': {'last': u'160987', 'prev_unsolved': u'157009',
                             'next': u'156819', 'next_unsolved': u'156819',
                             'prev': u'157009', 'first': u'1'},
-                    'voting': {'votes': u'93', 
+                    'voting': {'votes': u'93',
                                'own_rating': None,
                                'overall_rating': u'7.90'},
                     'solvable': False}
@@ -124,7 +124,6 @@ class WhatTheMovie(object):
         else:
             if self.shot:  # if there is already a shot - put it in list
                 self.last_shots.append(self.shot)
-                print self.last_shots
             if (shot_id.isdigit() or
                 shot_id == 'random' or
                 shot_id in self.shot['nav'].keys()):
@@ -287,7 +286,6 @@ class WhatTheMovie(object):
         self.shot['favourite'] = favourite
         self.shot['sotd'] = sotd
         self.shot['solvable'] = solvable
-        print self.shot
         return self.shot
 
     def downloadFile(self, url, local_path):
