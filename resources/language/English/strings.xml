@@ -81,4 +81,32 @@ Misc     = 3300-3349
     <string id="3234">Next</string>
     <string id="3235">Show "Tool buttons"</string>
     <string id="3236">Show "Navigation buttons"</string>
+    <string id="3237">Keys</string>
+    <string id="3238">Choose buttons for actions</string>
+    <!-- Keys -->
+    <string id="3239">No Key</string>
+    <string id="3240">page up</string>
+    <string id="3241">page down</string>
+    <string id="3242">show info</string>
+    <string id="3243">pause</string>
+    <string id="3244">stop</string>
+    <string id="3245">next item</string>
+    <string id="3246">prev item</string>
+    <string id="3247">fast forward</string>
+    <string id="3248">rewind</string>
+    <string id="3249">play</string>
+    <string id="3250">context menu</string>
+    <string id="3251">volume up</string>
+    <string id="3252">volume down</string>
+    <string id="3253">scroll up</string>
+    <string id="3254">scroll down</string>
+    <string id="3255">home</string>
+    <string id="3256">end</string>
+    <!-- Functions -->
+    <string id="3260">Next</string>
+    <string id="3261">Previous</string>
+    <string id="3262">Jump</string>
+    <string id="3263">Bookmark</string>
+    <string id="3264">Favourite</string>
+    <string id="3265">Solve</string>
 </strings>
