@@ -119,16 +119,16 @@ class WhatTheMovie(object):
     def getShot(self, shot_request):
         if self.OFFLINE_DEBUG:
             return self.OFFLINE_SHOT
-        if shot_request == 'last':
+        if shot_request == 'back':
             if self.last_shots:
                 self.shot = self.last_shots.pop()
         else:
             if self.shot:  # if there is already a shot - put it in list
                 self.last_shots.append(self.shot)
-            if (shot_request.isdigit() or
-                shot_request == 'random' or
-                shot_request in self.shot['nav'].keys()):
+            if shot_request.isdigit() or shot_request == 'random':
                 self.shot = self.scrapeShot(shot_request)
+            elif shot_request in self.shot['nav'].keys():
+                self.shot = self.scrapeShot(self.shot['nav'][shot_request])
         self.shot['requested_as'] = shot_request
         return self.shot
 

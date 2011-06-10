@@ -184,7 +184,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             elif key == 'key_random':
                 self.getShot('random')
             elif key == 'key_back':
-                self.getShot('last')
+                self.getShot('back')
             elif key == 'key_jump':
                 self.askShotID()
             elif key == 'key_book':
@@ -218,7 +218,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         elif controlId == self.CID_BUTTON_RANDOM:
             self.getShot('random')
         elif controlId == self.CID_BUTTON_BACK:
-            self.getShot('last')
+            self.getShot('back')
         elif controlId == self.CID_BUTTON_FIRST:
             self.getShot('first')
         elif controlId == self.CID_BUTTON_LAST:
@@ -638,8 +638,8 @@ class GUI(xbmcgui.WindowXMLDialog):
                  level=xbmc.LOGERROR)
         exc_type, exc_value, exc_traceback = sys.exc_info()
         trace = repr(traceback.format_exception(exc_type,
-                     exc_value,
-                     exc_traceback))
+                                                exc_value,
+                                                exc_traceback))
         xbmc.log('[ADDON][%s] Traceback: %s' % (self.ADDON_NAME,
                                                 trace),
                  level=xbmc.LOGERROR)
