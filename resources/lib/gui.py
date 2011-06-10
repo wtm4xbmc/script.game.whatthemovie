@@ -175,7 +175,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         if action in self.AID_EXIT_BACK:
             self.closeDialog()
         elif action in self.AID_NUMBERS:
-            user_rate = self.AID_NUMBERS.index(action.getId()) + 1
+            user_rate = self.AID_NUMBERS.index(action) + 1
             self.rateShot(self.shot['shot_id'], user_rate)
         elif action in self.assigned_keys:
             key = self.assigned_keys[action]
