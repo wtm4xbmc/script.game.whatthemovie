@@ -83,23 +83,23 @@ class GUI(xbmcgui.WindowXMLDialog):
                    64, 65, 66, 67, 58]
 
     # The order of this actions is the same like in the settings!
-    ACTION_IDS=({'AID_PAGE_UP': 5},
-                {'AID_PAGE_DOWN': 6},
-                {'AID_SHOW_INFO': 11},
-                {'AID_PAUSE': 12},
-                {'AID_STOP': 13},
-                {'AID_NEXT_ITEM': 14},
-                {'AID_PREV_ITEM': 15},
-                {'AID_PLAYER_FORWARD': 77},
-                {'AID_PLAYER_REWIND': 78 },
-                {'AID_PLAYER_PLAY': 79},
-                {'AID_CONTEXT_MENU': 117},
-                {'AID_VOLUME_UP': 88},
-                {'AID_VOLUME_DOWN': 89},
-                {'AID_SCROLL_UP': 111},
-                {'AID_SCROLL_DOWN': 112},
-                {'AID_HOME': 159},
-                {'AID_END': 160})
+    ACTION_IDS = ({'AID_PAGE_UP': 5},
+                  {'AID_PAGE_DOWN': 6},
+                  {'AID_SHOW_INFO': 11},
+                  {'AID_PAUSE': 12},
+                  {'AID_STOP': 13},
+                  {'AID_NEXT_ITEM': 14},
+                  {'AID_PREV_ITEM': 15},
+                  {'AID_PLAYER_FORWARD': 77},
+                  {'AID_PLAYER_REWIND': 78},
+                  {'AID_PLAYER_PLAY': 79},
+                  {'AID_CONTEXT_MENU': 117},
+                  {'AID_VOLUME_UP': 88},
+                  {'AID_VOLUME_DOWN': 89},
+                  {'AID_SCROLL_UP': 111},
+                  {'AID_SCROLL_DOWN': 112},
+                  {'AID_HOME': 159},
+                  {'AID_END': 160})
 
     # ADDON_CONSTANTS
     ADDON_ID = sys.modules['__main__'].__id__
@@ -160,7 +160,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.close()
 
     def setKeySetting(self):
-        keys = ('key_guess', 'key_random', 'key_back', 'key_next', 
+        keys = ('key_guess', 'key_random', 'key_back', 'key_next',
                 'key_prev', 'key_jump', 'key_book', 'key_fav', 'key_solve')
         self.assigned_keys = dict()
         for key in keys:
@@ -248,20 +248,20 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.setWTMProperty('main_image', '')
         self.close()
 
-    def getShot(self, shot_id=None):
+    def getShot(self, shot_request):
         # set busy_gif
         self.setWTMProperty('busy', 'loading')
         # hide label_status
         self.setWTMProperty('solved_status', 'inactive')
         # scrape shot and download picture
         try:
-            self.shot = self.Quiz.getShot(shot_id)
+            self.shot = self.Quiz.getShot(shot_request)
             shot = self.shot
             image_path = self.downloadPic(shot['image_url'],
                                           shot['shot_id'])
             xbmc.log('[ADDON][%s] Debug: shot=%s' % (self.ADDON_NAME,
                                                      self.shot),
-                     level=xbmc.LOGNOTICE)                              
+                     level=xbmc.LOGNOTICE)
         except Exception, error:
             self.errorMessage(self.getString(self.SID_ERROR_SHOT),
                               str(error))
@@ -624,15 +624,15 @@ class GUI(xbmcgui.WindowXMLDialog):
                 self.getControl(control).setVisible(False)
 
     def errorMessage(self, heading, error):
-        xbmc.log('[ADDON][%s] Error: %s %s' % (self.ADDON_NAME, heading, 
-                                              str(error)), 
+        xbmc.log('[ADDON][%s] Error: %s %s' % (self.ADDON_NAME, heading,
+                                              str(error)),
                  level=xbmc.LOGERROR)
         exc_type, exc_value, exc_traceback = sys.exc_info()
         trace = repr(traceback.format_exception(exc_type,
                      exc_value,
                      exc_traceback))
-        xbmc.log('[ADDON][%s] Traceback: %s' % (self.ADDON_NAME, 
-                                                exc_traceback), 
+        xbmc.log('[ADDON][%s] Traceback: %s' % (self.ADDON_NAME,
+                                                exc_traceback),
                  level=xbmc.LOGERROR)
         dialog = xbmcgui.Dialog()
         dialog.ok(heading, str(error))

@@ -12,6 +12,7 @@ class WhatTheMovie(object):
 
     OFFLINE_DEBUG = False
     OFFLINE_SHOT = {'shot_id': u'156827',
+                    'requested_as': 'random',
                     'bookmarked': False,
                     'favourite': False,
                     'gives_point': True,
@@ -115,24 +116,25 @@ class WhatTheMovie(object):
         response_c = response.replace('&amp;', '&').decode('unicode-escape')
         return response_c
 
-    def getShot(self, shot_id):
+    def getShot(self, shot_request):
         if self.OFFLINE_DEBUG:
             return self.OFFLINE_SHOT
-        if shot_id == 'last':
+        if shot_request == 'last':
             if self.last_shots:
                 self.shot = self.last_shots.pop()
         else:
             if self.shot:  # if there is already a shot - put it in list
                 self.last_shots.append(self.shot)
-            if (shot_id.isdigit() or
-                shot_id == 'random' or
-                shot_id in self.shot['nav'].keys()):
-                self.shot = self.scrapeShot(shot_id)
+            if (shot_request.isdigit() or
+                shot_request == 'random' or
+                shot_request in self.shot['nav'].keys()):
+                self.shot = self.scrapeShot(shot_request)
+        self.shot['requested_as'] = shot_request
         return self.shot
 
-    def scrapeShot(self, shot_id):
+    def scrapeShot(self, shot_request):
         self.shot = dict()
-        shot_url = '%s/shot/%s' % (self.MAIN_URL, shot_id)
+        shot_url = '%s/shot/%s' % (self.MAIN_URL, shot_request)
         self.browser.open(shot_url)
         html = self.browser.response().read()
         tree = BeautifulSoup(html)
