@@ -43,6 +43,7 @@ Misc     = 3300-3349
     <string id="3120">Abgelehnte Shots</string>
     <string id="3121">Du hast diesen Shot bereits gelöst</string>
     <string id="3122">Der korrekte Titel war: [B]%s[/B]</string>
+    <string id="3123">Du hast diesen Shot erstellt</string>
     <!-- Settings -->
     <string id="3200">Allgemein</string>
     <string id="3201">Login</string>

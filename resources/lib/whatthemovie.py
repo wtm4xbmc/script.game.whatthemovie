@@ -198,13 +198,18 @@ class WhatTheMovie(object):
             solved['first_by'] = sections[2].a.string
         except:
             solved['first_by'] = None
-        # already solved
+        # already solved + own_shot
         already_solved = False
+        self_posted = False
         js_list = tree.findAll('script',
                                attrs={'type': 'text/javascript'},
                                text=re.compile('guess_problem'))
         if js_list:
-            already_solved = True
+            message = str(js_list)
+            if re.search('already solved', message):
+                already_solved = True
+            elif re.search('You posted this', message):
+                self_posted = True
         # voting
         voting = dict()
         section = tree.find('script',
@@ -236,7 +241,7 @@ class WhatTheMovie(object):
             shot_type = 4
         # gives_point
         gives_point = False
-        if shot_type == 2 and not already_solved:
+        if shot_type == 2 and not already_solved and not self_posted:
             gives_point = True
         # bookmarked
         if tree.find('li', attrs={'id': 'watchbutton'}):
@@ -279,6 +284,7 @@ class WhatTheMovie(object):
         self.shot['solved'] = solved
         self.shot['date'] = date
         self.shot['already_solved'] = already_solved
+        self.shot['self_posted'] = self_posted
         self.shot['voting'] = voting
         self.shot['tags'] = tags
         self.shot['shot_type'] = shot_type

@@ -40,9 +40,10 @@ Misc     = 3300-3349
     <string id="3117">Your rating: [B]%s[/B]</string>
     <string id="3118">Hidden</string>
     <string id="3119">Unrated</string>
-    <string id="3120">Rejected SnapShots</string>
-    <string id="3121">You already solved this snapShot</string>
+    <string id="3120">Rejected Shots</string>
+    <string id="3121">You already solved this Shot</string>
     <string id="3122">The correct solution was: [B]%s[/B]</string>
+    <string id="3123">You posted this Shot</string>
     <!-- Settings -->
     <string id="3200">General</string>
     <string id="3201">Login</string>

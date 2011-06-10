@@ -76,6 +76,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_REJECTED_SHOT = 3120
     SID_ALREADY_SOLVED = 3121
     SID_SOLVED_SOLUTION = 3122
+    SID_SELF_POSTED = 3123
 
     # ACTION_IDs
     AID_EXIT_BACK = [9, 10, 13]
@@ -272,6 +273,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self._showShotPostedBy(shot['posted_by'])
         self._showShotSolvedStatus(shot['solved'])
         self._showShotAlreadySolved(shot['already_solved'])
+        self._showShotSelfPosted(shot['self_posted'])
         self._showShotID(shot['shot_id'])
         self._showShotDate(shot['date'])
         self._showShotFlags(shot['lang_list']['all'])
@@ -314,6 +316,13 @@ class GUI(xbmcgui.WindowXMLDialog):
         if already_solved:
             self.image_solution.setColorDiffuse('FFFFFFFF')
             label = self.getString(self.SID_ALREADY_SOLVED)
+            self.label_solution.setLabel(label)
+            self.setWTMProperty('solved_status', 'solved')
+
+    def _showShotSelfPosted(self, self_posted):
+        if self_posted:
+            self.image_solution.setColorDiffuse('FFFFFFFF')
+            label = self.getString(self.SID_SELF_POSTED)
             self.label_solution.setLabel(label)
             self.setWTMProperty('solved_status', 'solved')
 
@@ -632,7 +641,7 @@ class GUI(xbmcgui.WindowXMLDialog):
                      exc_value,
                      exc_traceback))
         xbmc.log('[ADDON][%s] Traceback: %s' % (self.ADDON_NAME,
-                                                exc_traceback),
+                                                trace),
                  level=xbmc.LOGERROR)
         dialog = xbmcgui.Dialog()
         dialog.ok(heading, str(error))
