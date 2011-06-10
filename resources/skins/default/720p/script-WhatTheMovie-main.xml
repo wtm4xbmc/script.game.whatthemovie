@@ -334,14 +334,36 @@
                     <texturebg>rating_stars_bg.png</texturebg>
                     <midtexture>rating_stars_glow.png</midtexture>
                 </control>
-                <control type="slider" id="1017">
-                    <description>Slider for setting of own rating</description>
-                    <posx>0</posx>
-                    <posy>0</posy>
-                    <width>280</width>
-                    <height>26</height>
-                    <visible>true</visible>
-                </control>
+		<control type="list" id="1017">
+		    <description>Rating stars list</description>
+		    <posx>0</posx>
+		    <posy>0</posy>
+		    <width>280</width>
+		    <height>26</height>
+		    <orientation>horizontal</orientation>
+		    <itemlayout width="28" height="26">
+			<control type="image">
+			    <description>The star mask</description>
+			    <posx>0</posx>
+			    <posy>0</posy>
+			    <width>28</width>
+			    <height>26</height>
+			    <texture></texture>
+			    <visible>false</visible>
+			</control>
+		    </itemlayout>
+		    <focusedlayout width="28" height="26">
+			<control type="image">
+			    <description>The star mask</description>
+			    <posx>0</posx>
+			    <posy>0</posy>
+			    <width>28</width>
+			    <height>26</height>
+			    <texture>$INFO[ListItem.Icon]</texture>
+			    <visible>Control.HasFocus(1017)</visible>
+			</control>
+		    </focusedlayout>
+		</control>
             </control>
             <control type="label" id="1014">
                 <description>Rating Label - can be replaced by a better solution</description>

@@ -11,7 +11,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     # Constants
     RATING_STAR_WIDTH = 18
     RATING_STAR_DISTANCE = 10
-    RATING_STAR_POSX = 3
+    RATING_STAR_POSX = 4
 
     # CONTROL_IDs
     CID_BUTTON_GUESS = 3000
@@ -39,7 +39,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_LABEL_RATING = 1014
     CID_LIST_FLAGS = 1013
     CID_PROGR_AVG_RATING = 1015
-    CID_SLIDE_OWN_RATING = 1017
+    CID_LIST_STARS = 1017
     CID_PROGR_OWN_RATING = 1018
     CID_GROUP_RATING = 1016
 
@@ -136,9 +136,9 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.image_gif = self.getControl(self.CID_IMAGE_GIF)
         self.image_solution = self.getControl(self.CID_IMAGE_SOLUTION)
         self.list_flags = self.getControl(self.CID_LIST_FLAGS)
+        self.list_stars = self.getControl(self.CID_LIST_STARS)
         self.group_rating = self.getControl(self.CID_GROUP_RATING)
         self.progr_avg_rating = self.getControl(self.CID_PROGR_AVG_RATING)
-        self.slide_own_rating = self.getControl(self.CID_SLIDE_OWN_RATING)
         self.progr_own_rating = self.getControl(self.CID_PROGR_OWN_RATING)
 
         # set control visibility depending on xbmc-addon settings
@@ -146,6 +146,11 @@ class GUI(xbmcgui.WindowXMLDialog):
 
         # set user defined hotkeys
         self.setKeySetting()
+
+        # fill stars list with the stars.
+        for i in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9):
+            star_item = xbmcgui.ListItem(iconImage='own_rating_star.png')
+            self.list_stars.addItem(star_item)
 
         # start the api
         user_agent = 'XBMC-ADDON - %s - V%s' % (self.ADDON_ID,
@@ -240,10 +245,6 @@ class GUI(xbmcgui.WindowXMLDialog):
                 self.getShot('prev' + unsolved_toggle)
             elif controlId == self.CID_BUTTON_NEXT:
                 self.getShot('next' + unsolved_toggle)
-        elif controlId == self.CID_SLIDE_OWN_RATING:
-            percent = self.slide_own_rating.getPercent()
-            user_rate = int(percent / 10) + 1  # always round up
-            self.rateShot(self.shot['shot_id'], user_rate)
 
     def closeDialog(self):
         self.setWTMProperty('main_image', '')
