@@ -12,6 +12,7 @@ class WhatTheMovie(object):
 
     OFFLINE_DEBUG = False
     OFFLINE_SHOT = {'shot_id': u'156827',
+                    'requested_as': 'random',
                     'bookmarked': False,
                     'favourite': False,
                     'gives_point': True,
@@ -34,7 +35,7 @@ class WhatTheMovie(object):
                     'nav': {'last': u'160987', 'prev_unsolved': u'157009',
                             'next': u'156819', 'next_unsolved': u'156819',
                             'prev': u'157009', 'first': u'1'},
-                    'voting': {'votes': u'93', 
+                    'voting': {'votes': u'93',
                                'own_rating': None,
                                'overall_rating': u'7.90'},
                     'solvable': False}
@@ -115,25 +116,25 @@ class WhatTheMovie(object):
         response_c = response.replace('&amp;', '&').decode('unicode-escape')
         return response_c
 
-    def getShot(self, shot_id):
+    def getShot(self, shot_request):
         if self.OFFLINE_DEBUG:
             return self.OFFLINE_SHOT
-        if shot_id == 'last':
+        if shot_request == 'back':
             if self.last_shots:
                 self.shot = self.last_shots.pop()
         else:
             if self.shot:  # if there is already a shot - put it in list
                 self.last_shots.append(self.shot)
-                print self.last_shots
-            if (shot_id.isdigit() or
-                shot_id == 'random' or
-                shot_id in self.shot['nav'].keys()):
-                self.shot = self.scrapeShot(shot_id)
+            if shot_request.isdigit() or shot_request == 'random':
+                self.shot = self.scrapeShot(shot_request)
+            elif shot_request in self.shot['nav'].keys():
+                self.shot = self.scrapeShot(self.shot['nav'][shot_request])
+        self.shot['requested_as'] = shot_request
         return self.shot
 
-    def scrapeShot(self, shot_id):
+    def scrapeShot(self, shot_request):
         self.shot = dict()
-        shot_url = '%s/shot/%s' % (self.MAIN_URL, shot_id)
+        shot_url = '%s/shot/%s' % (self.MAIN_URL, shot_request)
         self.browser.open(shot_url)
         html = self.browser.response().read()
         tree = BeautifulSoup(html)
@@ -197,13 +198,18 @@ class WhatTheMovie(object):
             solved['first_by'] = sections[2].a.string
         except:
             solved['first_by'] = None
-        # already solved
+        # already solved + own_shot
         already_solved = False
+        self_posted = False
         js_list = tree.findAll('script',
                                attrs={'type': 'text/javascript'},
                                text=re.compile('guess_problem'))
         if js_list:
-            already_solved = True
+            message = str(js_list)
+            if re.search('already solved', message):
+                already_solved = True
+            elif re.search('You posted this', message):
+                self_posted = True
         # voting
         voting = dict()
         section = tree.find('script',
@@ -235,7 +241,7 @@ class WhatTheMovie(object):
             shot_type = 4
         # gives_point
         gives_point = False
-        if shot_type == 2 and not already_solved:
+        if shot_type == 2 and not already_solved and not self_posted:
             gives_point = True
         # bookmarked
         if tree.find('li', attrs={'id': 'watchbutton'}):
@@ -278,6 +284,7 @@ class WhatTheMovie(object):
         self.shot['solved'] = solved
         self.shot['date'] = date
         self.shot['already_solved'] = already_solved
+        self.shot['self_posted'] = self_posted
         self.shot['voting'] = voting
         self.shot['tags'] = tags
         self.shot['shot_type'] = shot_type
@@ -287,7 +294,6 @@ class WhatTheMovie(object):
         self.shot['favourite'] = favourite
         self.shot['sotd'] = sotd
         self.shot['solvable'] = solvable
-        print self.shot
         return self.shot
 
     def downloadFile(self, url, local_path):

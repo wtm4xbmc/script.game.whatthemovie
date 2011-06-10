@@ -76,18 +76,36 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_REJECTED_SHOT = 3120
     SID_ALREADY_SOLVED = 3121
     SID_SOLVED_SOLUTION = 3122
-    #  Misc
-    SID_DATE_FORMAT = 3300
+    SID_SELF_POSTED = 3123
 
     # ACTION_IDs
     AID_EXIT_BACK = [9, 10, 13]
-    AID_CONTEXT_MENU = [117]
     AID_NUMBERS = [59, 60, 61, 62, 63,
                    64, 65, 66, 67, 58]
+
+    # The order of this actions is the same like in the settings!
+    ACTION_IDS = ({'AID_PAGE_UP': 5},
+                  {'AID_PAGE_DOWN': 6},
+                  {'AID_SHOW_INFO': 11},
+                  {'AID_PAUSE': 12},
+                  {'AID_STOP': 13},
+                  {'AID_NEXT_ITEM': 14},
+                  {'AID_PREV_ITEM': 15},
+                  {'AID_PLAYER_FORWARD': 77},
+                  {'AID_PLAYER_REWIND': 78},
+                  {'AID_PLAYER_PLAY': 79},
+                  {'AID_CONTEXT_MENU': 117},
+                  {'AID_VOLUME_UP': 88},
+                  {'AID_VOLUME_DOWN': 89},
+                  {'AID_SCROLL_UP': 111},
+                  {'AID_SCROLL_DOWN': 112},
+                  {'AID_HOME': 159},
+                  {'AID_END': 160})
 
     # ADDON_CONSTANTS
     ADDON_ID = sys.modules['__main__'].__id__
     ADDON_VERSION = sys.modules['__main__'].__version__
+    ADDON_NAME = sys.modules['__main__'].__addonname__
 
     def __init__(self, xmlFilename, scriptPath, defaultSkin, defaultRes):
         self.window_home = xbmcgui.Window(10000)
@@ -126,6 +144,9 @@ class GUI(xbmcgui.WindowXMLDialog):
         # set control visibility depending on xbmc-addon settings
         self.hideLabels()
 
+        # set user defined hotkeys
+        self.setKeySetting()
+
         # start the api
         user_agent = 'XBMC-ADDON - %s - V%s' % (self.ADDON_ID,
                                                 self.ADDON_VERSION)
@@ -139,16 +160,48 @@ class GUI(xbmcgui.WindowXMLDialog):
                               str(error))
             self.close()
 
+    def setKeySetting(self):
+        keys = ('key_guess', 'key_random', 'key_back', 'key_next',
+                'key_prev', 'key_jump', 'key_book', 'key_fav', 'key_solve')
+        self.assigned_keys = dict()
+        for key in keys:
+            assigned_key_i = int(self.getSetting(key))
+            if assigned_key_i:  # skip first key 'No Key' with id = 0
+                action_id = self.ACTION_IDS[assigned_key_i - 1].values()[0]
+                self.assigned_keys[action_id] = key
+
     def onAction(self, action):
+        action = action.getId()
         if action in self.AID_EXIT_BACK:
             self.closeDialog()
-        elif action in self.AID_CONTEXT_MENU:
-            self.askShotID()
         elif action in self.AID_NUMBERS:
-            user_rate = self.AID_NUMBERS.index(action.getId()) + 1
+            user_rate = self.AID_NUMBERS.index(action) + 1
             self.rateShot(self.shot['shot_id'], user_rate)
-        #else:
-        #    print action.getId()
+        elif action in self.assigned_keys:
+            key = self.assigned_keys[action]
+            if key == 'key_guess':
+                self.guessTitle(self.shot['shot_id'])
+            elif key == 'key_random':
+                self.getShot('random')
+            elif key == 'key_back':
+                self.getShot('back')
+            elif key == 'key_jump':
+                self.askShotID()
+            elif key == 'key_book':
+                self.bookmarkShot(self.shot['shot_id'])
+            elif key == 'key_fav':
+                self.favouriteShot(self.shot['shot_id'])
+            elif key == 'key_solve':
+                self.solveShot(self.shot['shot_id'])
+            elif key in ('key_next', 'key_prev'):
+                if self.getSetting('only_unsolved_nav') == 'true':
+                    unsolved_toggle = '_unsolved'
+                else:
+                    unsolved_toggle = ''
+                if key == 'key_next':
+                    self.getShot('next' + unsolved_toggle)
+                elif key == 'key_prev':
+                    self.getShot('prev' + unsolved_toggle)
 
     def askShotID(self):
         Dialog = xbmcgui.Dialog()
@@ -165,7 +218,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         elif controlId == self.CID_BUTTON_RANDOM:
             self.getShot('random')
         elif controlId == self.CID_BUTTON_BACK:
-            self.getShot('last')
+            self.getShot('back')
         elif controlId == self.CID_BUTTON_FIRST:
             self.getShot('first')
         elif controlId == self.CID_BUTTON_LAST:
@@ -196,17 +249,20 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.setWTMProperty('main_image', '')
         self.close()
 
-    def getShot(self, shot_id=None):
+    def getShot(self, shot_request):
         # set busy_gif
         self.setWTMProperty('busy', 'loading')
         # hide label_status
         self.setWTMProperty('solved_status', 'inactive')
         # scrape shot and download picture
         try:
-            self.shot = self.Quiz.getShot(shot_id)
+            self.shot = self.Quiz.getShot(shot_request)
             shot = self.shot
             image_path = self.downloadPic(shot['image_url'],
                                           shot['shot_id'])
+            xbmc.log('[ADDON][%s] Debug: shot=%s' % (self.ADDON_NAME,
+                                                     self.shot),
+                     level=xbmc.LOGNOTICE)
         except Exception, error:
             self.errorMessage(self.getString(self.SID_ERROR_SHOT),
                               str(error))
@@ -217,6 +273,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self._showShotPostedBy(shot['posted_by'])
         self._showShotSolvedStatus(shot['solved'])
         self._showShotAlreadySolved(shot['already_solved'])
+        self._showShotSelfPosted(shot['self_posted'])
         self._showShotID(shot['shot_id'])
         self._showShotDate(shot['date'])
         self._showShotFlags(shot['lang_list']['all'])
@@ -262,6 +319,13 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.label_solution.setLabel(label)
             self.setWTMProperty('solved_status', 'solved')
 
+    def _showShotSelfPosted(self, self_posted):
+        if self_posted:
+            self.image_solution.setColorDiffuse('FFFFFFFF')
+            label = self.getString(self.SID_SELF_POSTED)
+            self.label_solution.setLabel(label)
+            self.setWTMProperty('solved_status', 'solved')
+
     def _showShotSolution(self, solution):
         self.image_solution.setColorDiffuse('FFFFFFFF')
         label = self.getString(self.SID_SOLVED_SOLUTION) % solution
@@ -274,7 +338,7 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def _showShotDate(self, date):
         if date:
-            date_format = str(self.getString(self.SID_DATE_FORMAT))
+            date_format = xbmc.getRegion('dateshort')
             date_string = date.strftime(date_format)
         else:
             date_string = self.getString(self.SID_NOT_RELEASED)
@@ -398,12 +462,13 @@ class GUI(xbmcgui.WindowXMLDialog):
                               str(error))
 
     def solveShot(self, shot_id):
-        try:
-            solved_title = self.Quiz.solveShot(shot_id)
-            self._showShotSolution(solved_title)
-        except Exception, error:
-            self.errorMessage(self.getString(self.SID_ERROR_SHOT),
-                              str(error))
+        if self.shot['shot_id'] == shot_id and self.shot['solvable']:
+            try:
+                solved_title = self.Quiz.solveShot(shot_id)
+                self._showShotSolution(solved_title)
+            except Exception, error:
+                self.errorMessage(self.getString(self.SID_ERROR_SHOT),
+                                  str(error))
 
     def guessTitle(self, shot_id):
         # clear solved_status
@@ -440,7 +505,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_solution.setLabel(message % title_year)
         self.setWTMProperty('solved_status', 'correct')
         self.image_solution.setColorDiffuse('FF00FF00')
-        # if this shout gives points, do so
+        # if this shot gives points, do so
         if gives_point:
             self.score += 1
             self._showUserScore(self.score)
@@ -568,10 +633,15 @@ class GUI(xbmcgui.WindowXMLDialog):
                 self.getControl(control).setVisible(False)
 
     def errorMessage(self, heading, error):
-        print 'ERROR: %s: %s ' % (heading, str(error))
+        xbmc.log('[ADDON][%s] Error: %s %s' % (self.ADDON_NAME, heading,
+                                              str(error)),
+                 level=xbmc.LOGERROR)
         exc_type, exc_value, exc_traceback = sys.exc_info()
-        print 'TRACEBACK:' + repr(traceback.format_exception(exc_type,
-                                                             exc_value,
-                                                             exc_traceback))
+        trace = repr(traceback.format_exception(exc_type,
+                                                exc_value,
+                                                exc_traceback))
+        xbmc.log('[ADDON][%s] Traceback: %s' % (self.ADDON_NAME,
+                                                trace),
+                 level=xbmc.LOGERROR)
         dialog = xbmcgui.Dialog()
-        dialog.ok(heading, error)
+        dialog.ok(heading, str(error))
