@@ -308,7 +308,7 @@
             <control type="group" id="1016">
                 <description>Group for the rating stars images</description>
                 <posx>500</posx>
-                <posy>671</posy>
+                <posy>673</posy>
                 <width>280</width>
                 <height>26</height>
                 <visible>true</visible>
