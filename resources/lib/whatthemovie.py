@@ -300,7 +300,7 @@ class WhatTheMovie(object):
     def downloadFile(self, url, local_path):
         self.browser.retrieve(url, local_path, )
 
-    def guessShot(self, title_guess, shot_id):
+    def guessShot(self, shot_id, title_guess):
         if self.OFFLINE_DEBUG:
             if title_guess.lower() == self.OFFLINE_ANSWER['title'].lower():
                 return self.OFFLINE_ANSWER
