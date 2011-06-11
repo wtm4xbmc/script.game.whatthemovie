@@ -575,7 +575,8 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def setRandomOptions(self):
         options_list = list()
-        for option in ('difficulty', 'include_archive', 'include_solved'):
+        for option in ('difficulty', 'include_archive', 
+                       'include_solved', 'username'):
             options_list.append(self.getSetting(option))
         current_options = '-'.join(options_list)
         if self.getSetting('already_sent_options') != current_options:
