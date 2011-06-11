@@ -143,7 +143,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.setKeySetting()
 
         # fill stars list with the stars.
-        for i in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9):
+        for i in range(0, 10):
             star_item = xbmcgui.ListItem(iconImage='rating_star_own.png')
             self.list_stars.addItem(star_item)
 
@@ -171,14 +171,14 @@ class GUI(xbmcgui.WindowXMLDialog):
                 self.assigned_keys[action_id] = key
 
     def onAction(self, action):
-        action = action.getId()
-        if action in self.AID_EXIT_BACK:
+        action_id = action.getId()
+        if action_id in self.AID_EXIT_BACK:
             self.closeDialog()
-        elif action in self.AID_NUMBERS:
-            user_rate = self.AID_NUMBERS.index(action) + 1
+        elif action_id in self.AID_NUMBERS:
+            user_rate = self.AID_NUMBERS.index(action_id) + 1
             self.rateShot(self.shot['shot_id'], user_rate)
-        elif action in self.assigned_keys:
-            key = self.assigned_keys[action]
+        elif action_id in self.assigned_keys:
+            key = self.assigned_keys[action_id]
             if key == 'key_guess':
                 self.guessTitle(self.shot['shot_id'])
             elif key == 'key_random':
@@ -279,7 +279,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self._showShotRating(shot['voting'])
         self._showShotButtonState('favourite', shot['favourite'])
         self._showShotButtonState('bookmarked', shot['bookmarked'])
-        self._showSolvableState(shot['solvable'])
+        self._showShotSolvableState(shot['solvable'])
         self._showShotOfTheDay(shot['sotd'])
         # unset busy_gif
         self.setWTMProperty('busy', '')
@@ -394,7 +394,7 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def _showShotFlags(self, available_languages):
         visible_flags = list()
-        for i in (1, 2, 3, 4, 5):
+        for i in range(1, 6):
             visible_flags.append(self.getSetting('flag%s' % i))
         self.list_flags.reset()
         for flag in visible_flags:
@@ -422,7 +422,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             element.setEnabled(True)
             element.setSelected(True)
 
-    def _showSolvableState(self, state):
+    def _showShotSolvableState(self, state):
         element = self.getControl(self.CID_BUTTON_SOLUTION)
         if state:
             element.setEnabled(True)
