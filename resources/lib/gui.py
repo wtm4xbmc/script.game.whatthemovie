@@ -496,7 +496,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.label_solution.setLabel(message % guess)
             # try to check the guess. If it fails abort checking
             try:
-                solution = self.Quiz.guessShot(guess, shot_id)
+                solution = self.Quiz.guessShot(shot_id, guess)
             except Exception, error:
                 self.errorMessage(self.getString(self.SID_ERROR_GUESS),
                                   str(error))
