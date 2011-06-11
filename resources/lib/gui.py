@@ -240,6 +240,9 @@ class GUI(xbmcgui.WindowXMLDialog):
                 self.getShot('prev' + unsolved_toggle)
             elif controlId == self.CID_BUTTON_NEXT:
                 self.getShot('next' + unsolved_toggle)
+        elif controlId == self.CID_LIST_STARS:
+            user_rate = self.list_stars.getSelectedPosition() + 1
+            self.rateShot(self.shot['shot_id'], user_rate)
 
     def closeDialog(self):
         self.setWTMProperty('main_image', '')
