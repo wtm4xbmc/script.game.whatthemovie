@@ -1,4 +1,4 @@
-﻿<window id="1000">
+<window id="1000">
     <defaultcontrol always="false">3000</defaultcontrol>
     <controls>
         <control type="group">
@@ -252,7 +252,7 @@
             <control type="label" id="1008">
                 <description>Shot ID label</description>
                 <posx>280</posx>
-                <posy>582</posy>
+                <posy>580</posy>
                 <width>200</width>
                 <align>left</align>
                 <font>font12</font>
@@ -263,7 +263,7 @@
             <control type="label" id="1011">
                 <description>Shot date label</description>
                 <posx>1000</posx>
-                <posy>582</posy>
+                <posy>580</posy>
                 <width>300</width>
                 <align>right</align>
                 <font>font12</font>
@@ -308,7 +308,7 @@
             <control type="group" id="1016">
                 <description>Group for the rating stars images</description>
                 <posx>500</posx>
-                <posy>670</posy>
+                <posy>671</posy>
                 <width>280</width>
                 <height>26</height>
                 <visible>true</visible>
@@ -383,7 +383,7 @@
             <control type="group">
                 <description>Input language flag group</description>
                 <posx>540</posx>
-                <posy>580</posy>
+                <posy>574</posy>
                 <width>200</width>
                 <height>32</height>
                 <control type="list" id="1013">
