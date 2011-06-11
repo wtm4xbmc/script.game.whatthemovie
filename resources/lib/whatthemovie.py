@@ -10,7 +10,7 @@ class WhatTheMovie(object):
 
     MAIN_URL = 'http://whatthemovie.com'
 
-    OFFLINE_DEBUG = True
+    OFFLINE_DEBUG = False
     OFFLINE_SHOT = {'shot_id': u'156827',
                     'requested_as': 'random',
                     'self_posted': False,
