@@ -354,6 +354,7 @@
 			    <height>24</height>
 			    <texture></texture>
 			    <visible>false</visible>
+                <aspectratio>stretch</aspectratio>
 			</control>
 		    </itemlayout>
 		    <focusedlayout width="24" height="24">
@@ -365,6 +366,7 @@
 			    <height>24</height>
 			    <texture>$INFO[ListItem.Icon]</texture>
 			    <visible>Control.HasFocus(1017)</visible>
+                <aspectratio>stretch</aspectratio>
 			</control>
 		    </focusedlayout>
 		</control>
