@@ -442,6 +442,7 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def rateShot(self, shot_id, own_rating):
         if self.logged_in:
+            self.setWTMProperty('busy', 'loading')
             try:
                 self.Quiz.rateShot(shot_id, own_rating)
                 rating = self.shot['voting']
@@ -449,35 +450,42 @@ class GUI(xbmcgui.WindowXMLDialog):
             except Exception, error:
                 self.errorMessage(self.getString(self.SID_ERROR_SHOT),
                                   str(error))
+            self.setWTMProperty('busy', '')
 
     def favouriteShot(self, shot_id):
         state = self.shot['favourite']
         newstate = not state
+        self.setWTMProperty('busy', 'loading')
         try:
             self.Quiz.favouriteShot(shot_id, newstate)
             self._showShotButtonState('favourite', newstate)
         except Exception, error:
             self.errorMessage(self.getString(self.SID_ERROR_SHOT),
                               str(error))
+        self.setWTMProperty('busy', '')
 
     def bookmarkShot(self, shot_id):
         state = self.shot['bookmarked']
         newstate = not state
+        self.setWTMProperty('busy', 'loading')
         try:
             self.Quiz.bookmarkShot(shot_id, newstate)
             self._showShotButtonState('bookmarked', newstate)
         except Exception, error:
             self.errorMessage(self.getString(self.SID_ERROR_SHOT),
                               str(error))
+        self.setWTMProperty('busy', '')
 
     def solveShot(self, shot_id):
         if self.shot['shot_id'] == shot_id and self.shot['solvable']:
+            self.setWTMProperty('busy', 'loading')
             try:
                 solved_title = self.Quiz.solveShot(shot_id)
                 self._showShotSolution(solved_title)
             except Exception, error:
                 self.errorMessage(self.getString(self.SID_ERROR_SHOT),
                                   str(error))
+            self.setWTMProperty('busy', '')
 
     def guessTitle(self, shot_id):
         # clear solved_status
