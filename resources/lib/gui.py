@@ -144,7 +144,7 @@ class GUI(xbmcgui.WindowXMLDialog):
 
         # fill stars list with the stars.
         for i in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9):
-            star_item = xbmcgui.ListItem(iconImage='own_rating_star.png')
+            star_item = xbmcgui.ListItem(iconImage='rating_star_own.png')
             self.list_stars.addItem(star_item)
 
         # start the api
