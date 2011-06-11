@@ -254,6 +254,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.close()
 
     def getShot(self, shot_request):
+        self.log('Try to get a shot via: %s' % shot_request)
         # set busy_gif
         self.setWTMProperty('busy', 'loading')
         # hide label_status
@@ -264,9 +265,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             shot = self.shot
             image_path = self.downloadPic(shot['image_url'],
                                           shot['shot_id'])
-            xbmc.log('[ADDON][%s] Debug: shot=%s' % (self.ADDON_NAME,
-                                                     self.shot),
-                     level=xbmc.LOGNOTICE)
+            self.log('Debug: Shot=%s' % self.shot)
         except Exception, error:
             self.errorMessage(self.getString(self.SID_ERROR_SHOT),
                               str(error))
@@ -638,15 +637,15 @@ class GUI(xbmcgui.WindowXMLDialog):
                 self.getControl(control).setVisible(False)
 
     def errorMessage(self, heading, error):
-        xbmc.log('[ADDON][%s] Error: %s %s' % (self.ADDON_NAME, heading,
-                                              str(error)),
-                 level=xbmc.LOGERROR)
+        self.log('Error: %s %s' % (heading, str(error)))
         exc_type, exc_value, exc_traceback = sys.exc_info()
-        trace = repr(traceback.format_exception(exc_type,
-                                                exc_value,
+        trace = repr(traceback.format_exception(exc_type, exc_value,
                                                 exc_traceback))
-        xbmc.log('[ADDON][%s] Traceback: %s' % (self.ADDON_NAME,
-                                                trace),
-                 level=xbmc.LOGERROR)
+        self.log('Traceback: %s' % trace)
         dialog = xbmcgui.Dialog()
         dialog.ok(heading, str(error))
+
+    def log(self, msg):
+        xbmc.log('[ADDON][%s] %s' % (self.ADDON_NAME, str(msg)),
+                 level=xbmc.LOGNOTICE)
+        
