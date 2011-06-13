@@ -8,11 +8,6 @@ import whatthemovie
 
 
 class GUI(xbmcgui.WindowXMLDialog):
-    # Constants
-    RATING_STAR_WIDTH = 18
-    RATING_STAR_DISTANCE = 10
-    RATING_STAR_POSX = 4
-
     # CONTROL_IDs
     CID_BUTTON_GUESS = 3000
     CID_BUTTON_RANDOM = 3001
@@ -376,14 +371,25 @@ class GUI(xbmcgui.WindowXMLDialog):
         # a star is 1 star_width width
         # a gap is 1/2 star_widths width
         # a border is 1/4 star_widths width
-        # 100% = 10s + 9g + 2b = 10s + 9s/2 + 2s/4 = 100/15
-        star_width = 100 / 15
+        # 100% = 10s + 9g + 2b
+        # 100% = 10s + 9s/2 + 2s/4
+        # 100% = 40s/4 + 18s/4 + 2s/4 = 60s/4 = 15s
+        star_width = 100.0 / 15.0
         full_stars = float(int(rating_float))
-        last_star = rating_float - full_stars
-        percent = (star_width / 4 +   # left border
-                   full_stars * (star_width + star_width / 2) +  # stars + gaps
-                   last_star * star_width)  # last star
-        return float(percent)
+        part_star = rating_float - full_stars
+        # print 'calc: full = %f, partial = %f' % (full_stars, part_star)
+        gap_width = star_width / 2.0
+        border_width = star_width / 4.0
+        p_full_stars  = star_width * full_stars
+        p_full_gaps   = gap_width * full_stars
+        p_part_star   = star_width * part_star
+        # print '%%: lb = %f' % border_width
+        # print '%%: fs = %f' % p_full_stars
+        # print '%%: fg = %f' % p_full_gaps
+        # print '%%: ps = %f' % p_part_star
+        percent = border_width + p_full_stars + p_full_gaps + p_part_star
+        # print 'percent = %f' % percent
+        return int(percent + 0.5) # round up for better accurracy
 
     def _showShotFlags(self, available_languages):
         visible_flags = list()

@@ -1,4 +1,4 @@
-<window id="1000">
+﻿<window id="1000">
     <defaultcontrol always="false">3000</defaultcontrol>
     <controls>
         <control type="group">
@@ -307,17 +307,17 @@
             -->
             <control type="group" id="1016">
                 <description>Group for the rating stars images</description>
-                <posx>500</posx>
-                <posy>673</posy>
-                <width>280</width>
-                <height>26</height>
+                <posx>520</posx>
+                <posy>674</posy>
+                <width>240</width>
+                <height>24</height>
                 <visible>true</visible>
                 <control type="progress" id="1015">
                     <description>Overall rating</description>
                     <posx>0</posx>
                     <posy>0</posy>
-                    <width>280</width>
-                    <height>26</height>
+                    <width>240</width>
+                    <height>24</height>
                     <visible>true</visible>
                     <reveal>true</reveal>
                     <texturebg>rating_stars_empty.png</texturebg>
@@ -327,8 +327,8 @@
                     <description>Own rating</description>
                     <posx>0</posx>
                     <posy>0</posy>
-                    <width>280</width>
-                    <height>26</height>
+                    <width>240</width>
+                    <height>24</height>
                     <visible>true</visible>
                     <reveal>true</reveal>
                     <texturebg>rating_stars_bg.png</texturebg>
@@ -338,32 +338,32 @@
                     <description>Rating stars list</description>
                     <posx>0</posx>
                     <posy>0</posy>
-                    <width>280</width>
-                    <height>26</height>
+                    <width>240</width>
+                    <height>24</height>
                     <orientation>horizontal</orientation>
                     <onup>3000</onup>
                     <ondown>3003</ondown>
                     <onleft>3009</onleft>
                     <onright>3010</onright>
-                    <itemlayout width="28" height="26">
+                    <itemlayout width="24" height="24">
                         <control type="image">
                             <description>The star mask</description>
                             <posx>0</posx>
                             <posy>0</posy>
-                            <width>28</width>
-                            <height>26</height>
+                            <width>24</width>
+                            <height>24</height>
                             <texture></texture>
                             <visible>false</visible>
                             <aspectratio>stretch</aspectratio>
                         </control>
                     </itemlayout>
-                    <focusedlayout width="28" height="26">
+                    <focusedlayout width="24" height="24">
                         <control type="image">
                             <description>The star mask</description>
                             <posx>0</posx>
                             <posy>0</posy>
-                            <width>28</width>
-                            <height>26</height>
+                            <width>24</width>
+                            <height>24</height>
                             <texture>$INFO[ListItem.Icon]</texture>
                             <visible>Control.HasFocus(1017)</visible>
                             <aspectratio>stretch</aspectratio>
