@@ -364,7 +364,7 @@
                             <posy>0</posy>
                             <width>28</width>
                             <height>26</height>
-                            <texture>$INFO[ListItem.Icon]</texture>
+                            <texture>rating_star_own.png</texture>
                             <visible>Control.HasFocus(1017)</visible>
                             <aspectratio>stretch</aspectratio>
                         </control>
