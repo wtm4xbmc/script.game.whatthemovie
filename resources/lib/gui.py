@@ -378,7 +378,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         full_stars = float(int(rating_float))
         part_star = rating_float - full_stars
         # print 'calc: full = %f, partial = %f' % (full_stars, part_star)
-        gap_width = star_widht / 2.0
+        gap_width = star_width / 2.0
         border_width = star_width / 4.0
         p_full_stars  = star_width * full_stars
         p_full_gaps   = gap_width * full_stars
