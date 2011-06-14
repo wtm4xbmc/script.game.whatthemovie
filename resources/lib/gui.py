@@ -576,7 +576,7 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def setRandomOptions(self):
         options_list = list()
-        for option in ('difficulty', 'include_archive', 
+        for option in ('difficulty', 'include_archive',
                        'include_solved', 'username'):
             options_list.append(self.getSetting(option))
         current_options = '-'.join(options_list)
@@ -656,4 +656,3 @@ class GUI(xbmcgui.WindowXMLDialog):
     def log(self, msg):
         xbmc.log('[ADDON][%s] %s' % (self.ADDON_NAME, str(msg)),
                  level=xbmc.LOGNOTICE)
-        
