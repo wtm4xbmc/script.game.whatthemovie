@@ -235,7 +235,6 @@
                 <font>font12</font>
                 <textcolor>white</textcolor>
                 <shadowcolor>black</shadowcolor>
-                <scroll>false</scroll>
                 <visible>true</visible>
             </control>
             <control type="label" id="1005">
