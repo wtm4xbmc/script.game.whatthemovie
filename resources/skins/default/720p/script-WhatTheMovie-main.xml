@@ -1,4 +1,4 @@
-﻿<window id="1000">
+<window id="1000">
     <defaultcontrol always="false">3000</defaultcontrol>
     <controls>
         <control type="group">
@@ -219,7 +219,7 @@
                 <description>Login state label</description>
                 <posx>20</posx>
                 <posy>12</posy>
-                <width>350</width>
+                <width>450</width>
                 <align>left</align>
                 <font>font12</font>
                 <textcolor>white</textcolor>
@@ -235,16 +235,16 @@
                 <font>font12</font>
                 <textcolor>white</textcolor>
                 <shadowcolor>black</shadowcolor>
+                <scroll>false</scroll>
                 <visible>true</visible>
             </control>
             <control type="label" id="1005">
                 <description>Solved label</description>
                 <posx>1000</posx>
                 <posy>115</posy>
-                <width>450</width>
+                <width>350</width>
                 <align>right</align>
                 <font>font12</font>
-                <scroll>true</scroll>
                 <textcolor>white</textcolor>
                 <shadowcolor>black</shadowcolor>
                 <visible>true</visible>
@@ -275,7 +275,7 @@
                 <description>Score Label</description>
                 <posx>1260</posx>
                 <posy>12</posy>
-                <width>200</width>
+                <width>400</width>
                 <align>right</align>
                 <font>font12</font>
                 <textcolor>white</textcolor>
