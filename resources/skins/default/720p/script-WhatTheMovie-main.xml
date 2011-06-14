@@ -219,7 +219,7 @@
                 <description>Login state label</description>
                 <posx>20</posx>
                 <posy>12</posy>
-                <width>300</width>
+                <width>350</width>
                 <align>left</align>
                 <font>font12</font>
                 <textcolor>white</textcolor>
@@ -230,7 +230,7 @@
                 <description>Posted by label</description>
                 <posx>280</posx>
                 <posy>115</posy>
-                <width>250</width>
+                <width>350</width>
                 <align>left</align>
                 <font>font12</font>
                 <textcolor>white</textcolor>
