@@ -26,23 +26,23 @@ Misc     = 3300-3349
     <string id="3103">Nicht eingeloggt</string>
     <string id="3104">Eingeloggt als: [B]%s[/B]</string>
     <string id="3105">Deine Punkte: [B]%s[/B]</string>
-    <string id="3106">[B][COLOR=ff008B00]%s[/COLOR][/B] mal gelöst, als erstes von [B]%s[/B]</string>
+    <string id="3106">[B][COLOR=ff008B00]%s[/COLOR][/B] mal gelöst. Erster: [B]%s[/B]</string>
     <string id="3107">Bisher ungelöst</string>
     <string id="3108">Shot ID: [B]%s[/B]</string>
     <string id="3109">Datum: [B]%s[/B]</string>
-    <string id="3110">Veröffentlicht von: [B]%s[/B]</string>
+    <string id="3110">Ersteller: [B]%s[/B]</string>
     <string id="3111">Unveröffentlicht</string>
     <string id="3112">Gelöschter Benutzer</string>
-    <string id="3113">Neu hinzugefügte</string>
-    <string id="3114">Hauptfilme</string>
-    <string id="3115">Das Archiv</string>
+    <string id="3113">New Submissions</string>
+    <string id="3114">Feature Films</string>
+    <string id="3115">The Archive</string>
     <string id="3116">Durchschnittsbew.: [B]%s[/B] ([B]%s[/B] Stimmen)</string>
     <string id="3117">Deine Bewertung: [B]%s[/B]</string>
     <string id="3118">Versteckt</string>
     <string id="3119">Unbewertet</string>
-    <string id="3120">Abgelehnte Shots</string>
+    <string id="3120">Rejected Shots</string>
     <string id="3121">Du hast diesen Shot bereits gelöst</string>
-    <string id="3122">Der korrekte Titel war: [B]%s[/B]</string>
+    <string id="3122">Die Lösung lautet: [B]%s[/B]</string>
     <string id="3123">Du hast diesen Shot erstellt</string>
     <!-- Settings -->
     <string id="3200">Allgemein</string>

@@ -146,7 +146,7 @@ class GUI(xbmcgui.WindowXMLDialog):
 
         # fill stars list with the stars.
         for i in range(0, 10):
-            star_item = xbmcgui.ListItem(iconImage='rating_star_own.png')
+            star_item = xbmcgui.ListItem()
             self.list_stars.addItem(star_item)
 
         # start the api
@@ -583,7 +583,7 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def setRandomOptions(self):
         options_list = list()
-        for option in ('difficulty', 'include_archive', 
+        for option in ('difficulty', 'include_archive',
                        'include_solved', 'username'):
             options_list.append(self.getSetting(option))
         current_options = '-'.join(options_list)
@@ -663,4 +663,3 @@ class GUI(xbmcgui.WindowXMLDialog):
     def log(self, msg):
         xbmc.log('[ADDON][%s] %s' % (self.ADDON_NAME, str(msg)),
                  level=xbmc.LOGNOTICE)
-        

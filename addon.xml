@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="script.game.whatthemovie"
        name="WhatTheMovie"
-       version="0.0.4"
-       provider-name="sphere">
+       version="0.1.0"
+       provider-name="sphere, fuxii, tadi">
     <requires>
         <import addon="xbmc.python" version="1.0"/>
         <import addon="script.module.beautifulsoup" version="3.0.8"/>
@@ -12,6 +12,6 @@
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
         <summary lang="en">Guess Movies by snapshots</summary>
-        <description lang="en">fixme</description>
+        <description lang="en">Solve snapshots to gain points for the Hall of Fame - powered by the website www.whatthemovie.com: [CR][CR]Currently Main Features are:[CR]- Login with your whatthemovie.com account[CR]- Solve, favourite, bookmark and of course solve shots[CR]- Zoom the shot[CR]- Set random and navigation options[CR]- Jump automatically to the next or random next shot</description>
     </extension>
 </addon>
