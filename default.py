@@ -11,7 +11,7 @@ __id__ = Addon.getAddonInfo('id')
 __version__ = Addon.getAddonInfo('version')
 __path__ = Addon.getAddonInfo('path')
 
-xbmc.log('[ADDON][%s] version %s started'
+xbmc.log('[ADDON][%s] Version %s started'
          % (__addonname__, __version__), level=xbmc.LOGNOTICE)
 
 if (__name__ == '__main__'):
@@ -21,7 +21,7 @@ if (__name__ == '__main__'):
                  'default',
                  '720p')
     ui.doModal()
-    xbmc.log('[ADDON][%s] version %s exited'
+    xbmc.log('[ADDON][%s] Version %s exited'
              % (__addonname__, __version__), level=xbmc.LOGNOTICE)
     del ui
 

@@ -262,7 +262,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             shot = self.shot
             image_path = self.downloadPic(shot['image_url'],
                                           shot['shot_id'])
-            self.log('Debug: Shot=%s' % self.shot)
+            self.log('Got a shot: %s' % self.shot)
         except Exception, error:
             self.errorMessage(self.getString(self.SID_ERROR_SHOT),
                               str(error))
@@ -442,6 +442,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_score.setLabel(score_string)
 
     def rateShot(self, shot_id, own_rating):
+        self.log('Try to rate the shot with: %s' % own_rating)
         if self.logged_in:
             self.setWTMProperty('busy', 'loading')
             try:
@@ -456,6 +457,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     def favouriteShot(self, shot_id):
         state = self.shot['favourite']
         newstate = not state
+        self.log('Try to set the shots fav status to: %s' % newstate)
         self.setWTMProperty('busy', 'loading')
         try:
             self.Quiz.favouriteShot(shot_id, newstate)
@@ -468,6 +470,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     def bookmarkShot(self, shot_id):
         state = self.shot['bookmarked']
         newstate = not state
+        self.log('Try to set the shots bookmark status to: %s' % newstate)
         self.setWTMProperty('busy', 'loading')
         try:
             self.Quiz.bookmarkShot(shot_id, newstate)
@@ -478,6 +481,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.setWTMProperty('busy', '')
 
     def solveShot(self, shot_id):
+        self.log('Try to solve the shot')
         if self.shot['shot_id'] == shot_id and self.shot['solvable']:
             self.setWTMProperty('busy', 'loading')
             try:
@@ -497,6 +501,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         keyboard.doModal()
         if keyboard.isConfirmed() and keyboard.getText():
             guess = keyboard.getText().decode('utf8')
+            self.log('Try to check the title: %s' % guess)
             # enter checking status
             self.image_solution.setColorDiffuse('FFFFFF00')
             self.setWTMProperty('solved_status', 'checking')
@@ -518,6 +523,7 @@ class GUI(xbmcgui.WindowXMLDialog):
                 self.answerWrong(guess)
 
     def answerRight(self, title_year, gives_point):
+        self.log('Answer was correct: %s' % title_year)
         # enter right status
         message = self.getString(self.SID_ANSWER_RIGHT)
         self.label_solution.setLabel(message % title_year)
@@ -541,6 +547,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.getShot(jump_to)
 
     def answerWrong(self, guess):
+        self.log('Answer was wrong: %s' % guess)
         # enter wrong status
         message = self.getString(self.SID_ANSWER_WRONG)
         self.label_solution.setLabel(message % guess)
@@ -566,6 +573,7 @@ class GUI(xbmcgui.WindowXMLDialog):
                 user = self.getSetting('username')
                 password = self.getSetting('password')
                 # try to login
+                self.log('Try to login as: %s' % user)
                 self.logged_in = self.Quiz.login(user, password, cookie_file)
                 if not self.logged_in:
                     # login failed
@@ -574,6 +582,7 @@ class GUI(xbmcgui.WindowXMLDialog):
                               self.getString(self.SID_LOGIN_FAILED) % user)
                     self.Addon.openSettings()
                 else:
+                    self.log('Login successfull via: %s' % self.logged_in)
                     # login successfully
                     label = self.getString(self.SID_LOGGED_IN_AS) % user
                     self.score = int(self.Quiz.getScore(user)['ff_score'])
@@ -599,6 +608,7 @@ class GUI(xbmcgui.WindowXMLDialog):
                 options['include_archive'] = '1'
             if self.getSetting('include_solved') == 'true':
                 options['include_solved'] = '1'
+            self.log('Random options differ, new is: %s' % options)
             self.Quiz.setRandomOptions(options)
             self.setSetting('already_sent_options', current_options)
 
@@ -653,7 +663,7 @@ class GUI(xbmcgui.WindowXMLDialog):
                 self.getControl(control).setVisible(False)
 
     def errorMessage(self, heading, error):
-        self.log('Error: %s %s' % (heading, str(error)))
+        self.log('Error: %s - %s' % (heading, str(error)))
         exc_type, exc_value, exc_traceback = sys.exc_info()
         trace = repr(traceback.format_exception(exc_type, exc_value,
                                                 exc_traceback))
