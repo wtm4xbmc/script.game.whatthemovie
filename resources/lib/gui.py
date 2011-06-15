@@ -640,6 +640,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         if self.getSetting('visible_shot_rating') == 'false':
             self.label_ratings.setVisible(False)
             self.group_rating.setVisible(False)
+            self.label_votes.setVisible(False)
         if self.getSetting('visible_tool_buttons') == 'false':
             controls = (self.CID_BUTTON_FAV, self.CID_BUTTON_BOOKMARK,
                         self.CID_BUTTON_SOLUTION, self.CID_BUTTON_JUMP)
