@@ -576,7 +576,7 @@ class GUI(xbmcgui.WindowXMLDialog):
                 else:
                     # login successfully
                     label = self.getString(self.SID_LOGGED_IN_AS) % user
-                    self.score = int(self.Quiz.getScore(user))
+                    self.score = int(self.Quiz.getScore(user)['ff_score'])
                     self.setRandomOptions()
         self.label_loginstate.setLabel(label)
         self._showUserScore(self.score)
