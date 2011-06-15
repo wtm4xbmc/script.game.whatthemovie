@@ -672,5 +672,5 @@ class GUI(xbmcgui.WindowXMLDialog):
         dialog.ok(heading, str(error))
 
     def log(self, msg):
-        xbmc.log('[ADDON][%s] %s' % (self.ADDON_NAME, str(msg)),
+        xbmc.log('[ADDON][%s] %s' % (self.ADDON_NAME, msg.encode('utf-8')),
                  level=xbmc.LOGNOTICE)
