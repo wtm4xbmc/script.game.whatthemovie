@@ -381,9 +381,9 @@ class GUI(xbmcgui.WindowXMLDialog):
         # print 'calc: full = %f, partial = %f' % (full_stars, part_star)
         gap_width = star_width / 2.0
         border_width = star_width / 4.0
-        p_full_stars  = star_width * full_stars
-        p_full_gaps   = gap_width * full_stars
-        p_part_star   = star_width * part_star
+        p_full_stars = star_width * full_stars
+        p_full_gaps = gap_width * full_stars
+        p_part_star = star_width * part_star
         # print '%%: lb = %f' % border_width
         # print '%%: fs = %f' % p_full_stars
         # print '%%: fg = %f' % p_full_gaps
