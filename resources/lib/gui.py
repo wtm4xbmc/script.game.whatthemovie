@@ -26,12 +26,13 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_LABEL_LOGINSTATE = 1001
     CID_LABEL_SCORE = 1003
     CID_LABEL_POSTED_BY = 1004
+    CID_LABEL_RATINGS = 1019
     CID_LABEL_SOLVED = 1005
     CID_LABEL_SOLUTION = 1007
     CID_LABEL_SHOT_ID = 1008
     CID_LABEL_SHOT_DATE = 1011
     CID_LABEL_SHOT_TYPE = 1012
-    CID_LABEL_RATING = 1014
+    CID_LABEL_VOTES = 1014
     CID_LIST_FLAGS = 1013
     CID_PROGR_AVG_RATING = 1015
     CID_LIST_STARS = 1017
@@ -64,8 +65,8 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_NEW_SUBM = 3113
     SID_FEATURE_FILMS = 3114
     SID_THE_ARCHIVE = 3115
-    SID_OVERALL_RATING = 3116
-    SID_OWN_RATING = 3117
+    SID_OVERALL_VOTES = 3116
+    SID_RATINGS = 3117
     SID_RATING_HIDDEN = 3118
     SID_RATING_UNRATED = 3119
     SID_REJECTED_SHOT = 3120
@@ -126,7 +127,8 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_shot_id = self.getControl(self.CID_LABEL_SHOT_ID)
         self.label_shot_date = self.getControl(self.CID_LABEL_SHOT_DATE)
         self.label_shot_type = self.getControl(self.CID_LABEL_SHOT_TYPE)
-        self.label_rating = self.getControl(self.CID_LABEL_RATING)
+        self.label_ratings = self.getControl(self.CID_LABEL_RATINGS)
+        self.label_votes = self.getControl(self.CID_LABEL_VOTES)
         self.image_main = self.getControl(self.CID_IMAGE_MAIN)
         self.image_gif = self.getControl(self.CID_IMAGE_GIF)
         self.image_solution = self.getControl(self.CID_IMAGE_SOLUTION)
@@ -361,11 +363,10 @@ class GUI(xbmcgui.WindowXMLDialog):
             own_rating_percent = 0
         self.progr_own_rating.setPercent(own_rating_percent)
         votes = rating['votes']
-        rating_string = '[CR]'.join((self.getString(self.SID_OVERALL_RATING),
-                                     self.getString(self.SID_OWN_RATING)))
-        self.label_rating.setLabel(rating_string % (overall_rating,
-                                                    votes,
-                                                    own_rating))
+        self.label_votes.setLabel(self.getString(self.SID_OVERALL_VOTES)
+                                   % votes)
+        self.label_ratings.setLabel(self.getString(self.SID_RATINGS)
+                                   % (overall_rating, own_rating))
 
     def _calcRatingPercent(self, rating_float):
         # a star is 1 star_width width
