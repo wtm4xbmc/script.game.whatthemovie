@@ -355,8 +355,8 @@ class GUI(xbmcgui.WindowXMLDialog):
             interval_percent = 0
         self.progr_avg_rating.setPercent(interval_percent)
         if rating['own_rating']:
-            own_rating = rating['own_rating']
-            own_rating_percent = int(own_rating) * 10
+            own_rating = int(float(rating['own_rating']))
+            own_rating_percent = own_rating * 10
             self.progr_own_rating.setPercent(own_rating_percent)
         else:
             own_rating = self.getString(self.SID_RATING_UNRATED)
