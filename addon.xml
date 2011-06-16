@@ -2,7 +2,7 @@
 <addon id="script.game.whatthemovie"
        name="WhatTheMovie"
        version="0.1.0"
-       provider-name="sphere, fuxii, tadi">
+       provider-name="sphere, tadi, skiller2k1">
     <requires>
         <import addon="xbmc.python" version="1.0"/>
         <import addon="script.module.beautifulsoup" version="3.0.8"/>

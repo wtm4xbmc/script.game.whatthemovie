@@ -555,9 +555,10 @@
                     <posy>35</posy>
                     <width>48</width>
                     <height>48</height>
-                    <texture>loader.gif</texture>
+                    <texture>loader.png</texture>
                     <visible>StringCompare(Window(10000).Property(wtm.busy),loading)</visible>
                     <animation effect="fade" time="200">VisibleChange</animation>
+                    <animation effect="rotate" start="720" end="0" center="auto" time="3000" loop="true" condition="true">conditional</animation>
                 </control>
             </control>
         </control>
