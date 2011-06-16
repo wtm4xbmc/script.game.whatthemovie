@@ -493,13 +493,13 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.setWTMProperty('busy', '')
 
     def guessTitle(self, shot_id):
-        # clear solved_status
-        self.setWTMProperty('solved_status', 'inactive')
         # open xbmc keyboard
         heading = self.getString(self.SID_KEYBOARD_HEADING)
         keyboard = xbmc.Keyboard('', heading)
         keyboard.doModal()
         if keyboard.isConfirmed() and keyboard.getText():
+            # clear solved_status
+            self.setWTMProperty('solved_status', 'inactive')
             guess = keyboard.getText().decode('utf8')
             self.log('Try to check the title: %s' % guess)
             # enter checking status
