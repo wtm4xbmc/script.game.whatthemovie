@@ -45,6 +45,7 @@ Misc     = 3300-3349
     <string id="3122">Die Lösung lautet: [B]%s[/B]</string>
     <string id="3123">Du hast diesen Shot erstellt</string>
     <string id="3124">Sorry, du darfst den Shot nicht sehen - umgeleitet</string>
+    <string id="3125">The Vault</string>
     <!-- Settings -->
     <string id="3200">Allgemein</string>
     <string id="3201">Login</string>

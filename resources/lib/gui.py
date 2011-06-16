@@ -74,6 +74,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_SOLVED_SOLUTION = 3122
     SID_SELF_POSTED = 3123
     SID_NOT_ALLOWED = 3124
+    SID_THE_VAULT = 3125
 
     # ACTION_IDs
     AID_EXIT_BACK = [9, 10, 13]
@@ -298,6 +299,8 @@ class GUI(xbmcgui.WindowXMLDialog):
             type_string = self.getString(self.SID_THE_ARCHIVE)
         elif shot_type == 4:
             type_string = self.getString(self.SID_REJECTED_SHOT)
+        elif shot_type == 5:
+            type_string = self.getString(self.SID_THE_VAULT)
         self.label_shot_type.setLabel(type_string)
 
     def _showShotPostedBy(self, posted_by=None):

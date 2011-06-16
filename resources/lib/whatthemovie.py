@@ -1,6 +1,5 @@
 import mechanize
-import time
-import datetime
+from datetime import date
 import re
 from urllib import urlencode
 from BeautifulSoup import BeautifulSoup
@@ -32,7 +31,7 @@ class WhatTheMovie(object):
                                   u'system/images/stills/normal/73/'
                                   u'7e4a854279aaf150d0fe0841f459c4.jpg'),
                     'shot_type': 2,
-                    'date': datetime.datetime(2011, 5, 14, 0, 0),
+                    'date': date(2011, 5, 14),
                     'nav': {'last': u'160987', 'prev_unsolved': u'157009',
                             'next': u'156819', 'next_unsolved': u'156819',
                             'prev': u'157009', 'first': u'1'},
@@ -169,15 +168,16 @@ class WhatTheMovie(object):
                 lang_list['hidden'].append(lang.img['src'][-6:-4])
         lang_list['all'] = lang_list['main'] + lang_list['hidden']
         # date
-        date = None
-        date_info = tree.find('ul',
-                              attrs={'class': 'nav_date'}).findAll('li')
-        if len(date_info) >= 4:
-            date_s = time.strptime('%s %s %s' % (date_info[1].a.string,
-                                                 date_info[2].a.string,
-                                                 date_info[3].a.string[:-2]),
-                                   '%Y %B %d')
-            date = datetime.datetime.fromtimestamp(time.mktime(date_s))
+        shot_date = None
+        section = tree.find('ul',
+                              attrs={'class': 'nav_date'})
+        if section:
+            r = ('<a href="/overview/(?P<year>[0-9]+)/(?P<month>[0-9]+)/(?P<day>[0-9]+)">')
+            date_dict = re.search(r, unicode(section)).groupdict()
+            if date_dict:
+                shot_date = date(int(date_dict['year']),
+                                 int(date_dict['month']),
+                                 int(date_dict['day']))
         # posted by
         sections = tree.find('ul',
                              attrs={'class': 'nav_shotinfo'}).findAll('li')
@@ -240,6 +240,8 @@ class WhatTheMovie(object):
             shot_type = 3
         elif section == 'Rejected Snapshots':
             shot_type = 4
+        elif section == 'The Vault':
+            shot_type = 5
         # gives_point
         gives_point = False
         if shot_type == 2 and not already_solved and not self_posted:
@@ -290,7 +292,7 @@ class WhatTheMovie(object):
         self.shot['lang_list'] = lang_list
         self.shot['posted_by'] = posted_by
         self.shot['solved'] = solved
-        self.shot['date'] = date
+        self.shot['date'] = shot_date
         self.shot['already_solved'] = already_solved
         self.shot['self_posted'] = self_posted
         self.shot['voting'] = voting
