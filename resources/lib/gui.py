@@ -28,7 +28,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_LABEL_POSTED_BY = 1004
     CID_LABEL_RATINGS = 1019
     CID_LABEL_SOLVED = 1005
-    CID_LABEL_SOLUTION = 1007
+    CID_LABEL_MESSAGE = 1007
     CID_LABEL_SHOT_ID = 1008
     CID_LABEL_SHOT_DATE = 1011
     CID_LABEL_SHOT_TYPE = 1012
@@ -124,7 +124,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_score = self.getControl(self.CID_LABEL_SCORE)
         self.label_posted_by = self.getControl(self.CID_LABEL_POSTED_BY)
         self.label_solved = self.getControl(self.CID_LABEL_SOLVED)
-        self.label_solution = self.getControl(self.CID_LABEL_SOLUTION)
+        self.label_message = self.getControl(self.CID_LABEL_MESSAGE)
         self.label_shot_id = self.getControl(self.CID_LABEL_SHOT_ID)
         self.label_shot_date = self.getControl(self.CID_LABEL_SHOT_DATE)
         self.label_shot_type = self.getControl(self.CID_LABEL_SHOT_TYPE)
@@ -318,27 +318,27 @@ class GUI(xbmcgui.WindowXMLDialog):
         if already_solved:
             self.image_solution.setColorDiffuse('FFFFFFFF')
             label = self.getString(self.SID_ALREADY_SOLVED)
-            self.label_solution.setLabel(label)
+            self.label_message.setLabel(label)
             self.setWTMProperty('solved_status', 'solved')
 
     def _showShotNotAllowed(self, not_allowed):
         if not_allowed:
             self.image_solution.setColorDiffuse('FFFFFFFF')
             label = self.getString(self.SID_NOT_ALLOWED)
-            self.label_solution.setLabel(label)
+            self.label_message.setLabel(label)
             self.setWTMProperty('solved_status', 'solved')
 
     def _showShotSelfPosted(self, self_posted):
         if self_posted:
             self.image_solution.setColorDiffuse('FFFFFFFF')
             label = self.getString(self.SID_SELF_POSTED)
-            self.label_solution.setLabel(label)
+            self.label_message.setLabel(label)
             self.setWTMProperty('solved_status', 'solved')
 
     def _showShotSolution(self, solution):
         self.image_solution.setColorDiffuse('FFFFFFFF')
         label = self.getString(self.SID_SOLVED_SOLUTION) % solution
-        self.label_solution.setLabel(label)
+        self.label_message.setLabel(label)
         self.setWTMProperty('solved_status', 'solved')
 
     def _showShotID(self, shot_id):
@@ -515,7 +515,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.image_solution.setColorDiffuse('FFFFFF00')
             self.setWTMProperty('solved_status', 'checking')
             message = self.getString(self.SID_CHECKING)
-            self.label_solution.setLabel(message % guess)
+            self.label_message.setLabel(message % guess)
             # try to check the guess. If it fails abort checking
             try:
                 solution = self.Quiz.guessShot(shot_id, guess)
@@ -535,7 +535,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.log('Answer was correct: %s' % title_year)
         # enter right status
         message = self.getString(self.SID_ANSWER_RIGHT)
-        self.label_solution.setLabel(message % title_year)
+        self.label_message.setLabel(message % title_year)
         self.setWTMProperty('solved_status', 'correct')
         self.image_solution.setColorDiffuse('FF00FF00')
         # if this shot gives points, do so
@@ -559,7 +559,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.log('Answer was wrong: %s' % guess)
         # enter wrong status
         message = self.getString(self.SID_ANSWER_WRONG)
-        self.label_solution.setLabel(message % guess)
+        self.label_message.setLabel(message % guess)
         self.setWTMProperty('solved_status', 'wrong')
         self.image_solution.setColorDiffuse('FFFF0000')
 

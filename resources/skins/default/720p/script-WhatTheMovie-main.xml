@@ -506,7 +506,7 @@
                     <animation effect="fade" time="200">VisibleChange</animation>
                 </control>
                 <control type="image" id="1006">
-                    <description>Solution background image - will be tinted by gui</description>
+                    <description>Message Label Background - will be tinted by gui</description>
                     <posx>15</posx>
                     <posy>375</posy>
                     <width>720</width>
@@ -516,7 +516,7 @@
                     <animation effect="fade" time="200">VisibleChange</animation>
                 </control>
                 <control type="label" id="1007">
-                    <description>Solution movie title and year</description>
+                    <description>Message Label</description>
                     <posx>25</posx>
                     <posy>375</posy>
                     <width>720</width>
