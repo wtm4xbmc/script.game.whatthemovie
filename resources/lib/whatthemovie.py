@@ -172,7 +172,8 @@ class WhatTheMovie(object):
         section = tree.find('ul',
                               attrs={'class': 'nav_date'})
         if section:
-            r = ('<a href="/overview/(?P<year>[0-9]+)/(?P<month>[0-9]+)/(?P<day>[0-9]+)">')
+            r = ('<a href="/overview/(?P<year>[0-9]+)/'
+                 '(?P<month>[0-9]+)/(?P<day>[0-9]+)">')
             date_dict = re.search(r, unicode(section)).groupdict()
             if date_dict:
                 shot_date = date(int(date_dict['year']),
@@ -281,7 +282,8 @@ class WhatTheMovie(object):
                 solvable = True
         # not allowed
         not_allowed = False
-        section = tree.find('div', attrs={'class': 'flash_message flash_error'})
+        section = tree.find('div', attrs={'class': 
+                                          'flash_message flash_error'})
         if section:
             message = section.string
             if re.search('you are not allowed', message):
