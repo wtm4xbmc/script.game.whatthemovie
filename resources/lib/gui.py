@@ -73,6 +73,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_ALREADY_SOLVED = 3121
     SID_SOLVED_SOLUTION = 3122
     SID_SELF_POSTED = 3123
+    SID_NOT_ALLOWED = 3124
 
     # ACTION_IDs
     AID_EXIT_BACK = [9, 10, 13]
@@ -282,6 +283,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self._showShotButtonState('bookmarked', shot['bookmarked'])
         self._showShotSolvableState(shot['solvable'])
         self._showShotOfTheDay(shot['sotd'])
+        self._showShotNotAllowed(shot['not_allowed'])
         # unset busy_gif
         self.setWTMProperty('busy', '')
 
@@ -316,6 +318,13 @@ class GUI(xbmcgui.WindowXMLDialog):
         if already_solved:
             self.image_solution.setColorDiffuse('FFFFFFFF')
             label = self.getString(self.SID_ALREADY_SOLVED)
+            self.label_solution.setLabel(label)
+            self.setWTMProperty('solved_status', 'solved')
+
+    def _showShotNotAllowed(self, not_allowed):
+        if not_allowed:
+            self.image_solution.setColorDiffuse('FFFFFFFF')
+            label = self.getString(self.SID_NOT_ALLOWED)
             self.label_solution.setLabel(label)
             self.setWTMProperty('solved_status', 'solved')
 

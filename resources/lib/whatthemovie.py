@@ -277,6 +277,13 @@ class WhatTheMovie(object):
                     solvable = False
             except KeyError:
                 solvable = True
+        # not allowed
+        not_allowed = False
+        section = tree.find('div', attrs={'class': 'flash_message flash_error'})
+        if section:
+            message = section.string
+            if re.search('you are not allowed', message):
+                not_allowed = True
         # create return dict
         self.shot['shot_id'] = shot_id
         self.shot['image_url'] = image_url
@@ -295,6 +302,7 @@ class WhatTheMovie(object):
         self.shot['favourite'] = favourite
         self.shot['sotd'] = sotd
         self.shot['solvable'] = solvable
+        self.shot['not_allowed'] = not_allowed
         return self.shot
 
     def downloadFile(self, url, local_path):
