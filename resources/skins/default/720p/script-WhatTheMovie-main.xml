@@ -550,7 +550,7 @@
                     <animation effect="fade" time="200">VisibleChange</animation>
                 </control>
                 <control type="image" id="1002">
-                    <description>Animated Gif</description>
+                    <description>Animated loading image</description>
                     <posx>60</posx>
                     <posy>35</posy>
                     <width>48</width>

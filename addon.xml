@@ -12,6 +12,6 @@
     <extension point="xbmc.addon.metadata">
         <platform>all</platform>
         <summary lang="en">Guess Movies by snapshots</summary>
-        <description lang="en">Solve snapshots to gain points for the Hall of Fame - powered by the website www.whatthemovie.com: [CR][CR]Currently Main Features are:[CR]- Login with your whatthemovie.com account[CR]- Solve, favourite, bookmark and of course solve shots[CR]- Zoom the shot[CR]- Set random and navigation options[CR]- Jump automatically to the next or random next shot</description>
+        <description lang="en">Solve snapshots to gain points for the Hall of Fame - powered by the website whatthemovie.com [CR][CR]Currently Main Features are:[CR]- Login with your whatthemovie.com account[CR]- Solve, favourite, bookmark and rate shots[CR]- Zoom the shot[CR]- Set random and navigation options[CR]- Jump automatically to the next or random next shot</description>
     </extension>
 </addon>
