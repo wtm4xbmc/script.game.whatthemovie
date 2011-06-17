@@ -328,8 +328,8 @@ class GUI(xbmcgui.WindowXMLDialog):
         if not_allowed:
             self.image_solution.setColorDiffuse('FFFFFFFF')
             label = (self.getString(self.SID_NOT_ALLOWED)
-                                    % (self.shot['requested_as'],
-                                       self.shot['shot_id']))
+                     % (self.shot['requested_as'],
+                        self.shot['shot_id']))
             self.label_message.setLabel(label)
             self.setWTMProperty('solved_status', 'solved')
 
