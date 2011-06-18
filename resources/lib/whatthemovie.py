@@ -174,11 +174,13 @@ class WhatTheMovie(object):
         if section:
             r = ('<a href="/overview/(?P<year>[0-9]+)/'
                  '(?P<month>[0-9]+)/(?P<day>[0-9]+)">')
-            date_dict = re.search(r, unicode(section)).groupdict()
-            if date_dict:
-                shot_date = date(int(date_dict['year']),
-                                 int(date_dict['month']),
-                                 int(date_dict['day']))
+            date_match = re.search(r, unicode(section))
+            if date_match:
+                date_dict = date_match.groupdict()
+                if date_dict:
+                    shot_date = date(int(date_dict['year']),
+                                     int(date_dict['month']),
+                                     int(date_dict['day']))
         # posted by
         sections = tree.find('ul',
                              attrs={'class': 'nav_shotinfo'}).findAll('li')
