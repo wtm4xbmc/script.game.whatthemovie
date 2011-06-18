@@ -282,7 +282,7 @@ class WhatTheMovie(object):
                 solvable = True
         # not allowed
         not_allowed = False
-        section = tree.find('div', attrs={'class': 
+        section = tree.find('div', attrs={'class':
                                           'flash_message flash_error'})
         if section:
             message = section.string
