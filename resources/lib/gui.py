@@ -516,6 +516,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             # clear solved_status
             self.setWTMProperty('solved_status', 'inactive')
             guess = keyboard.getText().decode('utf8')
+            gives_point = (self.shot['gives_point'])  # call by value forced
             self.log('Try to check the title: %s' % guess)
             # enter checking status
             self.image_solution.setColorDiffuse('FFFFFF00')
@@ -533,7 +534,7 @@ class GUI(xbmcgui.WindowXMLDialog):
             # call answerRight or answerWrong
             if solution['is_right']:
                 self.answerRight(solution['title_year'],
-                                 self.shot['gives_point'])
+                                 gives_point)
             else:
                 self.answerWrong(guess)
 
