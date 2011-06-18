@@ -245,6 +245,8 @@ class WhatTheMovie(object):
             shot_type = 4
         elif section == 'The Vault':
             shot_type = 5
+        elif section == 'Deleted':
+            shot_type = 6
         # gives_point
         gives_point = False
         if shot_type == 2 and not already_solved and not self_posted:
