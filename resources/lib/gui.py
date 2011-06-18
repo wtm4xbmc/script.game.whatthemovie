@@ -75,6 +75,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_SELF_POSTED = 3123
     SID_NOT_ALLOWED = 3124
     SID_THE_VAULT = 3125
+    SID_ANSWER_RIGHT_POINT = 3126
 
     # ACTION_IDs
     AID_EXIT_BACK = [9, 10, 13]
@@ -539,14 +540,16 @@ class GUI(xbmcgui.WindowXMLDialog):
     def answerRight(self, title_year, gives_point):
         self.log('Answer was correct: %s' % title_year)
         # enter right status
-        message = self.getString(self.SID_ANSWER_RIGHT)
-        self.label_message.setLabel(message % title_year)
         self.setWTMProperty('solved_status', 'correct')
         self.image_solution.setColorDiffuse('FF00FF00')
         # if this shot gives points, do so
         if gives_point:
             self.score += 1
             self._showUserScore(self.score)
+            message = self.getString(self.SID_ANSWER_RIGHT_POINT) % title_year
+        else:
+            message = self.getString(self.SID_ANSWER_RIGHT) % title_year
+        self.label_message.setLabel(message)
         # if user wants auto_jump, do so
         if self.getSetting('auto_jump_enabled') == 'true':
             time_to_sleep = int(self.getSetting('auto_jump_sleep')) * 1000

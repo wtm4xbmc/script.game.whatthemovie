@@ -46,6 +46,7 @@ Misc     = 3300-3349
     <string id="3123">Du hast diesen Shot erstellt</string>
     <string id="3124">Sorry, du darfst den Shot [B]%s[/B] nicht sehen - umgeleitet zu [B]%s[/B]</string>
     <string id="3125">The Vault</string>
+    <string id="3126">Richtig. Originaltitel: [B]%s[/B] - Großartig, das gab einen Punkt!</string>
     <!-- Settings -->
     <string id="3200">Allgemein</string>
     <string id="3201">Login</string>
