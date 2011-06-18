@@ -46,7 +46,7 @@ Misc     = 3300-3349
     <string id="3123">You posted this shot</string>
     <string id="3124">Sorry, you are not allowed to view the shot [B]%s[/B] - redirected to [B]%s[/B]</string>
     <string id="3125">The Vault</string>
-    <string id="3126">Correct. Original title is: [B]%s[/B] - Awesome, you scored one point!</string>
+    <string id="3126">Awesome. Original title is: [B]%s[/B] +1 Point!</string>
     <!-- Settings -->
     <string id="3200">General</string>
     <string id="3201">Login</string>
