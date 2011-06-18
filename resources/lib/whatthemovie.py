@@ -328,7 +328,10 @@ class WhatTheMovie(object):
             answer['is_right'] = True
             answer['title_year'] = response_c.split('"')[3]
             if self.shot['shot_id'] == shot_id:
-                self.shot['already_solved'] = True
+                if not self.shot['already_solved']:
+                    self.shot['already_solved'] = True
+                if self.shot['gives_point']:
+                    self.shot['gives_point'] = False
         return answer
 
     def rateShot(self, shot_id, user_rate, rerated='false'):
