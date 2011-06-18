@@ -38,7 +38,8 @@ class WhatTheMovie(object):
                     'voting': {'votes': u'93',
                                'own_rating': None,
                                'overall_rating': u'7.90'},
-                    'solvable': False}
+                    'solvable': False,
+                    'redirected': False}
     OFFLINE_ANSWER = {'title': 'Fluch der Karibik',
                       'is_right': True,
                       'title_year': (u'Pirates of the Caribbean: '
@@ -284,14 +285,17 @@ class WhatTheMovie(object):
                     solvable = False
             except KeyError:
                 solvable = True
-        # not allowed
-        not_allowed = False
+        # redirected
+        redirected = False
         section = tree.find('div', attrs={'class':
-                                          'flash_message flash_error'})
+                                          re.compile('flash_message')})
         if section:
             message = section.string
+            redirected = 1
             if re.search('you are not allowed', message):
-                not_allowed = True
+                redirected = 2
+            if re.search('No such snapshot', message):
+                redirected = 3
         # create return dict
         self.shot['shot_id'] = shot_id
         self.shot['image_url'] = image_url
@@ -310,7 +314,7 @@ class WhatTheMovie(object):
         self.shot['favourite'] = favourite
         self.shot['sotd'] = sotd
         self.shot['solvable'] = solvable
-        self.shot['not_allowed'] = not_allowed
+        self.shot['redirected'] = redirected
         return self.shot
 
     def downloadFile(self, url, local_path):

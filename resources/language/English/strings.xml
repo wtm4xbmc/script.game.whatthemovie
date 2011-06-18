@@ -48,6 +48,7 @@ Misc     = 3300-3349
     <string id="3125">The Vault</string>
     <string id="3126">Awesome. Original title is: [B]%s[/B] +1 Point!</string>
     <string id="3127">Deleted Shots</string>
+    <string id="3128">Sorry, no such shot [B]%s[/B] - redirected to [B]%s[/B]</string>
     <!-- Settings -->
     <string id="3200">General</string>
     <string id="3201">Login</string>

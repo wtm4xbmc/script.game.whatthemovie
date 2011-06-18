@@ -48,6 +48,7 @@ Misc     = 3300-3349
     <string id="3125">The Vault</string>
     <string id="3126">Großartig. Originaltitel: [B]%s[/B] +1 Punkt!</string>
     <string id="3127">Deleted Shots</string>
+    <string id="3128">Sorry, es existiert kein Shot [B]%s[/B] - umgeleitet zu [B]%s[/B]</string>
     <!-- Settings -->
     <string id="3200">Allgemein</string>
     <string id="3201">Login</string>

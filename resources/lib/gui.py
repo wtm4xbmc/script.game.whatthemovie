@@ -77,6 +77,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     SID_THE_VAULT = 3125
     SID_ANSWER_RIGHT_POINT = 3126
     SID_DELETED = 3127
+    SID_NO_SUCH_SHOT = 3128
 
     # ACTION_IDs
     AID_EXIT_BACK = [9, 10, 13]
@@ -286,13 +287,13 @@ class GUI(xbmcgui.WindowXMLDialog):
         self._showShotButtonState('bookmarked', shot['bookmarked'])
         self._showShotSolvableState(shot['solvable'])
         self._showShotOfTheDay(shot['sotd'])
-        self._showShotNotAllowed(shot['not_allowed'])
+        self._showShotRedirected(shot['redirected'])
         # unset busy_gif
         self.setWTMProperty('busy', '')
 
     def _showShotType(self, shot_type):
         if shot_type == 0:
-            type_string = 'FIND ME PLEASE'
+            type_string = 'UNKNOWN - Report to WTM4XBMC'
         elif shot_type == 1:
             type_string = self.getString(self.SID_NEW_SUBM)
         elif shot_type == 2:
@@ -328,12 +329,17 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.label_message.setLabel(label)
             self.setWTMProperty('solved_status', 'solved')
 
-    def _showShotNotAllowed(self, not_allowed):
-        if not_allowed:
+    def _showShotRedirected(self, redirected):
+        if redirected:
+            if redirected == 1:
+                message = 'Redirected from %s to %s. REPORT TO WTM4XBMC'
+            if redirected == 2:
+                message = self.getString(self.SID_NOT_ALLOWED)
+            elif redirected == 3:
+                message = self.getString(self.SID_NO_SUCH_SHOT)
             self.image_solution.setColorDiffuse('FFFFFFFF')
-            label = (self.getString(self.SID_NOT_ALLOWED)
-                     % (self.shot['requested_as'],
-                        self.shot['shot_id']))
+            label = message % (self.shot['requested_as'],
+                               self.shot['shot_id'])
             self.label_message.setLabel(label)
             self.setWTMProperty('solved_status', 'solved')
 
