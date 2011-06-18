@@ -333,7 +333,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         if redirected:
             if redirected == 1:
                 message = 'Redirected from %s to %s. REPORT TO WTM4XBMC'
-            if redirected == 2:
+            elif redirected == 2:
                 message = self.getString(self.SID_NOT_ALLOWED)
             elif redirected == 3:
                 message = self.getString(self.SID_NO_SUCH_SHOT)
