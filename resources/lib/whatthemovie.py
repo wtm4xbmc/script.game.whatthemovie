@@ -1,84 +1,134 @@
-# WhatTheMovie Python Class
-# Copyright (C) Tristan 'sphere' Fischer 2011
+#
+#     Copyright (C) 2011 Team WTM4XBMC
+#     http://github.com/wtm4xbmc
+#
+# This Program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# This Program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this script; see the file LICENSE.txt.  If not, write to
+# the Free Software Foundation, 675 Mass Ave, Cambridge, MA 02139, USA.
+# http://www.gnu.org/copyleft/gpl.html
+#
+#
 
-from mechanize import Browser, LWPCookieJar, Request
+import mechanize
+from datetime import date
+import re
 from urllib import urlencode
 from BeautifulSoup import BeautifulSoup
-from time import strptime, mktime
-from datetime import datetime, timedelta
-from re import compile, search
 
 
-class WhatTheMovie:
+class WhatTheMovie(object):
 
     MAIN_URL = 'http://whatthemovie.com'
 
+    OFFLINE_DEBUG = False
+    OFFLINE_SHOT = {'shot_id': u'156827',
+                    'requested_as': 'random',
+                    'self_posted': False,
+                    'bookmarked': False,
+                    'favourite': False,
+                    'gives_point': True,
+                    'already_solved': False,
+                    'tags': [u'tag1'],
+                    'posted_by': u'Hagentinho',
+                    'sotd': False,
+                    'lang_list': {'hidden': [u'dk', u'et', u'fi', u'gr'],
+                                  'main': [u'de', u'fr', u'en', u'es', u'pt'],
+                                  'all': [u'dk', u'et', u'fi', u'gr',
+                                          u'de', u'fr', u'en', u'es', u'pt']},
+                    'solved': {'status': True,
+                               'count': 1280,
+                               'first_by': u'Mimimi'},
+                    'image_url': (u'http://static.whatthemovie.com/'
+                                  u'system/images/stills/normal/73/'
+                                  u'7e4a854279aaf150d0fe0841f459c4.jpg'),
+                    'shot_type': 2,
+                    'date': date(2011, 5, 14),
+                    'nav': {'last': u'160987', 'prev_unsolved': u'157009',
+                            'next': u'156819', 'next_unsolved': u'156819',
+                            'prev': u'157009', 'first': u'1'},
+                    'voting': {'votes': u'93',
+                               'own_rating': None,
+                               'overall_rating': u'7.90'},
+                    'solvable': False,
+                    'redirected': False}
+    OFFLINE_ANSWER = {'title': 'Fluch der Karibik',
+                      'is_right': True,
+                      'title_year': (u'Pirates of the Caribbean: '
+                                     u'At World\'s End (2007)')}
+
     def __init__(self, user_agent):
         # Get browser stuff
-        self.cookies = LWPCookieJar()
-        self.browser = Browser()
+        self.cookies = mechanize.LWPCookieJar()
+        self.browser = mechanize.Browser()
         self.browser.set_cookiejar(self.cookies)
         self.browser.addheaders = [('user-agent', user_agent)]
         # Set empty returns
         self.shot = dict()
         self.last_shots = list()
 
-    def _checkLogin(self, url=None):
-        is_login = False
-        if url is not None:
-            self.browser.open(url)
-        try:
-            html = self.browser.response().read()
-        except:
-            self.browser.open(self.MAIN_URL)
-            html = self.browser.response().read()
-        tree = BeautifulSoup(html)
-        if tree.find('a', href='http://whatthemovie.com/user/logout'):
-            is_login = True
-        return is_login
-
-    def login(self, user, password, cookie_path, options=None):
-        is_login = False
-        login_url = '%s/user/login/' % self.MAIN_URL
+    def login(self, user, password, cookie_path):
+        logged_in = False
+        if self.OFFLINE_DEBUG:
+            return 'auth'
         try:
             self.cookies.revert(cookie_path)
-            # cookie found
-        except:
-            # no cookie found
-            pass
-        is_login = self._checkLogin(login_url)
-        if not is_login:
-            # need to login
-            self.browser.select_form(nr=0)
-            self.browser['name'] = user
-            self.browser['upassword'] = password
-            self.browser.submit()
-            is_login = self._checkLogin(login_url)
-            if is_login:
-                # logged in via auth
+            cookie_found = True
+        except IOError:
+            cookie_found = False
+        if cookie_found:
+            logged_in_user = self._getUsername(retrieve=True)
+            if logged_in_user == user:
+                logged_in = 'cookie'
+        if not logged_in:
+            login_url = '%s/user/login' % self.MAIN_URL
+            data_dict = dict()
+            data_dict['name'] = user
+            data_dict['upassword'] = password
+            data = urlencode(data_dict)
+            req = mechanize.Request(login_url, data)
+            self.browser.open(req)
+            logged_in_user = self._getUsername()
+            if logged_in_user:
+                logged_in = 'auth'
                 self.cookies.save(cookie_path)
-            else:
-                # could not log in
-                pass
-        if is_login:
-            if options and len(options) > 0:
-                self.setOptions(options)
-        return is_login
+        return logged_in
 
-    def setOptions(self, options_dict):
+    def _getUsername(self, retrieve=False):
+        # only retrieve if there is no previous retrieve which we can use
+        if retrieve:
+            self.browser.open(self.MAIN_URL)
+        html = self.browser.response().read()
+        tree = BeautifulSoup(html)
+        section = tree.find('li', attrs={'class': 'secondary_nav',
+                                         'style': 'margin-left: 0'})
+        if section:
+            username = section.a.span.string
+        else:
+            username = None
+        return username
+
+    def setRandomOptions(self, settings):
+        if self.OFFLINE_DEBUG:
+            return
         option_url = '%s/shot/setrandomoptions' % self.MAIN_URL
-        if options_dict['include_archive'] == '0':
-            options_dict.pop('include_archive')
-        if options_dict['include_solved'] == '0':
-            options_dict.pop('include_solved')
-        self._sendAjaxReq(option_url, options_dict)
+        self._sendAjaxReq(option_url, settings)
 
     def _sendAjaxReq(self, url, data_dict=None):
         if data_dict:
             post_data = urlencode(data_dict)
         else:
             post_data = ' '
-        req = Request(url, post_data)
+        req = mechanize.Request(url, post_data)
         req.add_header('Accept', 'text/javascript, */*')
         req.add_header('Content-Type',
                        'application/x-www-form-urlencoded; charset=UTF-8')
@@ -88,22 +138,25 @@ class WhatTheMovie:
         response_c = response.replace('&amp;', '&').decode('unicode-escape')
         return response_c
 
-    def getShot(self, shot_id):
-        if shot_id == 'last':
-            if len(self.last_shots) > 0:
+    def getShot(self, shot_request):
+        if self.OFFLINE_DEBUG:
+            return self.OFFLINE_SHOT
+        if shot_request == 'back':
+            if self.last_shots:
                 self.shot = self.last_shots.pop()
         else:
             if self.shot:  # if there is already a shot - put it in list
                 self.last_shots.append(self.shot)
-            if (shot_id.isdigit() or
-                shot_id == 'random' or
-                shot_id in self.shot['nav'].keys()):
-                self.shot = self.scrapeShot(shot_id)
+            if shot_request.isdigit() or shot_request == 'random':
+                self.shot = self.scrapeShot(shot_request)
+            elif shot_request in self.shot['nav'].keys():
+                self.shot = self.scrapeShot(self.shot['nav'][shot_request])
+        self.shot['requested_as'] = shot_request
         return self.shot
 
-    def scrapeShot(self, shot_id):
+    def scrapeShot(self, shot_request):
         self.shot = dict()
-        shot_url = '%s/shot/%s' % (self.MAIN_URL, shot_id)
+        shot_url = '%s/shot/%s' % (self.MAIN_URL, shot_request)
         self.browser.open(shot_url)
         html = self.browser.response().read()
         tree = BeautifulSoup(html)
@@ -137,15 +190,19 @@ class WhatTheMovie:
                 lang_list['hidden'].append(lang.img['src'][-6:-4])
         lang_list['all'] = lang_list['main'] + lang_list['hidden']
         # date
-        date = None
-        date_info = tree.find('ul',
-                              attrs={'class': 'nav_date'}).findAll('li')
-        if len(date_info) >= 4:
-            struct_date = strptime('%s %s %s' % (date_info[1].a.string,
-                                                 date_info[2].a.string,
-                                                 date_info[3].a.string[:-2]),
-                                   '%Y %B %d')
-            date = datetime.fromtimestamp(mktime(struct_date))
+        shot_date = None
+        section = tree.find('ul',
+                              attrs={'class': 'nav_date'})
+        if section:
+            r = ('<a href="/overview/(?P<year>[0-9]+)/'
+                 '(?P<month>[0-9]+)/(?P<day>[0-9]+)">')
+            date_match = re.search(r, unicode(section))
+            if date_match:
+                date_dict = date_match.groupdict()
+                if date_dict:
+                    shot_date = date(int(date_dict['year']),
+                                     int(date_dict['month']),
+                                     int(date_dict['day']))
         # posted by
         sections = tree.find('ul',
                              attrs={'class': 'nav_shotinfo'}).findAll('li')
@@ -166,24 +223,29 @@ class WhatTheMovie:
         try:
             solved['first_by'] = sections[2].a.string
         except:
-            solved['first_by'] = 'nobody'
-        # already solved
+            solved['first_by'] = None
+        # already solved + own_shot
         already_solved = False
+        self_posted = False
         js_list = tree.findAll('script',
                                attrs={'type': 'text/javascript'},
-                               text=compile('guess_problem'))
-        if len(js_list) > 0:
-            already_solved = True
+                               text=re.compile('guess_problem'))
+        if js_list:
+            message = str(js_list)
+            if re.search('already solved', message):
+                already_solved = True
+            elif re.search('You posted this', message):
+                self_posted = True
         # voting
         voting = dict()
         section = tree.find('script',
                             attrs={'type': 'text/javascript'},
-                            text=compile('tt_shot_rating_stars'))
-        r = '<strong>(?P<overall_rating>[0-9.]+|hidden)</strong> '
-        r += '\((?P<votes>[0-9]+) votes\)'
-        r += '(<br>Your rating: <strong>(?P<own_rating>[0-9.]+)</strong>)?'
+                            text=re.compile('tt_shot_rating_stars'))
+        r = ('<strong>(?P<overall_rating>[0-9.]+|hidden)</strong> '
+             '\((?P<votes>[0-9]+) votes\)'
+             '(<br>Your rating: <strong>(?P<own_rating>[0-9.]+)</strong>)?')
         if section:
-            voting = search(r, section).groupdict()
+            voting = re.search(r, section).groupdict()
         # tags
         tags = list()
         tags_list = tree.find('ul', attrs={'id':
@@ -203,9 +265,13 @@ class WhatTheMovie:
             shot_type = 3
         elif section == 'Rejected Snapshots':
             shot_type = 4
+        elif section == 'The Vault':
+            shot_type = 5
+        elif section == 'Deleted':
+            shot_type = 6
         # gives_point
         gives_point = False
-        if shot_type == 2 and already_solved == False:
+        if shot_type == 2 and not already_solved and not self_posted:
             gives_point = True
         # bookmarked
         if tree.find('li', attrs={'id': 'watchbutton'}):
@@ -232,20 +298,34 @@ class WhatTheMovie:
         if tree.find('div', attrs={'class': 'sotd_banner'}):
             sotd = True
         # Solvable
-        solution_link = tree.find('li', attrs={'id': 'solutionbutton'}).a
-        try:
-            if solution_link['class'] == 'inactive':
-                solvable = False
-        except KeyError:
-            solvable = True
+        solvable = False
+        section = tree.find('li', attrs={'id': 'solutionbutton'})
+        if section is not None:
+            try:
+                if section.a['class'] == 'inactive':
+                    solvable = False
+            except KeyError:
+                solvable = True
+        # redirected
+        redirected = False
+        section = tree.find('div', attrs={'class':
+                                          re.compile('flash_message')})
+        if section:
+            message = section.string
+            redirected = 1
+            if re.search('you are not allowed', message):
+                redirected = 2
+            if re.search('No such snapshot', message):
+                redirected = 3
         # create return dict
         self.shot['shot_id'] = shot_id
         self.shot['image_url'] = image_url
         self.shot['lang_list'] = lang_list
         self.shot['posted_by'] = posted_by
         self.shot['solved'] = solved
-        self.shot['date'] = date
+        self.shot['date'] = shot_date
         self.shot['already_solved'] = already_solved
+        self.shot['self_posted'] = self_posted
         self.shot['voting'] = voting
         self.shot['tags'] = tags
         self.shot['shot_type'] = shot_type
@@ -255,17 +335,20 @@ class WhatTheMovie:
         self.shot['favourite'] = favourite
         self.shot['sotd'] = sotd
         self.shot['solvable'] = solvable
-        print self.shot
+        self.shot['redirected'] = redirected
         return self.shot
 
     def downloadFile(self, url, local_path):
         self.browser.retrieve(url, local_path, )
 
-    def guessShot(self, title_guess, shot_id=None):
+    def guessShot(self, shot_id, title_guess):
+        if self.OFFLINE_DEBUG:
+            if title_guess.lower() == self.OFFLINE_ANSWER['title'].lower():
+                return self.OFFLINE_ANSWER
+            else:
+                return {'is_right': False}
         answer = dict()
         answer['is_right'] = False
-        if not shot_id:
-            shot_id = self.shot['shot_id']
         post_url = '%s/shot/%s/guess' % (self.MAIN_URL, shot_id)
         post_dict = {'guess': title_guess.encode('utf8')}
         response_c = self._sendAjaxReq(post_url, post_dict)
@@ -273,9 +356,17 @@ class WhatTheMovie:
         if response_c[6:11] == 'right':
             answer['is_right'] = True
             answer['title_year'] = response_c.split('"')[3]
+            if self.shot['shot_id'] == shot_id:
+                if not self.shot['already_solved']:
+                    self.shot['already_solved'] = True
+                if self.shot['gives_point']:
+                    self.shot['gives_point'] = False
         return answer
 
     def rateShot(self, shot_id, user_rate, rerated='false'):
+        if self.OFFLINE_DEBUG:
+            self.OFFLINE_SHOT['voting']['own_rating'] = str(user_rate)
+            return
         url = '%s/shot/%s/rate.js' % (self.MAIN_URL, shot_id)
         user_rate_5 = float(user_rate) / 2
         rating_dict = dict()
@@ -287,6 +378,9 @@ class WhatTheMovie:
             self.shot['voting']['own_rating'] = str(user_rate)
 
     def bookmarkShot(self, shot_id, new_state):
+        if self.OFFLINE_DEBUG:
+            self.OFFLINE_SHOT['bookmarked'] = new_state
+            return
         if new_state == True:
             url = '%s/shot/%s/watch' % (self.MAIN_URL, shot_id)
         else:
@@ -296,6 +390,9 @@ class WhatTheMovie:
             self.shot['bookmarked'] = new_state
 
     def favouriteShot(self, shot_id, new_state):
+        if self.OFFLINE_DEBUG:
+            self.OFFLINE_SHOT['favourite'] = new_state
+            return
         if new_state == True:
             url = '%s/shot/%s/fav' % (self.MAIN_URL, shot_id)
         else:
@@ -305,20 +402,26 @@ class WhatTheMovie:
             self.shot['favourite'] = new_state
 
     def solveShot(self, shot_id):
+        if self.OFFLINE_DEBUG:
+            return self.OFFLINE_ANSWER['title']
         url = '%s/shot/%s/showsolution' % (self.MAIN_URL, shot_id)
         ajax_answer = self._sendAjaxReq(url)
         r = '<strong>(?P<solution>.+)\.\.\.</strong>'
-        solved_title = search(r, ajax_answer).group('solution')
+        solved_title = re.search(r, ajax_answer).group('solution')
         if self.shot['shot_id'] == shot_id:
             self.shot['already_solved'] = True
         return solved_title
 
     def getScore(self, username):
+        if self.OFFLINE_DEBUG:
+            return 0
         score = 0
         profile_url = '%s/user/%s/' % (self.MAIN_URL, username)
         self.browser.open(profile_url)
         html = self.browser.response().read()
         tree = BeautifulSoup(html)
         box = tree.find('div', attrs={'class': 'box_white'})
-        score = box.p.strong.string[0:-13]
+        r = ('>(?P<ff_score>[0-9]+) Feature Films.*'
+             '>(?P<all_score>[0-9]+) Snapshots')
+        score = re.search(r, str(box.p)).groupdict()
         return score
