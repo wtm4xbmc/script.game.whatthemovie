@@ -190,8 +190,7 @@ class WhatTheMovie(object):
         lang_list['all'] = lang_list['main'] + lang_list['hidden']
         # date
         shot_date = None
-        section = tree.find('ul',
-                              attrs={'class': 'nav_date'})
+        section = tree.find('ul', attrs={'class': 'nav_date'})
         if section:
             r = ('<a href="/overview/(?P<year>[0-9]+)/'
                  '(?P<month>[0-9]+)/(?P<day>[0-9]+)">')
@@ -414,7 +413,7 @@ class WhatTheMovie(object):
     def getScore(self, username):
         if self.OFFLINE_DEBUG:
             score = {'ff_score': 0,
-                     'all_score': 0,}
+                     'all_score': 0}
             return score
         score = 0
         profile_url = '%s/user/%s/' % (self.MAIN_URL, username)
