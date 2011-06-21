@@ -558,7 +558,7 @@
                     <texture>loader.png</texture>
                     <visible>StringCompare(Window(10000).Property(wtm.busy),loading)</visible>
                     <animation effect="fade" time="200">VisibleChange</animation>
-                    <animation effect="rotate" start="720" end="0" center="auto" time="3000" loop="true" condition="true">conditional</animation>
+                    <animation effect="rotate" start="720" end="0" center="auto" time="3000" loop="true" condition="Control.IsVisible(1002)">conditional</animation>
                 </control>
             </control>
         </control>
