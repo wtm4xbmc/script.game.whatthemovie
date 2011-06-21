@@ -413,7 +413,9 @@ class WhatTheMovie(object):
 
     def getScore(self, username):
         if self.OFFLINE_DEBUG:
-            return 0
+            score = {'ff_score': 0,
+                     'all_score': 0,}
+            return score
         score = 0
         profile_url = '%s/user/%s/' % (self.MAIN_URL, username)
         self.browser.open(profile_url)
