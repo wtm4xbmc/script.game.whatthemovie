@@ -609,7 +609,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         # if login is enabeld start loop until
         # self.logged_in is true or user disables login
         if self.getSetting('login') == 'true':
-            cookie_dir = 'special://profile/addon_data/%s' % self.ADDON_ID
+            cookie_dir = self.Addon.getAddonInfo('profile')
             self.checkCreatePath(cookie_dir)
             cookie_file = xbmc.translatePath('%s/cookie.txt' % cookie_dir)
             # try to login until self.logged_in becomes True
