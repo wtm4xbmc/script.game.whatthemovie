@@ -20,7 +20,6 @@
 #
 
 import mechanize
-from datetime import date
 import re
 from urllib import urlencode
 from BeautifulSoup import BeautifulSoup
@@ -52,7 +51,7 @@ class WhatTheMovie(object):
                                   u'system/images/stills/normal/73/'
                                   u'7e4a854279aaf150d0fe0841f459c4.jpg'),
                     'shot_type': 2,
-                    'date': date(2011, 5, 14),
+                    'date': (2011, 5, 14),
                     'nav': {'last': u'160987', 'prev_unsolved': u'157009',
                             'next': u'156819', 'next_unsolved': u'156819',
                             'prev': u'157009', 'first': u'1'},
@@ -200,9 +199,9 @@ class WhatTheMovie(object):
             if date_match:
                 date_dict = date_match.groupdict()
                 if date_dict:
-                    shot_date = date(int(date_dict['year']),
-                                     int(date_dict['month']),
-                                     int(date_dict['day']))
+                    shot_date = (int(date_dict['year']),
+                                 int(date_dict['month']),
+                                 int(date_dict['day']))
         # posted by
         sections = tree.find('ul',
                              attrs={'class': 'nav_shotinfo'}).findAll('li')

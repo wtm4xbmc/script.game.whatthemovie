@@ -381,8 +381,10 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_shot_id.setLabel(self.getString(self.SID_SHOT_ID)
                                     % shot_id)
 
-    def _showShotDate(self, date):
-        if date:
+    def _showShotDate(self, date_tupel):
+        if date_tupel:
+            y, m, d = date_tupel
+            date = datetime.date(y, m, d)
             date_format = xbmc.getRegion('dateshort')
             date_string = date.strftime(date_format)
         else:
