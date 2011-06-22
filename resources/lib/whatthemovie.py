@@ -149,7 +149,18 @@ class WhatTheMovie(object):
             if shot_request.isdigit() or shot_request == 'random':
                 self.shot = self.scrapeShot(shot_request)
             elif shot_request in self.shot['nav'].keys():
-                self.shot = self.scrapeShot(self.shot['nav'][shot_request])
+                # fixme(sphere): replace with better logic
+                # if there is no shot_request in dict
+                if not self.shot['nav'][shot_request]: 
+                    # check if it is a unsolved request and try without
+                    if shot_request[-9:] == '_unsolved' and self.shot['nav'][shot_request[:-9]]:
+                        resolved_shot_request = self.shot['nav'][shot_request[:-9]]
+                    else:
+                        # else fallback to random
+                        resolved_shot_request = 'random'
+                else:
+                    resolved_shot_request = self.shot['nav'][shot_request]
+                self.shot = self.scrapeShot(resolved_shot_request)
         self.shot['requested_as'] = shot_request
         return self.shot
 
