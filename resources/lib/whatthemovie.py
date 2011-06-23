@@ -20,7 +20,6 @@
 #
 
 import mechanize
-from datetime import date
 import re
 from urllib import urlencode
 from BeautifulSoup import BeautifulSoup
@@ -52,7 +51,7 @@ class WhatTheMovie(object):
                                   u'system/images/stills/normal/73/'
                                   u'7e4a854279aaf150d0fe0841f459c4.jpg'),
                     'shot_type': 2,
-                    'date': date(2011, 5, 14),
+                    'date': (2011, 5, 14),
                     'nav': {'last': u'160987', 'prev_unsolved': u'157009',
                             'next': u'156819', 'next_unsolved': u'156819',
                             'prev': u'157009', 'first': u'1'},
@@ -150,7 +149,18 @@ class WhatTheMovie(object):
             if shot_request.isdigit() or shot_request == 'random':
                 self.shot = self.scrapeShot(shot_request)
             elif shot_request in self.shot['nav'].keys():
-                self.shot = self.scrapeShot(self.shot['nav'][shot_request])
+                # fixme(sphere): replace with better logic
+                # if there is no shot_request in dict
+                if not self.shot['nav'][shot_request]: 
+                    # check if it is a unsolved request and try without
+                    if shot_request[-9:] == '_unsolved' and self.shot['nav'][shot_request[:-9]]:
+                        resolved_shot_request = self.shot['nav'][shot_request[:-9]]
+                    else:
+                        # else fallback to random
+                        resolved_shot_request = 'random'
+                else:
+                    resolved_shot_request = self.shot['nav'][shot_request]
+                self.shot = self.scrapeShot(resolved_shot_request)
         self.shot['requested_as'] = shot_request
         return self.shot
 
@@ -191,8 +201,7 @@ class WhatTheMovie(object):
         lang_list['all'] = lang_list['main'] + lang_list['hidden']
         # date
         shot_date = None
-        section = tree.find('ul',
-                              attrs={'class': 'nav_date'})
+        section = tree.find('ul', attrs={'class': 'nav_date'})
         if section:
             r = ('<a href="/overview/(?P<year>[0-9]+)/'
                  '(?P<month>[0-9]+)/(?P<day>[0-9]+)">')
@@ -200,9 +209,9 @@ class WhatTheMovie(object):
             if date_match:
                 date_dict = date_match.groupdict()
                 if date_dict:
-                    shot_date = date(int(date_dict['year']),
-                                     int(date_dict['month']),
-                                     int(date_dict['day']))
+                    shot_date = (int(date_dict['year']),
+                                 int(date_dict['month']),
+                                 int(date_dict['day']))
         # posted by
         sections = tree.find('ul',
                              attrs={'class': 'nav_shotinfo'}).findAll('li')
@@ -414,7 +423,9 @@ class WhatTheMovie(object):
 
     def getScore(self, username):
         if self.OFFLINE_DEBUG:
-            return 0
+            score = {'ff_score': 0,
+                     'all_score': 0}
+            return score
         score = 0
         profile_url = '%s/user/%s/' % (self.MAIN_URL, username)
         self.browser.open(profile_url)

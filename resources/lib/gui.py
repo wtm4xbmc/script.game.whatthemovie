@@ -381,8 +381,10 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_shot_id.setLabel(self.getString(self.SID_SHOT_ID)
                                     % shot_id)
 
-    def _showShotDate(self, date):
-        if date:
+    def _showShotDate(self, date_tupel):
+        if date_tupel:
+            y, m, d = date_tupel
+            date = datetime.date(y, m, d)
             date_format = xbmc.getRegion('dateshort')
             date_string = date.strftime(date_format)
         else:
@@ -409,9 +411,9 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.progr_own_rating.setPercent(own_rating_percent)
         votes = rating['votes']
         self.label_votes.setLabel(self.getString(self.SID_OVERALL_VOTES)
-                                   % votes)
+                                  % votes)
         self.label_ratings.setLabel(self.getString(self.SID_RATINGS)
-                                   % (overall_rating, own_rating))
+                                    % (overall_rating, own_rating))
 
     def _calcRatingPercent(self, rating_float):
         # a star is 1 star_width width
@@ -423,19 +425,13 @@ class GUI(xbmcgui.WindowXMLDialog):
         star_width = 100.0 / 15.0
         full_stars = float(int(rating_float))
         part_star = rating_float - full_stars
-        # print 'calc: full = %f, partial = %f' % (full_stars, part_star)
         gap_width = star_width / 2.0
         border_width = star_width / 4.0
         p_full_stars = star_width * full_stars
         p_full_gaps = gap_width * full_stars
         p_part_star = star_width * part_star
-        # print '%%: lb = %f' % border_width
-        # print '%%: fs = %f' % p_full_stars
-        # print '%%: fg = %f' % p_full_gaps
-        # print '%%: ps = %f' % p_part_star
         percent = border_width + p_full_stars + p_full_gaps + p_part_star
-        # print 'percent = %f' % percent
-        return int(percent + 0.5) # round up for better accurracy
+        return percent  # .setPercent() can handle float()
 
     def _showShotFlags(self, available_languages):
         visible_flags = list()
@@ -487,8 +483,8 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.label_score.setLabel(score_string)
 
     def rateShot(self, shot_id, own_rating):
-        self.log('Try to rate the shot with: %s' % own_rating)
         if self.logged_in:
+            self.log('Try to rate the shot with: %s' % own_rating)
             self.setWTMProperty('busy', 'loading')
             try:
                 self.Quiz.rateShot(shot_id, own_rating)
@@ -500,30 +496,32 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.setWTMProperty('busy', '')
 
     def favouriteShot(self, shot_id):
-        state = self.shot['favourite']
-        newstate = not state
-        self.log('Try to set the shots fav status to: %s' % newstate)
-        self.setWTMProperty('busy', 'loading')
-        try:
-            self.Quiz.favouriteShot(shot_id, newstate)
-            self._showShotButtonState('favourite', newstate)
-        except Exception, error:
-            self.errorMessage(self.getString(self.SID_ERROR_SHOT),
-                              str(error))
-        self.setWTMProperty('busy', '')
+        if self.logged_in:
+            state = self.shot['favourite']
+            newstate = not state
+            self.log('Try to set the shots fav status to: %s' % newstate)
+            self.setWTMProperty('busy', 'loading')
+            try:
+                self.Quiz.favouriteShot(shot_id, newstate)
+                self._showShotButtonState('favourite', newstate)
+            except Exception, error:
+                self.errorMessage(self.getString(self.SID_ERROR_SHOT),
+                                  str(error))
+            self.setWTMProperty('busy', '')
 
     def bookmarkShot(self, shot_id):
-        state = self.shot['bookmarked']
-        newstate = not state
-        self.log('Try to set the shots bookmark status to: %s' % newstate)
-        self.setWTMProperty('busy', 'loading')
-        try:
-            self.Quiz.bookmarkShot(shot_id, newstate)
-            self._showShotButtonState('bookmarked', newstate)
-        except Exception, error:
-            self.errorMessage(self.getString(self.SID_ERROR_SHOT),
-                              str(error))
-        self.setWTMProperty('busy', '')
+        if self.logged_in:
+            state = self.shot['bookmarked']
+            newstate = not state
+            self.log('Try to set the shots bookmark status to: %s' % newstate)
+            self.setWTMProperty('busy', 'loading')
+            try:
+                self.Quiz.bookmarkShot(shot_id, newstate)
+                self._showShotButtonState('bookmarked', newstate)
+            except Exception, error:
+                self.errorMessage(self.getString(self.SID_ERROR_SHOT),
+                                  str(error))
+            self.setWTMProperty('busy', '')
 
     def solveShot(self, shot_id):
         self.log('Try to solve the shot')
@@ -609,7 +607,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         # if login is enabeld start loop until
         # self.logged_in is true or user disables login
         if self.getSetting('login') == 'true':
-            cookie_dir = 'special://profile/addon_data/%s' % self.ADDON_ID
+            cookie_dir = self.Addon.getAddonInfo('profile')
             self.checkCreatePath(cookie_dir)
             cookie_file = xbmc.translatePath('%s/cookie.txt' % cookie_dir)
             # try to login until self.logged_in becomes True
