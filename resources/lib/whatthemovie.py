@@ -432,7 +432,7 @@ class WhatTheMovie(object):
         html = self.browser.response().read()
         tree = BeautifulSoup(html)
         box = tree.find('div', attrs={'class': 'box_white'})
-        r = ('>(?P<ff_score>[0-9]+) Feature Films.*'
-             '>(?P<all_score>[0-9]+) Snapshots')
+        r = ('>(?P<ff_score>[0-9]+) Feature Film.*'
+             '>(?P<all_score>[0-9]+) Snapshot')
         score = re.search(r, str(box.p)).groupdict()
         return score
