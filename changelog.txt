@@ -1,4 +1,7 @@
-0.9.1 
+1.0.0
+- Eden release
+
+0.9.1
 - Bugfix (error if player has exactly 1 point)
 
 0.9.0 Initial zip-release version
