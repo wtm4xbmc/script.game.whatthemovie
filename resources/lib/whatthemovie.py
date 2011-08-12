@@ -193,7 +193,7 @@ class WhatTheMovie(object):
         subst_image_url = 'http://static.whatthemovie.com/images/substitute'
         if self.image_download_path:
             if not image_url.startswith(subst_image_url):
-                local_image_file = '%s%s.jpg' % (self.image_download_path, 
+                local_image_file = '%s%s.jpg' % (self.image_download_path,
                                                  shot_id)
                 self.downloadFile(image_url, local_image_file)
                 image_url = local_image_file
