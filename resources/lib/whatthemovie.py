@@ -74,6 +74,7 @@ class WhatTheMovie(object):
         # Set empty returns
         self.shot = dict()
         self.last_shots = list()
+        self.image_download_path = None
 
     def login(self, user, password, cookie_path):
         logged_in = False
@@ -101,6 +102,9 @@ class WhatTheMovie(object):
                 logged_in = 'auth'
                 self.cookies.save(cookie_path)
         return logged_in
+
+    def setImagePath(self, image_download_path):
+        self.image_download_path = image_download_path
 
     def _getUsername(self, retrieve=False):
         # only retrieve if there is no previous retrieve which we can use
@@ -186,6 +190,13 @@ class WhatTheMovie(object):
                 nav[nav_type] = None
         # image url
         image_url = tree.find('img', alt='guess this movie snapshot')['src']
+        subst_image_url = 'http://static.whatthemovie.com/images/substitute'
+        if self.image_download_path:
+            if not image_url.startswith(subst_image_url):
+                local_image_file = '%s%s.jpg' % (self.image_download_path, 
+                                                 shot_id)
+                self.downloadFile(image_url, local_image_file)
+                image_url = local_image_file
         # languages
         lang_list = dict()
         lang_list['main'] = list()

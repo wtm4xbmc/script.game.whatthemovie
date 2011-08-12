@@ -140,6 +140,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.getString = self.Addon.getLocalizedString
         self.getSetting = self.Addon.getSetting
         self.setSetting = self.Addon.setSetting
+        self.createPaths()
 
         # get controls
         self.button_guess = self.getControl(self.CID_BUTTON_GUESS)
@@ -179,6 +180,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         user_agent = 'XBMC-ADDON - %s - V%s' % (self.ADDON_ID,
                                                 self.ADDON_VERSION)
         self.Quiz = whatthemovie.WhatTheMovie(user_agent)
+        self.Quiz.setImagePath(xbmc.translatePath(self.cache_path))
         # try to login and get first random shot. If it fails exit
         try:
             self.login()
@@ -282,19 +284,17 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.setWTMProperty('busy', 'loading')
         # hide label_status
         self.setWTMProperty('solved_status', 'inactive')
-        # scrape shot and download picture
+        # scrape shot
         try:
             self.shot = self.Quiz.getShot(shot_request)
             shot = self.shot
-            image_path = self.downloadPic(shot['image_url'],
-                                          shot['shot_id'])
             self.log('Got a shot: %s' % self.shot)
         except Exception, error:
             self.errorMessage(self.getString(self.SID_ERROR_SHOT),
                               str(error))
             self.setWTMProperty('busy', '')
             return
-        self._showShotImage(image_path)
+        self._showShotImage(shot['image_url'])
         self._showShotType(shot['shot_type'])
         self._showShotPostedBy(shot['posted_by'])
         self._showShotSolvedStatus(shot['solved'])
@@ -607,9 +607,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         # if login is enabeld start loop until
         # self.logged_in is true or user disables login
         if self.getSetting('login') == 'true':
-            cookie_dir = self.Addon.getAddonInfo('profile')
-            self.checkCreatePath(cookie_dir)
-            cookie_file = xbmc.translatePath('%s/cookie.txt' % cookie_dir)
+            cookie_file = xbmc.translatePath('%s/cookie.txt' % self.profile_path)
             # try to login until self.logged_in becomes True
             while not self.logged_in:
                 if self.getSetting('login') == 'false':
@@ -658,18 +656,11 @@ class GUI(xbmcgui.WindowXMLDialog):
             self.Quiz.setRandomOptions(options)
             self.setSetting('already_sent_options', current_options)
 
-    def downloadPic(self, image_url, shot_id):
-        subst_image_url = 'http://static.whatthemovie.com/images/substitute'
-        if not image_url.startswith(subst_image_url):
-            cache_dir = ('special://profile/addon_data/%s/cache'
-                         % self.ADDON_ID)
-            self.checkCreatePath(cache_dir)
-            image_path = xbmc.translatePath('%s/%s.jpg' % (cache_dir, shot_id))
-            if not os.path.isfile(image_path):
-                self.Quiz.downloadFile(image_url, image_path)
-        else:
-            image_path = image_url
-        return image_path
+    def createPaths(self):
+        self.profile_path = self.Addon.getAddonInfo('profile')
+        self.cache_path = self.profile_path + '/cache/'
+        self.checkCreatePath(self.profile_path)
+        self.checkCreatePath(self.cache_path)
 
     def checkCreatePath(self, path):
         result = False
