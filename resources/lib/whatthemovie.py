@@ -19,9 +19,10 @@
 #
 #
 
-import mechanize
 import re
-from urllib import urlencode
+import urllib
+import urllib2
+import cookielib
 from BeautifulSoup import BeautifulSoup
 
 
@@ -67,10 +68,10 @@ class WhatTheMovie(object):
 
     def __init__(self, user_agent):
         # Get browser stuff
-        self.cookies = mechanize.LWPCookieJar()
-        self.browser = mechanize.Browser()
-        self.browser.set_cookiejar(self.cookies)
-        self.browser.addheaders = [('user-agent', user_agent)]
+        self.cookies = cookielib.LWPCookieJar()
+        processor = urllib2.HTTPCookieProcessor(self.cookies)
+        self.opener = urllib2.build_opener(processor)
+        self.opener.addheaders = [('user-agent', user_agent)]
         # Set empty returns
         self.shot = dict()
         self.last_shots = list()
@@ -86,7 +87,7 @@ class WhatTheMovie(object):
         except IOError:
             cookie_found = False
         if cookie_found:
-            logged_in_user = self._getUsername(retrieve=True)
+            logged_in_user = self._getUsername()
             if logged_in_user == user:
                 logged_in = 'cookie'
         if not logged_in:
@@ -94,9 +95,8 @@ class WhatTheMovie(object):
             data_dict = dict()
             data_dict['name'] = user
             data_dict['upassword'] = password
-            data = urlencode(data_dict)
-            req = mechanize.Request(login_url, data)
-            self.browser.open(req)
+            data = urllib.urlencode(data_dict)
+            html = self.opener.open(login_url, data).read()
             logged_in_user = self._getUsername()
             if logged_in_user:
                 logged_in = 'auth'
@@ -106,11 +106,10 @@ class WhatTheMovie(object):
     def setImagePath(self, image_download_path):
         self.image_download_path = image_download_path
 
-    def _getUsername(self, retrieve=False):
+    def _getUsername(self, html=None):
         # only retrieve if there is no previous retrieve which we can use
-        if retrieve:
-            self.browser.open(self.MAIN_URL)
-        html = self.browser.response().read()
+        if not html:
+            html = self.opener.open(self.MAIN_URL).read()
         tree = BeautifulSoup(html)
         section = tree.find('li', attrs={'class': 'secondary_nav',
                                          'style': 'margin-left: 0'})
@@ -128,16 +127,15 @@ class WhatTheMovie(object):
 
     def _sendAjaxReq(self, url, data_dict=None):
         if data_dict:
-            post_data = urlencode(data_dict)
+            post_data = urllib.urlencode(data_dict)
         else:
             post_data = ' '
-        req = mechanize.Request(url, post_data)
+        req = urllib2.Request(url, post_data)
         req.add_header('Accept', 'text/javascript, */*')
         req.add_header('Content-Type',
                        'application/x-www-form-urlencoded; charset=UTF-8')
         req.add_header('X-Requested-With', 'XMLHttpRequest')
-        self.browser.open(req)
-        response = self.browser.response().read()
+        response = self.opener.open(req).read()
         response_c = response.replace('&amp;', '&').decode('unicode-escape')
         return response_c
 
@@ -173,8 +171,7 @@ class WhatTheMovie(object):
     def scrapeShot(self, shot_request):
         self.shot = dict()
         shot_url = '%s/shot/%s' % (self.MAIN_URL, shot_request)
-        self.browser.open(shot_url)
-        html = self.browser.response().read()
+        html = self.opener.open(shot_url).read()
         tree = BeautifulSoup(html)
         # id
         shot_id = tree.find('li', attrs={'class': 'number'}).string.strip()
@@ -361,7 +358,7 @@ class WhatTheMovie(object):
         return self.shot
 
     def downloadFile(self, url, local_path):
-        self.browser.retrieve(url, local_path, )
+        urllib.urlretrieve(url, local_path, )
 
     def guessShot(self, shot_id, title_guess):
         if self.OFFLINE_DEBUG:
@@ -441,8 +438,7 @@ class WhatTheMovie(object):
             return score
         score = 0
         profile_url = '%s/user/%s/' % (self.MAIN_URL, username)
-        self.browser.open(profile_url)
-        html = self.browser.response().read()
+        html = self.opener.open(profile_url).read()
         tree = BeautifulSoup(html)
         box = tree.find('div', attrs={'class': 'box_white'})
         r = ('>(?P<ff_score>[0-9]+) Feature Film.*'
