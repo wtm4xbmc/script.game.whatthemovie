@@ -328,7 +328,7 @@ class WhatTheMovie(object):
                 if not image_url.startswith(subst_image_url):
                     local_image_file = '%s%s.jpg' % (self.image_download_path,
                                                      shot_id)
-                    urllib.urlretrieve(url, local_path, )
+                    urllib.urlretrieve(image_download_path, local_image_file, )
                     image_url = local_image_file
             # languages
             lang_list = dict()
