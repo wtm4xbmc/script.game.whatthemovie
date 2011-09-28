@@ -23,6 +23,9 @@ import re
 import urllib
 import urllib2
 import cookielib
+import threading
+import Queue
+import time
 from BeautifulSoup import BeautifulSoup
 
 
@@ -106,6 +109,23 @@ class WhatTheMovie(object):
     def setImagePath(self, image_download_path):
         self.image_download_path = image_download_path
 
+    def start(self):
+        jobs = ('random', 'random', 'random')
+        self.num_workers = 3
+        self.workers = [self.Scraper(self.opener, self.image_download_path) \
+                        for i in range(self.num_workers)]
+        for worker in self.workers:
+            worker.start()
+        for job in jobs:
+            self.Scraper.jobs.put(job)
+
+    def stop(self):
+        self.Scraper.exit_requested = True
+        for i in range(self.num_workers):
+            self.Scraper.jobs.put('exit')
+        for worker in self.workers:
+            worker.join()
+
     def _getUsername(self, html=None):
         # only retrieve if there is no previous retrieve which we can use
         if not html:
@@ -149,216 +169,30 @@ class WhatTheMovie(object):
             if self.shot:  # if there is already a shot - put it in list
                 self.last_shots.append(self.shot)
             if shot_request.isdigit() or shot_request == 'random':
-                self.shot = self.scrapeShot(shot_request)
+                pass
             elif shot_request in self.shot['nav'].keys():
                 # fixme(sphere): replace with better logic
-                # if there is no shot_request in dict
+                # if there is no matching val in nav
                 if not self.shot['nav'][shot_request]:
                     # check if it is a unsolved request and try without
                     if (shot_request[-9:] == '_unsolved'
                         and self.shot['nav'][shot_request[:-9]]):
                         request = shot_request[:-9]
-                        resolved_shot_request = self.shot['nav'][request]
-                    else:
-                        # else fallback to random
-                        resolved_shot_request = 'random'
+                        shot_request = self.shot['nav'][request]
                 else:
-                    resolved_shot_request = self.shot['nav'][shot_request]
-                self.shot = self.scrapeShot(resolved_shot_request)
-        self.shot['requested_as'] = shot_request
+                    shot_request = self.shot['nav'][shot_request]
+            self.Scraper.jobs.put(shot_request)
+            self.shot = None
+            while not self.shot:
+                self.Scraper.shots_lock.acquire()
+                for i, shot in enumerate(self.Scraper.shots):
+                    if shot['requested_as'] == shot_request:
+                        self.shot = self.Scraper.shots.pop(i)
+                        break
+                self.Scraper.shots_lock.release()
+                if not self.shot:
+                    time.sleep(1)
         return self.shot
-
-    def scrapeShot(self, shot_request):
-        self.shot = dict()
-        shot_url = '%s/shot/%s' % (self.MAIN_URL, shot_request)
-        html = self.opener.open(shot_url).read()
-        tree = BeautifulSoup(html)
-        # id
-        shot_id = tree.find('li', attrs={'class': 'number'}).string.strip()
-        # prev/next
-        nav = dict()
-        section = tree.find('ul', attrs={'id': 'nav_shots'}).findAll('li')
-        nav_types = ((0, 'first'), (1, 'prev'), (2, 'prev_unsolved'),
-                     (4, 'next_unsolved'), (5, 'next'), (6, 'last'))
-        for i, nav_type in nav_types:
-            if section[i].a:
-                nav[nav_type] = section[i].a['href'][6:]
-            else:
-                nav[nav_type] = None
-        # image url
-        image_url = tree.find('img', alt='guess this movie snapshot')['src']
-        subst_image_url = 'http://static.whatthemovie.com/images/substitute'
-        if self.image_download_path:
-            if not image_url.startswith(subst_image_url):
-                local_image_file = '%s%s.jpg' % (self.image_download_path,
-                                                 shot_id)
-                self.downloadFile(image_url, local_image_file)
-                image_url = local_image_file
-        # languages
-        lang_list = dict()
-        lang_list['main'] = list()
-        lang_list['hidden'] = list()
-        section = tree.find('ul', attrs={'class': 'language_flags'})
-        langs_main = section.findAll(lambda tag: len(tag.attrs) == 0)
-        for lang in langs_main:
-            if lang.img:
-                lang_list['main'].append(lang.img['src'][-6:-4])
-        langs_hidden = section.findAll('li',
-                                       attrs={'class': 'hidden_languages'})
-        for lang in langs_hidden:
-            if lang.img:
-                lang_list['hidden'].append(lang.img['src'][-6:-4])
-        lang_list['all'] = lang_list['main'] + lang_list['hidden']
-        # date
-        shot_date = None
-        section = tree.find('ul', attrs={'class': 'nav_date'})
-        if section:
-            r = ('<a href="/overview/(?P<year>[0-9]+)/'
-                 '(?P<month>[0-9]+)/(?P<day>[0-9]+)">')
-            date_match = re.search(r, unicode(section))
-            if date_match:
-                date_dict = date_match.groupdict()
-                if date_dict:
-                    shot_date = (int(date_dict['year']),
-                                 int(date_dict['month']),
-                                 int(date_dict['day']))
-        # posted by
-        sections = tree.find('ul',
-                             attrs={'class': 'nav_shotinfo'}).findAll('li')
-        if sections[0].a:
-            posted_by = sections[0].a.string
-        else:
-            posted_by = None
-        # solved
-        solved = dict()
-        try:
-            solved_string, solved_count = sections[1].string[8:].split()
-            if solved_string == 'solved':
-                solved['status'] = True
-                solved['count'] = int(solved_count.strip('()'))
-        except:
-            solved['status'] = False
-            solved['count'] = 0
-        try:
-            solved['first_by'] = sections[2].a.string
-        except:
-            solved['first_by'] = None
-        # already solved + own_shot
-        already_solved = False
-        self_posted = False
-        js_list = tree.findAll('script',
-                               attrs={'type': 'text/javascript'},
-                               text=re.compile('guess_problem'))
-        if js_list:
-            message = str(js_list)
-            if re.search('already solved', message):
-                already_solved = True
-            elif re.search('You posted this', message):
-                self_posted = True
-        # voting
-        voting = dict()
-        section = tree.find('script',
-                            attrs={'type': 'text/javascript'},
-                            text=re.compile('tt_shot_rating_stars'))
-        r = ('<strong>(?P<overall_rating>[0-9.]+|hidden)</strong> '
-             '\((?P<votes>[0-9]+) votes\)'
-             '(<br>Your rating: <strong>(?P<own_rating>[0-9.]+)</strong>)?')
-        if section:
-            voting = re.search(r, section).groupdict()
-        # tags
-        tags = list()
-        tags_list = tree.find('ul', attrs={'id':
-                                           'shot_tag_list'}).findAll('li')
-        for tag in tags_list:
-            if tag.a:
-                tags.append(tag.a.string)
-        # shot_type
-        section = tree.find('h2', attrs={'class':
-                                         'topbar_title'}).string.strip()
-        shot_type = 0  # Unknown
-        if section == 'New Submissions':
-            shot_type = 1
-        elif section == 'Feature Films':
-            shot_type = 2
-        elif section == 'The Archive':
-            shot_type = 3
-        elif section == 'Rejected Snapshots':
-            shot_type = 4
-        elif section == 'The Vault':
-            shot_type = 5
-        elif section == 'Deleted':
-            shot_type = 6
-        # gives_point
-        gives_point = False
-        if shot_type == 2 and not already_solved and not self_posted:
-            gives_point = True
-        # bookmarked
-        if tree.find('li', attrs={'id': 'watchbutton'}):
-            bookmark_link = tree.find('li', attrs={'id': 'watchbutton'}).a
-            try:
-                if bookmark_link['class'] == 'active':
-                    bookmarked = True
-            except KeyError:
-                bookmarked = False
-        else:
-            bookmarked = None  # Not logged in
-        # favourite
-        if tree.find('li', attrs={'class': 'love'}):
-            favourite_link = tree.find('li', attrs={'class': 'love'}).a
-            try:
-                if favourite_link['class'] == 'active':
-                    favourite = True
-            except KeyError:
-                favourite = False
-        else:
-            favourite = None  # Not logged in
-        # Snapshot of the Day
-        sotd = False
-        if tree.find('div', attrs={'class': 'sotd_banner'}):
-            sotd = True
-        # Solvable
-        solvable = False
-        section = tree.find('li', attrs={'id': 'solutionbutton'})
-        if section is not None:
-            try:
-                if section.a['class'] == 'inactive':
-                    solvable = False
-            except KeyError:
-                solvable = True
-        # redirected
-        redirected = False
-        section = tree.find('div', attrs={'class':
-                                          re.compile('flash_message')})
-        if section:
-            message = section.string
-            redirected = 1
-            if re.search('you are not allowed', message):
-                redirected = 2
-            if re.search('No such snapshot', message):
-                redirected = 3
-        # create return dict
-        self.shot['shot_id'] = shot_id
-        self.shot['image_url'] = image_url
-        self.shot['lang_list'] = lang_list
-        self.shot['posted_by'] = posted_by
-        self.shot['solved'] = solved
-        self.shot['date'] = shot_date
-        self.shot['already_solved'] = already_solved
-        self.shot['self_posted'] = self_posted
-        self.shot['voting'] = voting
-        self.shot['tags'] = tags
-        self.shot['shot_type'] = shot_type
-        self.shot['gives_point'] = gives_point
-        self.shot['nav'] = nav
-        self.shot['bookmarked'] = bookmarked
-        self.shot['favourite'] = favourite
-        self.shot['sotd'] = sotd
-        self.shot['solvable'] = solvable
-        self.shot['redirected'] = redirected
-        return self.shot
-
-    def downloadFile(self, url, local_path):
-        urllib.urlretrieve(url, local_path, )
 
     def guessShot(self, shot_id, title_guess):
         if self.OFFLINE_DEBUG:
@@ -445,3 +279,217 @@ class WhatTheMovie(object):
              '>(?P<all_score>[0-9]+) Snapshot')
         score = re.search(r, str(box.p)).groupdict()
         return score
+
+    class Scraper(threading.Thread):
+
+        jobs = Queue.Queue()
+        shots = list()
+        shots_lock = threading.Lock()
+        exit_requested = False
+
+        def __init__(self, opener, image_download_path):
+            self.opener = opener
+            self.image_download_path = image_download_path
+            threading.Thread.__init__(self)
+
+        def run(self):
+            while not self.exit_requested:
+                job = WhatTheMovie.Scraper.jobs.get()
+                if job == 'exit':
+                    break
+                shot = self.scrapeShot(job)
+                WhatTheMovie.Scraper.shots_lock.acquire()
+                WhatTheMovie.Scraper.shots.append(shot)
+                WhatTheMovie.Scraper.shots_lock.release()
+                WhatTheMovie.Scraper.jobs.task_done()
+
+        def scrapeShot(self, shot_request):
+            self.shot = dict()
+            shot_url = '%s/shot/%s' % (WhatTheMovie.MAIN_URL, shot_request)
+            html = self.opener.open(shot_url).read()
+            tree = BeautifulSoup(html)
+            # id
+            shot_id = tree.find('li', attrs={'class': 'number'}).string.strip()
+            # prev/next
+            nav = dict()
+            section = tree.find('ul', attrs={'id': 'nav_shots'}).findAll('li')
+            nav_types = ((0, 'first'), (1, 'prev'), (2, 'prev_unsolved'),
+                         (4, 'next_unsolved'), (5, 'next'), (6, 'last'))
+            for i, nav_type in nav_types:
+                if section[i].a:
+                    nav[nav_type] = section[i].a['href'][6:]
+                else:
+                    nav[nav_type] = None
+            # image url
+            image_url = tree.find('img',
+                                  alt='guess this movie snapshot')['src']
+            subst_image_url = 'http://static.whatthemovie.com/images/subst'
+            if self.image_download_path:
+                if not image_url.startswith(subst_image_url):
+                    local_image_file = '%s%s.jpg' % (self.image_download_path,
+                                                     shot_id)
+                    urllib.urlretrieve(url, local_path, )
+                    image_url = local_image_file
+            # languages
+            lang_list = dict()
+            lang_list['main'] = list()
+            lang_list['hidden'] = list()
+            section = tree.find('ul', attrs={'class': 'language_flags'})
+            langs_main = section.findAll(lambda tag: len(tag.attrs) == 0)
+            for lang in langs_main:
+                if lang.img:
+                    lang_list['main'].append(lang.img['src'][-6:-4])
+            langs_hidden = section.findAll('li',
+                                           attrs={'class': 'hidden_languages'})
+            for lang in langs_hidden:
+                if lang.img:
+                    lang_list['hidden'].append(lang.img['src'][-6:-4])
+            lang_list['all'] = lang_list['main'] + lang_list['hidden']
+            # date
+            shot_date = None
+            section = tree.find('ul', attrs={'class': 'nav_date'})
+            if section:
+                r = ('<a href="/overview/(?P<year>[0-9]+)/'
+                     '(?P<month>[0-9]+)/(?P<day>[0-9]+)">')
+                date_match = re.search(r, unicode(section))
+                if date_match:
+                    date_dict = date_match.groupdict()
+                    if date_dict:
+                        shot_date = (int(date_dict['year']),
+                                     int(date_dict['month']),
+                                     int(date_dict['day']))
+            # posted by
+            sections = tree.find('ul',
+                                 attrs={'class': 'nav_shotinfo'}).findAll('li')
+            if sections[0].a:
+                posted_by = sections[0].a.string
+            else:
+                posted_by = None
+            # solved
+            solved = dict()
+            try:
+                solved_string, solved_count = sections[1].string[8:].split()
+                if solved_string == 'solved':
+                    solved['status'] = True
+                    solved['count'] = int(solved_count.strip('()'))
+            except:
+                solved['status'] = False
+                solved['count'] = 0
+            try:
+                solved['first_by'] = sections[2].a.string
+            except:
+                solved['first_by'] = None
+            # already solved + own_shot
+            already_solved = False
+            self_posted = False
+            js_list = tree.findAll('script',
+                                   attrs={'type': 'text/javascript'},
+                                   text=re.compile('guess_problem'))
+            if js_list:
+                message = str(js_list)
+                if re.search('already solved', message):
+                    already_solved = True
+                elif re.search('You posted this', message):
+                    self_posted = True
+            # voting
+            voting = dict()
+            section = tree.find('script',
+                                attrs={'type': 'text/javascript'},
+                                text=re.compile('tt_shot_rating_stars'))
+            r = ('<strong>(?P<overall_rating>[0-9.]+|hidden)</strong> '
+                 '\((?P<votes>[0-9]+) votes\)'
+                 '(<br>Your rating: <strong>(?P<own_rating>[0-9.]+)</strong)?')
+            if section:
+                voting = re.search(r, section).groupdict()
+            # tags
+            tags = list()
+            tags_list = tree.find('ul', attrs={'id':
+                                               'shot_tag_list'}).findAll('li')
+            for tag in tags_list:
+                if tag.a:
+                    tags.append(tag.a.string)
+            # shot_type
+            section = tree.find('h2', attrs={'class':
+                                             'topbar_title'}).string.strip()
+            shot_type = 0  # Unknown
+            if section == 'New Submissions':
+                shot_type = 1
+            elif section == 'Feature Films':
+                shot_type = 2
+            elif section == 'The Archive':
+                shot_type = 3
+            elif section == 'Rejected Snapshots':
+                shot_type = 4
+            elif section == 'The Vault':
+                shot_type = 5
+            elif section == 'Deleted':
+                shot_type = 6
+            # gives_point
+            gives_point = False
+            if shot_type == 2 and not already_solved and not self_posted:
+                gives_point = True
+            # bookmarked
+            if tree.find('li', attrs={'id': 'watchbutton'}):
+                bookmark_link = tree.find('li', attrs={'id': 'watchbutton'}).a
+                try:
+                    if bookmark_link['class'] == 'active':
+                        bookmarked = True
+                except KeyError:
+                    bookmarked = False
+            else:
+                bookmarked = None  # Not logged in
+            # favourite
+            if tree.find('li', attrs={'class': 'love'}):
+                favourite_link = tree.find('li', attrs={'class': 'love'}).a
+                try:
+                    if favourite_link['class'] == 'active':
+                        favourite = True
+                except KeyError:
+                    favourite = False
+            else:
+                favourite = None  # Not logged in
+            # Snapshot of the Day
+            sotd = False
+            if tree.find('div', attrs={'class': 'sotd_banner'}):
+                sotd = True
+            # Solvable
+            solvable = False
+            section = tree.find('li', attrs={'id': 'solutionbutton'})
+            if section is not None:
+                try:
+                    if section.a['class'] == 'inactive':
+                        solvable = False
+                except KeyError:
+                    solvable = True
+            # redirected
+            redirected = False
+            section = tree.find('div', attrs={'class':
+                                              re.compile('flash_message')})
+            if section:
+                message = section.string
+                redirected = 1
+                if re.search('you are not allowed', message):
+                    redirected = 2
+                if re.search('No such snapshot', message):
+                    redirected = 3
+            # create return dict
+            self.shot['shot_id'] = shot_id
+            self.shot['image_url'] = image_url
+            self.shot['lang_list'] = lang_list
+            self.shot['posted_by'] = posted_by
+            self.shot['solved'] = solved
+            self.shot['date'] = shot_date
+            self.shot['already_solved'] = already_solved
+            self.shot['self_posted'] = self_posted
+            self.shot['voting'] = voting
+            self.shot['tags'] = tags
+            self.shot['shot_type'] = shot_type
+            self.shot['gives_point'] = gives_point
+            self.shot['nav'] = nav
+            self.shot['bookmarked'] = bookmarked
+            self.shot['favourite'] = favourite
+            self.shot['sotd'] = sotd
+            self.shot['solvable'] = solvable
+            self.shot['redirected'] = redirected
+            self.shot['requested_as'] = shot_request
+            return self.shot
