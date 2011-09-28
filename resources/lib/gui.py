@@ -184,6 +184,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         # try to login and get first random shot. If it fails exit
         try:
             self.login()
+            self.Quiz.start()
             self.getShot('random')
         except Exception, error:
             self.errorMessage(self.getString(self.SID_ERROR_LOGIN),
@@ -276,6 +277,7 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def closeDialog(self):
         self.setWTMProperty('main_image', '')
+        self.Quiz.stop()
         self.close()
 
     def getShot(self, shot_request):
