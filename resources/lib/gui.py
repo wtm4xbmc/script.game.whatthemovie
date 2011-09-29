@@ -59,6 +59,7 @@ class GUI(xbmcgui.WindowXMLDialog):
     CID_LIST_STARS = 1017
     CID_PROGR_OWN_RATING = 1018
     CID_GROUP_RATING = 1016
+    CID_LABEL_PRELOADS = 1020
 
     # STRING_IDs
     #  Messages
@@ -164,6 +165,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.group_rating = self.getControl(self.CID_GROUP_RATING)
         self.progr_avg_rating = self.getControl(self.CID_PROGR_AVG_RATING)
         self.progr_own_rating = self.getControl(self.CID_PROGR_OWN_RATING)
+        self.label_preloads = self.getControl(self.CID_LABEL_PRELOADS)
 
         # set control visibility depending on xbmc-addon settings
         self.hideLabels()
@@ -184,7 +186,7 @@ class GUI(xbmcgui.WindowXMLDialog):
         # try to login and get first random shot. If it fails exit
         try:
             self.login()
-            self.Quiz.start()
+            self.Quiz.start(callback=self.updatePreload)
             self.getShot('random')
         except Exception, error:
             self.errorMessage(self.getString(self.SID_ERROR_LOGIN),
@@ -483,6 +485,11 @@ class GUI(xbmcgui.WindowXMLDialog):
     def _showUserScore(self, score):
         score_string = self.getString(self.SID_YOUR_SCORE) % str(score)
         self.label_score.setLabel(score_string)
+
+    def updatePreload(self, num_preloads):
+        # fixme(anyone): This needs a better place ;-)
+        label = 'Preloads : %s' % num_preloads
+        self.label_preloads.setLabel(label)
 
     def rateShot(self, shot_id, own_rating):
         if self.logged_in:
