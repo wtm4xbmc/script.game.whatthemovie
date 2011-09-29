@@ -109,12 +109,14 @@ class WhatTheMovie(object):
     def setImagePath(self, image_download_path):
         self.image_download_path = image_download_path
 
-    def start(self, num_workers=3, jobs=None):
-        self.num_workers = num_workers
+    def start(self, num_workers=3, jobs=None, callback=None):
         if not jobs:
             jobs = ('random', 'random', 'random')
-        self.workers = [self.Scraper(self.opener, self.image_download_path) \
-                        for i in range(self.num_workers)]
+        self.callback = callback
+        self.num_workers = num_workers
+        self.num_jobs = len(jobs)
+        self.workers = [self.Scraper(self.opener, self.image_download_path, 
+                        self.callback) for i in range(self.num_workers)]
         for worker in self.workers:
             worker.start()
         for job in jobs:
@@ -167,6 +169,8 @@ class WhatTheMovie(object):
             if self.last_shots:
                 self.Scraper.shots_lock.acquire()
                 self.Scraper.shots.insert(0, self.shot)
+                if self.callback:
+                    self.callback(len(self.Scraper.shots))
                 self.Scraper.shots_lock.release()
                 self.shot = self.last_shots.pop()
         else:
@@ -185,13 +189,16 @@ class WhatTheMovie(object):
                         shot_request = self.shot['nav'][request]
                 else:
                     shot_request = self.shot['nav'][shot_request]
-            self.Scraper.jobs.put(shot_request)
+            if len(self.Scraper.shots) - 1 < self.num_jobs:
+                self.Scraper.jobs.put(shot_request)
             self.shot = None
             while not self.shot:
                 self.Scraper.shots_lock.acquire()
                 for i, shot in enumerate(self.Scraper.shots):
                     if shot['requested_as'] == shot_request:
                         self.shot = self.Scraper.shots.pop(i)
+                        if self.callback:
+                            self.callback(len(self.Scraper.shots))
                         break
                 self.Scraper.shots_lock.release()
                 if not self.shot:
@@ -291,8 +298,9 @@ class WhatTheMovie(object):
         shots_lock = threading.Lock()
         exit_requested = False
 
-        def __init__(self, opener, image_download_path):
+        def __init__(self, opener, image_download_path, callback=None):
             self.opener = opener
+            self.callback = callback
             self.image_download_path = image_download_path
             threading.Thread.__init__(self)
 
@@ -304,6 +312,8 @@ class WhatTheMovie(object):
                 shot = self.scrapeShot(job)
                 WhatTheMovie.Scraper.shots_lock.acquire()
                 WhatTheMovie.Scraper.shots.append(shot)
+                if self.callback:
+                    self.callback(len(WhatTheMovie.Scraper.shots))
                 WhatTheMovie.Scraper.shots_lock.release()
                 WhatTheMovie.Scraper.jobs.task_done()
 
