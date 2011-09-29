@@ -109,9 +109,10 @@ class WhatTheMovie(object):
     def setImagePath(self, image_download_path):
         self.image_download_path = image_download_path
 
-    def start(self):
-        jobs = ('random', 'random', 'random')
-        self.num_workers = 3
+    def start(self, num_workers=3, jobs=None):
+        self.num_workers = num_workers
+        if not jobs:
+            jobs = ('random', 'random', 'random')
         self.workers = [self.Scraper(self.opener, self.image_download_path) \
                         for i in range(self.num_workers)]
         for worker in self.workers:
@@ -164,6 +165,9 @@ class WhatTheMovie(object):
             return self.OFFLINE_SHOT
         if shot_request == 'back':
             if self.last_shots:
+                self.Scraper.shots_lock.acquire()
+                self.Scraper.shots.insert(0, self.shot)
+                self.Scraper.shots_lock.release()
                 self.shot = self.last_shots.pop()
         else:
             if self.shot:  # if there is already a shot - put it in list
