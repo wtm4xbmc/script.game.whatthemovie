@@ -79,6 +79,7 @@ class WhatTheMovie(object):
         self.shot = dict()
         self.last_shots = list()
         self.image_download_path = None
+        self.running = False
 
     def login(self, user, password, cookie_path):
         logged_in = False
@@ -109,18 +110,17 @@ class WhatTheMovie(object):
     def setImagePath(self, image_download_path):
         self.image_download_path = image_download_path
 
-    def start(self, num_workers=3, jobs=None, callback=None):
-        if not jobs:
-            jobs = ('random', 'random', 'random')
+    def start(self, num_workers=3, num_init_jobs=3, callback=None):
         self.callback = callback
         self.num_workers = num_workers
-        self.num_jobs = len(jobs)
-        self.workers = [self.Scraper(self.opener, self.image_download_path, 
+        self.num_init_jobs = num_init_jobs
+        self.workers = [self.Scraper(self.opener, self.image_download_path,
                         self.callback) for i in range(self.num_workers)]
         for worker in self.workers:
             worker.start()
-        for job in jobs:
-            self.Scraper.jobs.put(job)
+        for job in range(self.num_init_jobs):
+            self.Scraper.jobs.put('random')
+        self.running = True
 
     def stop(self):
         self.Scraper.exit_requested = True
@@ -128,6 +128,7 @@ class WhatTheMovie(object):
             self.Scraper.jobs.put('exit')
         for worker in self.workers:
             worker.join()
+        self.running = False
 
     def _getUsername(self, html=None):
         # only retrieve if there is no previous retrieve which we can use
@@ -165,6 +166,8 @@ class WhatTheMovie(object):
     def getShot(self, shot_request):
         if self.OFFLINE_DEBUG:
             return self.OFFLINE_SHOT
+        if not self.running:
+            return
         if shot_request == 'back':
             if self.last_shots:
                 self.Scraper.shots_lock.acquire()
@@ -189,7 +192,7 @@ class WhatTheMovie(object):
                         shot_request = self.shot['nav'][request]
                 else:
                     shot_request = self.shot['nav'][shot_request]
-            if len(self.Scraper.shots) - 1 < self.num_jobs:
+            if len(self.Scraper.shots) - 1 < self.num_init_jobs:
                 self.Scraper.jobs.put(shot_request)
             self.shot = None
             while not self.shot:
