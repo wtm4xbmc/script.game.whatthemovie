@@ -25,7 +25,6 @@ import urllib2
 import cookielib
 import threading
 import Queue
-import time
 from BeautifulSoup import BeautifulSoup
 
 
@@ -194,18 +193,31 @@ class WhatTheMovie(object):
                     shot_request = self.shot['nav'][shot_request]
             if len(self.Scraper.shots) - 1 < self.num_init_jobs:
                 self.Scraper.jobs.put(shot_request)
+            # delete actual shot because we want a new one
             self.shot = None
+            self.Scraper.new_shot_condition.acquire()
+            # as long as we dont have a shot which we want (ex. 'random')
             while not self.shot:
+                # lock the list of preloaded shots
                 self.Scraper.shots_lock.acquire()
+                # search in already preloaded shots for one we want
                 for i, shot in enumerate(self.Scraper.shots):
+                    # if this is a shot we want
                     if shot['requested_as'] == shot_request:
+                        # save the shot we want and delete from list
                         self.shot = self.Scraper.shots.pop(i)
                         if self.callback:
                             self.callback(len(self.Scraper.shots))
+                        # stop searching in the list of preloaded shots
                         break
+                # relase the lock - new shots can now be inserted from workers
                 self.Scraper.shots_lock.release()
-                if not self.shot:
-                    time.sleep(1)
+                # if our search was successfull leave the waiting state
+                if self.shot:
+                    break
+                # there was no shot we want - wait for a new
+                self.Scraper.new_shot_condition.wait()
+            self.Scraper.new_shot_condition.release()
         return self.shot
 
     def guessShot(self, shot_id, title_guess):
@@ -299,6 +311,7 @@ class WhatTheMovie(object):
         jobs = Queue.Queue()
         shots = list()
         shots_lock = threading.Lock()
+        new_shot_condition = threading.Condition()
         exit_requested = False
 
         def __init__(self, opener, image_download_path, callback=None):
@@ -312,9 +325,16 @@ class WhatTheMovie(object):
                 job = WhatTheMovie.Scraper.jobs.get()
                 if job == 'exit':
                     break
+                # scrape the shot - this will take some time
                 shot = self.scrapeShot(job)
+                # lock the list of shots
                 WhatTheMovie.Scraper.shots_lock.acquire()
+                # save the shot
                 WhatTheMovie.Scraper.shots.append(shot)
+                # tell that a new shot was inserted
+                WhatTheMovie.Scraper.new_shot_condition.acquire()
+                WhatTheMovie.Scraper.new_shot_condition.notify()
+                WhatTheMovie.Scraper.new_shot_condition.release()
                 if self.callback:
                     self.callback(len(WhatTheMovie.Scraper.shots))
                 WhatTheMovie.Scraper.shots_lock.release()
