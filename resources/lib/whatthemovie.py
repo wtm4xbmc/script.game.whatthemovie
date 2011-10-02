@@ -163,17 +163,17 @@ class WhatTheMovie(object):
         return response_c
 
     def getShot(self, shot_request):
-        if self.OFFLINE_DEBUG:
-            return self.OFFLINE_SHOT
         if not self.running:
             return
+        if self.OFFLINE_DEBUG:
+            return self.OFFLINE_SHOT
         if shot_request == 'back':
             if self.last_shots:
-                self.Scraper.shots_lock.acquire()
-                self.Scraper.shots.insert(0, self.shot)
+                self.Scraper.next_shots_lock.acquire()
+                self.Scraper.next_shots.insert(0, self.shot)
                 if self.callback:
-                    self.callback(len(self.Scraper.shots))
-                self.Scraper.shots_lock.release()
+                    self.callback(len(self.Scraper.next_shots))
+                self.Scraper.next_shots_lock.release()
                 self.shot = self.last_shots.pop()
         else:
             if self.shot:  # if there is already a shot - put it in list
@@ -191,7 +191,7 @@ class WhatTheMovie(object):
                         shot_request = self.shot['nav'][request]
                 else:
                     shot_request = self.shot['nav'][shot_request]
-            if len(self.Scraper.shots) - 1 < self.num_init_jobs:
+            if len(self.Scraper.next_shots) - 1 < self.num_init_jobs:
                 self.Scraper.jobs.put(shot_request)
             # delete actual shot because we want a new one
             self.shot = None
@@ -199,19 +199,19 @@ class WhatTheMovie(object):
             # as long as we dont have a shot which we want (ex. 'random')
             while not self.shot:
                 # lock the list of preloaded shots
-                self.Scraper.shots_lock.acquire()
+                self.Scraper.next_shots_lock.acquire()
                 # search in already preloaded shots for one we want
-                for i, shot in enumerate(self.Scraper.shots):
+                for i, shot in enumerate(self.Scraper.next_shots):
                     # if this is a shot we want
                     if shot['requested_as'] == shot_request:
                         # save the shot we want and delete from list
-                        self.shot = self.Scraper.shots.pop(i)
+                        self.shot = self.Scraper.next_shots.pop(i)
                         if self.callback:
-                            self.callback(len(self.Scraper.shots))
+                            self.callback(len(self.Scraper.next_shots))
                         # stop searching in the list of preloaded shots
                         break
                 # relase the lock - new shots can now be inserted from workers
-                self.Scraper.shots_lock.release()
+                self.Scraper.next_shots_lock.release()
                 # if our search was successfull leave the waiting state
                 if self.shot:
                     break
@@ -309,8 +309,8 @@ class WhatTheMovie(object):
     class Scraper(threading.Thread):
 
         jobs = Queue.Queue()
-        shots = list()
-        shots_lock = threading.Lock()
+        next_shots = list()
+        next_shots_lock = threading.Lock()
         new_shot_condition = threading.Condition()
         exit_requested = False
 
@@ -328,16 +328,16 @@ class WhatTheMovie(object):
                 # scrape the shot - this will take some time
                 shot = self.scrapeShot(job)
                 # lock the list of shots
-                WhatTheMovie.Scraper.shots_lock.acquire()
+                WhatTheMovie.Scraper.next_shots_lock.acquire()
                 # save the shot
-                WhatTheMovie.Scraper.shots.append(shot)
+                WhatTheMovie.Scraper.next_shots.append(shot)
                 # tell that a new shot was inserted
                 WhatTheMovie.Scraper.new_shot_condition.acquire()
                 WhatTheMovie.Scraper.new_shot_condition.notify()
                 WhatTheMovie.Scraper.new_shot_condition.release()
                 if self.callback:
-                    self.callback(len(WhatTheMovie.Scraper.shots))
-                WhatTheMovie.Scraper.shots_lock.release()
+                    self.callback(len(WhatTheMovie.Scraper.next_shots))
+                WhatTheMovie.Scraper.next_shots_lock.release()
                 WhatTheMovie.Scraper.jobs.task_done()
 
         def scrapeShot(self, shot_request):
