@@ -38,7 +38,8 @@ class WhatTheMovie(object):
                     'self_posted': False,
                     'bookmarked': False,
                     'favourite': False,
-                    'gives_point': True,
+                    'gives_point': {'ff': False,
+                                    'all': False},
                     'already_solved': False,
                     'tags': [u'tag1'],
                     'posted_by': u'Hagentinho',
@@ -238,8 +239,8 @@ class WhatTheMovie(object):
             if self.shot['shot_id'] == shot_id:
                 if not self.shot['already_solved']:
                     self.shot['already_solved'] = True
-                if self.shot['gives_point']:
-                    self.shot['gives_point'] = False
+                self.shot['gives_point'] = {'ff': False,
+                                            'all': False}
         return answer
 
     def rateShot(self, shot_id, user_rate, rerated='false'):
@@ -292,18 +293,20 @@ class WhatTheMovie(object):
         return solved_title
 
     def getScore(self, username):
+        score = {'ff_score': 0,
+                 'all_score': 0}
         if self.OFFLINE_DEBUG:
-            score = {'ff_score': 0,
-                     'all_score': 0}
             return score
-        score = 0
         profile_url = '%s/user/%s/' % (self.MAIN_URL, username)
         html = self.opener.open(profile_url).read()
         tree = BeautifulSoup(html)
         box = tree.find('div', attrs={'class': 'box_white'})
         r = ('>(?P<ff_score>[0-9]+) Feature Film.*'
              '>(?P<all_score>[0-9]+) Snapshot')
-        score = re.search(r, str(box.p)).groupdict()
+        if re.search(r, str(box.p)):
+            score_dict = re.search(r, str(box.p)).groupdict()
+            score = {'ff_score': int(score_dict['ff_score']),
+                     'all_score': int(score_dict['all_score'])}
         return score
 
     class Scraper(threading.Thread):
@@ -462,9 +465,12 @@ class WhatTheMovie(object):
             elif section == 'Deleted':
                 shot_type = 6
             # gives_point
-            gives_point = False
-            if shot_type == 2 and not already_solved and not self_posted:
-                gives_point = True
+            gives_point = {'ff': False,
+                           'all': False}
+            if not already_solved and not self_posted:
+                gives_point['all'] = True
+                if shot_type == 2:
+                    gives_point['ff'] = True
             # bookmarked
             if tree.find('li', attrs={'id': 'watchbutton'}):
                 bookmark_link = tree.find('li', attrs={'id': 'watchbutton'}).a
