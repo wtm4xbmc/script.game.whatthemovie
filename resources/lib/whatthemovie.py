@@ -164,7 +164,7 @@ class WhatTheMovie(object):
 
     def getShot(self, shot_request):
         if not self.running:
-            return
+            self.start()
         if self.OFFLINE_DEBUG:
             return self.OFFLINE_SHOT
         if shot_request == 'back':
