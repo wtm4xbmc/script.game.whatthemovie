@@ -484,7 +484,7 @@ class GUI(xbmcgui.WindowXMLDialog):
 
     def _showUserScore(self, score):
         ff_score_label = (self.getString(self.SID_YOUR_SCORE) \
-                          % score['ff_score'])
+                          % (score['ff_score'], score['all_score']))
         self.label_score.setLabel(ff_score_label)
 
     def updatePreload(self, num_preloads):
