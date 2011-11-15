@@ -620,8 +620,8 @@ class GUI(xbmcgui.WindowXMLDialog):
         self.image_solution.setColorDiffuse('FFFF0000')
 
     def login(self):
-        self.score = {'ff_score': '0',
-                      'all_score': '0'}
+        self.score = {'ff_score': 0,
+                      'all_score': 0}
         self.logged_in = False
         label = self.getString(self.SID_NOT_LOGGED_IN)
         # if login is enabeld start loop until
