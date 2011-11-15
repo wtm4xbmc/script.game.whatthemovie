@@ -341,7 +341,10 @@ class WhatTheMovie(object):
                 if self.callback:
                     self.callback(len(WhatTheMovie.Scraper.next_shots))
                 WhatTheMovie.Scraper.next_shots_lock.release()
-                WhatTheMovie.Scraper.jobs.task_done()
+                try:  # python >= 2.5 needed for task_done
+                    WhatTheMovie.Scraper.jobs.task_done()
+                except AttributeError:
+                    pass
 
         def scrapeShot(self, shot_request):
             self.shot = dict()
