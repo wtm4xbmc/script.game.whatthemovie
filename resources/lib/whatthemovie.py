@@ -329,7 +329,15 @@ class WhatTheMovie(object):
                 if job == 'exit':
                     break
                 # scrape the shot - this will take some time
-                shot = self.scrapeShot(job)
+                is_new = False
+                while not is_new:
+                    shot = self.scrapeShot(job)
+                    WhatTheMovie.Scraper.next_shots_lock.acquire()
+                    if shot['shot_id'] in [s['shot_id'] for s in WhatTheMovie.Scraper.next_shots]:
+                        pass
+                    else:
+                        is_new = True
+                    WhatTheMovie.Scraper.next_shots_lock.release()
                 # lock the list of shots
                 WhatTheMovie.Scraper.next_shots_lock.acquire()
                 # save the shot
