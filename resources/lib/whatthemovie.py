@@ -168,6 +168,8 @@ class WhatTheMovie(object):
             self.start()
         if self.OFFLINE_DEBUG:
             return self.OFFLINE_SHOT
+
+        # We dont have to get a new shot
         if shot_request == 'back':
             if self.last_shots:
                 self.Scraper.next_shots_lock.acquire()
@@ -176,14 +178,27 @@ class WhatTheMovie(object):
                     self.callback(len(self.Scraper.next_shots))
                 self.Scraper.next_shots_lock.release()
                 self.shot = self.last_shots.pop()
+
+        # We need to get a new shot (from preload or a fresh one)
         else:
-            if self.shot:  # if there is already a shot - put it in list
+            # if there is already a shot - put it in list of last_shots
+            if self.shot:  
                 self.last_shots.append(self.shot)
-            if shot_request.isdigit() or shot_request == 'random':
-                pass
-            elif shot_request in self.shot['nav'].keys():
-                # fixme(sphere): replace with better logic
-                # if there is no matching val in nav
+
+            # We need a new shot via 'random'
+            if shot_request == 'random':
+                # Check if there aren't enough 'random' shots in the preloads
+                num_random_preloads = len([s for s in self.Scraper.next_shots \
+                                           if s['requested_as'] == 'random'])
+                if num_random_preloads - 1 < self.num_init_jobs:
+                    self.Scraper.jobs.put(shot_request)
+
+            # We need a new shot via shot_id
+            elif shot_request.isdigit():
+                self.Scraper.jobs.put(shot_request)
+
+            # We need a new shot via navi_key
+            elif self.shot and shot_request in self.shot['nav'].keys():
                 if not self.shot['nav'][shot_request]:
                     # check if it is a unsolved request and try without
                     if (shot_request[-9:] == '_unsolved'
@@ -192,8 +207,9 @@ class WhatTheMovie(object):
                         shot_request = self.shot['nav'][request]
                 else:
                     shot_request = self.shot['nav'][shot_request]
-            if len(self.Scraper.next_shots) - 1 < self.num_init_jobs:
                 self.Scraper.jobs.put(shot_request)
+
+
             # delete actual shot because we want a new one
             self.shot = None
             self.Scraper.new_shot_condition.acquire()
