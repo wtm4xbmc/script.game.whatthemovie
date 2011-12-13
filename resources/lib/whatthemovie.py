@@ -246,7 +246,7 @@ class WhatTheMovie(object):
         answer = dict()
         answer['is_right'] = False
         post_url = '%s/shot/%s/guess' % (self.MAIN_URL, shot_id)
-        post_dict = {'guess': title_guess.encode('utf8')}
+        post_dict = {'guess': title_guess.encode('utf8').replace(',', '')}
         response_c = self._sendAjaxReq(post_url, post_dict)
         # ['right'|'wrong']
         if response_c[6:11] == 'right':
