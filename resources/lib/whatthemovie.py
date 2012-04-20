@@ -347,7 +347,11 @@ class WhatTheMovie(object):
                 # scrape the shot - this will take some time
                 is_new = False
                 while not is_new:
-                    shot = self.scrapeShot(job)
+                    try:
+                        shot = self.scrapeShot(job)
+                    except (urllib2.HTTPError, urllib2.URLError):
+                        print 'Timeout occured, trying again...'
+                        continue
                     WhatTheMovie.Scraper.next_shots_lock.acquire()
                     if shot['shot_id'] in [s['shot_id'] for s in WhatTheMovie.Scraper.next_shots]:
                         pass
