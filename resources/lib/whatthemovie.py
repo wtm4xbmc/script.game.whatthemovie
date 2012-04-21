@@ -22,6 +22,7 @@
 import re
 import urllib
 import urllib2
+import socket
 import cookielib
 import threading
 import Queue
@@ -349,7 +350,7 @@ class WhatTheMovie(object):
                 while not is_new:
                     try:
                         shot = self.scrapeShot(job)
-                    except (urllib2.HTTPError, urllib2.URLError):
+                    except (urllib2.HTTPError, socket.timeout):
                         print 'Timeout occured, trying again...'
                         continue
                     WhatTheMovie.Scraper.next_shots_lock.acquire()
