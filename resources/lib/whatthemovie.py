@@ -372,6 +372,15 @@ class WhatTheMovie(object):
                 WhatTheMovie.Scraper.next_shots_lock.release()
                 WhatTheMovie.Scraper.jobs.task_done()
 
+        def download_file(self, url, local_file, referer=None):
+            req = urllib2.Request(url)
+            if referer:
+                req.add_header('Referer', referer)
+            res = urllib2.urlopen(req)
+            f = open(local_file, 'wb')
+            f.write(res.read())
+            f.close()
+
         def scrapeShot(self, shot_request):
             self.shot = dict()
             shot_url = '%s/shot/%s' % (WhatTheMovie.MAIN_URL, shot_request)
@@ -396,13 +405,13 @@ class WhatTheMovie(object):
                 r_img = re.compile('background-image:url\("(.+?)"\)')
                 m_img = re.search(r_img, section.string)
                 if m_img:
-                    image_url = WhatTheMovie.MAIN_URL + m_img.group(1)
+                    image_url = m_img.group(1)
             subst_image_url = 'http://static.whatthemovie.com/images/subst'
             if self.image_download_path:
                 if not image_url.startswith(subst_image_url):
                     local_image_file = '%s%s.jpg' % (self.image_download_path,
                                                      shot_id)
-                    urllib.urlretrieve(image_url, local_image_file, )
+                    self.download_file(image_url, local_image_file, referer=shot_url)
                     image_url = local_image_file
             # languages
             lang_list = dict()
